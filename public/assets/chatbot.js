@@ -1062,19 +1062,10 @@
   // ---------------------------------------------------------------------------
   function observeCardModels() {
     const models = document.querySelectorAll('.card-model');
-    if (!models.length || !('IntersectionObserver' in window) ||
-        window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    const animation = new Image();
-    animation.addEventListener('load', () => {
-      const observer = new IntersectionObserver(entries => {
-        for (const entry of entries) {
-          entry.target.classList.toggle('card-model-moving', entry.isIntersecting);
-        }
-      }, { threshold: .3 });
-      models.forEach(model => observer.observe(model));
-    });
-    animation.src = '/card-motion.webp';
+    if (!models.length) return;
+    import('/card-model-viewer.js')
+      .then(({ mountCardModels }) => mountCardModels(models))
+      .catch(() => {});
   }
 
   document.addEventListener('DOMContentLoaded', () => {

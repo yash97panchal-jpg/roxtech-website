@@ -33,34 +33,17 @@
 .model-logistics { --model-x: 33.3333%; --model-y: 100%; }
 .model-education { --model-x: 66.6667%; --model-y: 100%; }
 
-@media (prefers-reduced-motion: no-preference) {
-  .card-model.card-model-moving {
-    background-image: url("/card-motion.webp");
-    background-size: 1200% 1900%;
-    background-position: 0% var(--motion-y);
-    animation: card-model-orbit 2.3s steps(11, end) 2 alternate;
-  }
-  @keyframes card-model-orbit {
-    from { background-position-x: 0%; }
-    to { background-position-x: 100%; }
-  }
+.card-model {
+  position: relative;
+  overflow: hidden;
 }
-.model-workspace { --motion-y: 0%; }
-.model-campus { --motion-y: 5.55556%; }
-.model-web { --motion-y: 11.1111%; }
-.model-speed { --motion-y: 16.6667%; }
-.model-erp { --motion-y: 22.2222%; }
-.model-data { --motion-y: 27.7778%; }
-.model-data-pipeline { --motion-y: 33.3333%; }
-.model-mobile { --motion-y: 38.8889%; }
-.model-cloud { --motion-y: 44.4444%; }
-.model-ai { --motion-y: 50%; }
-.model-security { --motion-y: 55.5556%; }
-.model-support { --motion-y: 61.1111%; }
-.model-manufacturing { --motion-y: 66.6667%; }
-.model-retail { --motion-y: 72.2222%; }
-.model-commerce { --motion-y: 77.7778%; }
-.model-healthcare { --motion-y: 83.3333%; }
-.model-fintech { --motion-y: 88.8889%; }
-.model-logistics { --motion-y: 94.4444%; }
-.model-education { --motion-y: 100%; }
+.card-model-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+.card-model-rendered > .card-model-canvas {
+  opacity: 1;
+}

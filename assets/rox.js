@@ -253,7 +253,7 @@ function initRox() {
       try {
         // Direct background email delivery (FormSubmit AJAX + Backend API)
         // Does NOT open any email apps or popups!
-        const formSubmitPromise = fetch('https://formsubmit.co/ajax/hello@roxtech.io', {
+        const formSubmitPromise = fetch('https://formsubmit.co/ajax/hello@roxtech.online', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -268,7 +268,13 @@ function initRox() {
           body: JSON.stringify(payload)
         }).catch(() => null);
 
-        await Promise.all([formSubmitPromise, backendPromise]);
+        const responses = await Promise.all([formSubmitPromise, backendPromise]);
+        const accepted = await Promise.all(responses.map(async response => {
+          if (!response?.ok) return false;
+          const result = await response.json().catch(() => null);
+          return result?.success === true || result?.success === 'true';
+        }));
+        if (!accepted.some(Boolean)) throw new Error('Quotation delivery was not confirmed');
 
         // Success Feedback via Top-Right Popup Toast
         window.showTopRightToast(
@@ -288,10 +294,10 @@ function initRox() {
         window.showTopRightToast(
           'error',
           'Submission Error',
-          'There is some error sending your quotation. Please try again or reach us at hello@roxtech.io.'
+          'There is some error sending your quotation. Please try again or reach us at hello@roxtech.online.'
         );
         if (note) {
-          note.textContent = 'There was an issue sending your quotation. Please check your network or reach us at hello@roxtech.io.';
+          note.textContent = 'There was an issue sending your quotation. Please check your network or reach us at hello@roxtech.online.';
           note.className = 'note';
         }
       } finally {
@@ -389,7 +395,7 @@ function initRox() {
       };
 
       try {
-        const formSubmitPromise = fetch('https://formsubmit.co/ajax/hello@roxtech.io', {
+        const formSubmitPromise = fetch('https://formsubmit.co/ajax/hello@roxtech.online', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           body: JSON.stringify(payload)
@@ -401,7 +407,13 @@ function initRox() {
           body: JSON.stringify(payload)
         }).catch(() => null);
 
-        await Promise.all([formSubmitPromise, backendPromise]);
+        const responses = await Promise.all([formSubmitPromise, backendPromise]);
+        const accepted = await Promise.all(responses.map(async response => {
+          if (!response?.ok) return false;
+          const result = await response.json().catch(() => null);
+          return result?.success === true || result?.success === 'true';
+        }));
+        if (!accepted.some(Boolean)) throw new Error('Quotation delivery was not confirmed');
 
         window.showTopRightToast(
           'success',
@@ -419,7 +431,7 @@ function initRox() {
         window.showTopRightToast(
           'error',
           'Submission Error',
-          'There is some error sending your quotation. Please try again or reach us at hello@roxtech.io.'
+          'There is some error sending your quotation. Please try again or reach us at hello@roxtech.online.'
         );
       } finally {
         if (hqSubmitBtn) {

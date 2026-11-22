@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RoxTech | IT Services, Custom Software & Cloud for Growing Businesses</title>
+  <meta name="description" content="RoxTech designs, builds and runs websites, ERP systems, mobile apps and cloud platforms for businesses worldwide.">
+  <meta name="theme-color" content="#060B13">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+
+  <!-- Typography: Poppins (Headings), Source Sans 3 (Body), Barlow (Numbers) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=Barlow:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/rox.css">
+  <link rel="stylesheet" href="assets/rox-pro.css">
+  <link rel="stylesheet" href="assets/rox-refresh.css">
+  <link rel="stylesheet" href="assets/chatbot.css">
+</head>
+<body>
+
+  <!-- Floating Glass Header Navigation -->
+  <header class="top">
+    <div class="wrap bar">
+      <a href="index.html" class="brand-logo-container" aria-label="RoxTech — Intelligence Technology"><img src="assets/roxtech-symbol-clean.png" alt="RoxTech Symbol" class="brand-symbol-img"><div class="brand-text-block"><span class="brand-name">Rox<span>Tech</span></span><small class="brand-tagline">Intelligence Technology</small></div></a>
+
+      <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
+
+      <nav class="main" id="nav" aria-label="Main Navigation">
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="services.html">Services</a>
+        <a href="industries.html">Industries</a>
+        <a href="case-studies.html">Work</a>
+        <a href="about.html">About</a>
+        <a href="blog.html">Insights</a>
+        <a href="careers.html">Careers</a>
+        <a class="btn btn-primary" href="contact.html">Get a quote <span class="btn-arrow">→</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section with Signature Interactive Logo Animation Showcase -->
+    <section class="hero">
+      <div class="wrap">
+        <div>
+          <h1>Digital products that <span class="text-gradient">move your business forward.</span></h1>
+          <p>From standout websites to custom software, mobile apps and practical AI solutions — we turn complex ideas into experiences people love to use.</p>
+          <div class="actions">
+            <a class="btn btn-primary" href="contact.html">Get a free quote <span class="btn-arrow">→</span></a>
+            <a class="btn btn-ghost" href="services.html">See our services</a>
+          </div>
+          <div class="hero-trust-bar"><span>Independent thinking. Purpose-built technology. Long-term partnerships.</span></div>
+        </div>
+
+        <!-- 3D Hero Scene: five glass towers (the RoxTech symbol) with animated 0 1 binary code background, reacts to the mouse -->
+        <div class="hero-brand-stage">
+          <!-- Cyber Digital 0 1 Binary Code Background Canvas -->
+          <canvas class="hero-binary-canvas" id="heroBinaryCanvas" aria-hidden="true"></canvas>
+
+          <div class="scene3d" id="scene3d" role="img" aria-label="3D illustration of the RoxTech tower emblem with cyber 0 1 binary intelligence streams">
+            <div class="scene-rig">
+              <div class="scene-sway">
+                <div class="scene-floor"></div>
+
+                <!-- 3D Perspective Binary Matrix Wall in Scene Depth -->
+                <div class="scene-binary-wall" aria-hidden="true">
+                  <div class="bin-col" style="--x:-200px;--d:0s"><i>0</i><i>1</i><i>0</i><i>1</i><i>1</i><i>0</i><i>1</i><i>0</i><i>0</i><i>1</i><i>1</i><i>0</i><i>1</i><i>0</i></div>
+                  <div class="bin-col" style="--x:-130px;--d:1.2s"><i>1</i><i>0</i><i>1</i><i>0</i><i>0</i><i>1</i><i>0</i><i>1</i><i>1</i><i>0</i><i>0</i><i>1</i><i>0</i><i>1</i></div>
+                  <div class="bin-col" style="--x:-50px;--d:2.4s"><i>0</i><i>0</i><i>1</i><i>1</i><i>0</i><i>1</i><i>0</i><i>0</i><i>1</i><i>1</i><i>1</i><i>0</i><i>1</i><i>0</i></div>
+                  <div class="bin-col" style="--x:40px;--d:0.8s"><i>1</i><i>1</i><i>0</i><i>1</i><i>0</i><i>0</i><i>1</i><i>1</i><i>0</i><i>1</i><i>0</i><i>1</i><i>0</i><i>1</i></div>
+                  <div class="bin-col" style="--x:120px;--d:1.8s"><i>0</i><i>1</i><i>0</i><i>0</i><i>1</i><i>1</i><i>0</i><i>1</i><i>0</i><i>0</i><i>1</i><i>1</i><i>1</i><i>0</i></div>
+                  <div class="bin-col" style="--x:190px;--d:2.9s"><i>1</i><i>0</i><i>1</i><i>1</i><i>0</i><i>1</i><i>0</i><i>1</i><i>1</i><i>0</i><i>1</i><i>0</i><i>0</i><i>1</i></div>
+                </div>
+
+                <div class="tower" style="--x:-170px;--z:40px;--h:110px;--c1:#2b7fd0;--c2:#12417a;--d:0s"><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i><i class="tp"></i></div>
+                <div class="tower" style="--x:-85px;--z:-20px;--h:190px;--c1:#2a86d8;--c2:#0f3a72;--d:.8s"><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i><i class="tp"></i></div>
+                <div class="tower" style="--x:0px;--z:-60px;--h:270px;--c1:#35a0e8;--c2:#123f7d;--d:1.6s"><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i><i class="tp"></i></div>
+                <div class="tower" style="--x:85px;--z:-20px;--h:210px;--c1:#2a86d8;--c2:#0f3a72;--d:2.4s"><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i><i class="tp"></i></div>
+                <div class="tower" style="--x:170px;--z:40px;--h:150px;--c1:#2b7fd0;--c2:#12417a;--d:3.2s"><i class="fr"></i><i class="bk"></i><i class="rt"></i><i class="lf"></i><i class="tp"></i></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="value-strip" aria-label="Our approach"><div class="wrap value-grid"><div><span>01 / DISCOVER</span><strong>Understand the challenge</strong></div><div><span>02 / ENGINEER</span><strong>Build for real users</strong></div><div><span>03 / EVOLVE</span><strong>Improve beyond launch</strong></div></div></section>
+
+    <!-- Services Section (Kora Bento / CMS Service Cards) -->
+    <section>
+      <div class="wrap">
+        <div class="head">
+          <h2>What we do for you</h2>
+          <p class="lead">Thoughtful design, dependable engineering and technology tailored to your goals.</p>
+        </div>
+
+        <div class="grid g3">
+          <div class="card">
+            <div class="ico">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 21h8"/></svg>
+            </div>
+            <h3>Web development</h3>
+            <p>Fast, secure websites and customer portals that load quickly and convert visitors into enquiries.</p>
+            <a href="services.html#web" class="card-action-link">Explore service <span class="btn-arrow">→</span></a>
+          </div>
+
+          <div class="card">
+            <div class="ico">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/><circle cx="19" cy="18" r="2"/></svg>
+            </div>
+            <h3>ERP and custom software</h3>
+            <p>Systems built around how your team works: inventory, billing, HR and reporting in one place.</p>
+            <a href="services.html#erp" class="card-action-link">Explore service <span class="btn-arrow">→</span></a>
+          </div>
+
+          <div class="card">
+            <div class="ico">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>
+            </div>
+            <h3>Mobile apps</h3>
+            <p>iOS and Android apps with offline support, built once and tested on real devices.</p>
+            <a href="services.html#mobile" class="card-action-link">Explore service <span class="btn-arrow">→</span></a>
+          </div>
+
+          <div class="card">
+            <div class="ico">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18a4 4 0 0 1-.5-8A6 6 0 0 1 18 9a4.5 4.5 0 0 1-.5 9z"/></svg>
+            </div>
+            <h3>Cloud and DevOps</h3>
+            <p>Migration, automated deployments, monitoring and cost control on the cloud platform that suits your business.</p>
+            <a href="services.html#cloud" class="card-action-link">Explore service <span class="btn-arrow">→</span></a>
+          </div>
+
+          <div class="card">
+            <div class="ico">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l3 3M16 16l3 3M19 5l-3 3M8 16l-3 3"/></svg>
+            </div>
+            <h3>AI and automation</h3>
+            <p>Chatbots, document processing and workflow automation that remove repetitive manual work.</p>
+            <a href="services.html#ai" class="card-action-link">Explore service <span class="btn-arrow">→</span></a>
+          </div>
+
+          <div class="card">
+            <div class="ico">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v12c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>
+            </div>
+            <h3>Data services</h3>
+            <p>Catalog digitization, data cleansing and dashboards so decisions rest on accurate numbers.</p>
+            <a href="services.html#data" class="card-action-link">Explore service <span class="btn-arrow">→</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Delivery Process Split (Kora Feature Row) -->
+    <section class="alt">
+      <div class="wrap">
+        <div class="split">
+          <img src="assets/img/hero-workspace-hd.svg" alt="RoxTech engineers collaborating at a workspace" loading="lazy">
+          <div>
+            <h2>A delivery process with no surprises</h2>
+            <p class="lead">You see working software every two weeks, a fixed scope you can approve, and one project lead who answers your messages.</p>
+            <ul>
+              <li>Written scope and price before we start</li>
+              <li>Fortnightly demos and a shared task board</li>
+              <li>Security testing before every release</li>
+              <li>30 days of free support after go-live</li>
+            </ul>
+            <div style="margin-top: 32px;">
+              <a class="btn btn-primary" href="contact.html">Schedule a scoping call <span class="btn-arrow">→</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How a Project Runs (Kora 5-Step Workflow) -->
+    <section class="dark">
+      <div class="wrap">
+        <div class="head">
+          <h2 style="color: #FFFFFF;">How a project runs</h2>
+          <p class="lead">From architecture blueprints to round-the-clock maintenance.</p>
+        </div>
+
+        <div class="steps">
+          <div class="step-card">
+            <span class="step-number">STEP 01</span>
+            <h3>Discover</h3>
+            <p>We learn your goals, users, constraints and integration requirements.</p>
+          </div>
+          <div class="step-card">
+            <span class="step-number">STEP 02</span>
+            <h3>Design</h3>
+            <p>Interactive wireframes, UX flows, and system architecture you approve.</p>
+          </div>
+          <div class="step-card">
+            <span class="step-number">STEP 03</span>
+            <h3>Build</h3>
+            <p>Two-week agile sprints with working live demos on staging environments.</p>
+          </div>
+          <div class="step-card">
+            <span class="step-number">STEP 04</span>
+            <h3>Test</h3>
+            <p>Thorough QA, vulnerability scanning, and OWASP security compliance.</p>
+          </div>
+          <div class="step-card">
+            <span class="step-number">STEP 05</span>
+            <h3>Launch &amp; Support</h3>
+            <p>Zero-downtime go-live, real-time monitoring and 30 days free support.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Recent Work / Case Studies (Kora CMS Portfolio) -->
+    <section>
+      <div class="wrap">
+        <div class="head">
+          <h2>Recent work across India &amp; global enterprises</h2>
+          <p class="lead">Measurable outcomes delivered for manufacturing, retail, and field operations.</p>
+        </div>
+
+        <div class="grid g3">
+          <a class="card link" href="case-studies.html">
+            <img src="assets/img/project-erp-hd.svg" alt="Pan-India multi-plant ERP" class="card-img" loading="lazy">
+            <span class="tag" style="margin-top:0; margin-bottom:8px;">Manufacturing &bull; Gujarat &amp; Pan-India</span>
+            <h3>Pan-India multi-plant ERP</h3>
+            <p>Stock errors down 62% across 4 manufacturing units with automated GST &amp; E-Way bill generation.</p>
+            <div class="meta">
+              <div><strong>62%</strong><span>stock errors cut</span></div>
+              <div><strong>4 hrs</strong><span>saved daily</span></div>
+            </div>
+            <span class="card-action-link">View case study <span class="btn-arrow">→</span></span>
+          </a>
+
+          <a class="card link" href="case-studies.html">
+            <img src="assets/img/project-web-hd.svg" alt="Omnichannel storefront &amp; UPI" class="card-img" loading="lazy">
+            <span class="tag" style="margin-top:0; margin-bottom:8px;">BFSI &amp; Retail &bull; Gujarat &amp; National</span>
+            <h3>Omnichannel storefront &amp; UPI</h3>
+            <p>Page load cut to 1.4s, handling 1.2M+ instant UPI transactions during peak seasonal festivals.</p>
+            <div class="meta">
+              <div><strong>1.4s</strong><span>page load</span></div>
+              <div><strong>1.2M+</strong><span>UPI transactions</span></div>
+            </div>
+            <span class="card-action-link">View case study <span class="btn-arrow">→</span></span>
+          </a>
+
+          <a class="card link" href="case-studies.html">
+            <img src="assets/img/project-app-hd.svg" alt="Field technician mobile app" class="card-img" loading="lazy">
+            <span class="tag" style="margin-top:0; margin-bottom:8px;">Energy &amp; Telecom &bull; Pan-India</span>
+            <h3>Field technician mobile app</h3>
+            <p>Offline-first Flutter app used by 400+ field engineers across urban and rural zones with zero data loss.</p>
+            <div class="meta">
+              <div><strong>400+</strong><span>field engineers</span></div>
+              <div><strong>0%</strong><span>data loss</span></div>
+            </div>
+            <span class="card-action-link">View case study <span class="btn-arrow">→</span></span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Engagement Models / Pricing Tiers (Kora Iconic Tier Grid) -->
+    <section class="alt">
+      <div class="wrap">
+        <div class="head centered">
+          <h2>Flexible engagement models</h2>
+          <p class="lead">Predictable budgets, direct engineer access, and 100% intellectual property ownership.</p>
+        </div>
+
+        <div class="pricing-grid">
+          <!-- Tier 1 -->
+          <div class="pricing-card">
+            <div class="pricing-tier">Sprint MVP / Prototype</div>
+            <div class="pricing-desc">For validating new software products, portals, or urgent feature sprints.</div>
+            <div class="pricing-price">Fixed-Price <small>/ milestone</small></div>
+            <ul class="pricing-features">
+              <li>Detailed architecture blueprint &amp; written scope</li>
+              <li>Dedicated full-stack engineering team</li>
+              <li>Fortnightly milestone releases &amp; demos</li>
+              <li>OWASP security baseline testing</li>
+              <li>100% client code &amp; IP ownership</li>
+              <li>30 days free post-launch bug fixes</li>
+            </ul>
+            <a href="contact.html" class="btn btn-ghost">Start Sprint MVP</a>
+          </div>
+
+          <!-- Tier 2 (Featured) -->
+          <div class="pricing-card featured">
+            <span class="pricing-pill">Most Popular</span>
+            <div class="pricing-tier">Dedicated Pod</div>
+            <div class="pricing-desc">For scaling products, enterprise ERPs, and ongoing product roadmaps.</div>
+            <div class="pricing-price">Monthly Pod <small>/ dedicated team</small></div>
+            <ul class="pricing-features">
+              <li>Senior architects, full-stack engineers &amp; QA</li>
+              <li>Named project lead &amp; daily Slack/Teams standup</li>
+              <li>Direct overlap with IST, EMEA &amp; US East hours</li>
+              <li>Automated CI/CD pipelines &amp; cloud infrastructure</li>
+              <li>Continuous performance &amp; vulnerability audits</li>
+              <li>Full scalability: adjust pod size on 30-day notice</li>
+            </ul>
+            <a href="contact.html" class="btn btn-primary">Book Dedicated Pod <span class="btn-arrow">→</span></a>
+          </div>
+
+          <!-- Tier 3 -->
+          <div class="pricing-card">
+            <div class="pricing-tier">Enterprise CoE</div>
+            <div class="pricing-desc">For large multi-plant corporations requiring 24/7 SLA operations.</div>
+            <div class="pricing-price">Custom CoE <small>/ enterprise SLA</small></div>
+            <ul class="pricing-features">
+              <li>Dedicated in-house engineering pods at our Ahmedabad headquarters</li>
+              <li>Follow-the-sun 24/7/365 SLA monitoring coverage</li>
+              <li>DPDP Act 2023, ISO 27001 &amp; SOC 2 Type II audit</li>
+              <li>High-availability cloud &amp; multi-region failover</li>
+              <li>Executive steering committee &amp; quarterly reviews</li>
+              <li>Full disaster recovery &amp; business continuity</li>
+            </ul>
+            <a href="contact.html" class="btn btn-ghost">Discuss Enterprise CoE</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section (Kora Review Cards) -->
+    <section>
+      <div class="wrap">
+        <div class="head">
+          <h2>What clients say</h2>
+          <p class="lead">Trusted by technical leaders across India, the UK, and North America.</p>
+        </div>
+
+        <div class="grid g3">
+          <div class="card testimonial">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="quote">“RoxTech scaled our omnichannel platform with deep UPI payment integration right before the Diwali rush. The site handled 1.2M transactions with zero downtime.”</p>
+            <div class="testimonial-header">
+              <img src="assets/img/client-rajesh.svg" alt="Illustrative profile graphic, not a real portrait" class="testimonial-avatar" loading="lazy">
+              <div class="author">
+                <strong>Rajesh Iyer</strong>
+                <span>Chief Technology Officer, Omnix Retail India (Ahmedabad)</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card testimonial">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="quote">“Their engineers integrated directly with our in-house team. The mobile application launched cleanly across iOS and Android with rock-solid offline support.”</p>
+            <div class="testimonial-header">
+              <img src="assets/img/client-sarah.svg" alt="Illustrative profile graphic, not a real portrait" class="testimonial-avatar" loading="lazy">
+              <div class="author">
+                <strong>Sarah Jenkins</strong>
+                <span>Chief Technology Officer, Meridian Health</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card testimonial">
+            <div class="testimonial-stars">★★★★★</div>
+            <p class="quote">“Working with RoxTech felt like having a senior engineering partner down the hall. They gave us fixed pricing, clear deliverables, and zero post-launch surprises.”</p>
+            <div class="testimonial-header">
+              <img src="assets/img/client-robert.svg" alt="Illustrative profile graphic, not a real portrait" class="testimonial-avatar" loading="lazy">
+              <div class="author">
+                <strong>Robert Chen</strong>
+                <span>Managing Director, Crestview Financial</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Accordion (Kora Smooth Details Accordion) -->
+    <section class="alt">
+      <div class="wrap">
+        <div class="head centered">
+          <h2>Common questions</h2>
+          <p class="lead">Straightforward answers about our engineering process, pricing, and handover.</p>
+        </div>
+
+        <div class="faq">
+          <details>
+            <summary>How long does a project take?</summary>
+            <p>Most web portals and mobile applications take 8 to 12 weeks. Larger ERP rollouts typically take 3 to 6 months. We ship working increments every two weeks, so you test features regularly before launch.</p>
+          </details>
+          <details>
+            <summary>How does pricing work?</summary>
+            <p>We work on fixed-price milestones with a clearly documented scope, or dedicated monthly engineering pods for ongoing work. There are no hidden fees, and any scope changes require written approval first.</p>
+          </details>
+          <details>
+            <summary>Who owns the code?</summary>
+            <p>You own 100% of the code, intellectual property, architecture files, and data from day one. When a milestone completes, full repository access and documentation transfer directly to your team.</p>
+          </details>
+          <details>
+            <summary>What support do you offer after launch?</summary>
+            <p>Every build includes 30 days of free post-launch support and bug fixes. Afterward, we offer monthly maintenance plans covering 24/7 uptime monitoring, security patches, backup management, and ongoing feature updates.</p>
+          </details>
+          <details>
+            <summary>Which technologies do you use?</summary>
+            <p>We build with modern, proven stacks: React, Next.js, Node.js, Python, Django, PostgreSQL, and Flutter for cross-platform mobile apps. For cloud infrastructure, we deploy to AWS, Azure, and Google Cloud.</p>
+          </details>
+          <details>
+            <summary>How do you handle security?</summary>
+            <p>Security is built into every release. We follow OWASP standards, enforce encrypted data storage, configure role-based access control, and perform automated vulnerability scans before any code reaches production.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- High-Converting CTA Box (Kora Book-a-Call Banner) -->
+    <section class="dark">
+      <div class="wrap">
+        <div class="cta-box">
+          <h2>Tell us what you want to build</h2>
+          <p>Share a few details and we will send a clear scope, timeline and price within two business days.</p>
+          <div class="actions">
+            <a class="btn btn-primary" href="contact.html">Start a project <span class="btn-arrow">→</span></a>
+            <a class="btn btn-ghost" href="mailto:hello@roxtech.io">Email our engineers</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Multi-Column Authority Footer (Kora Style) -->
+  <footer>
+    <div class="wrap">
+      <div class="cols">
+        <div>
+          <a href="index.html" class="brand-logo-container" aria-label="RoxTech — Intelligence Technology"><img src="assets/roxtech-symbol-clean.png" alt="RoxTech Symbol" class="brand-symbol-img"><div class="brand-text-block"><span class="brand-name">Rox<span>Tech</span></span><small class="brand-tagline">Intelligence Technology</small></div></a>
+          <p>Software, cloud and data services for companies that want technology that works and keeps working.</p>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <a href="about.html">About RoxTech</a>
+          <a href="industries.html">Industries We Serve</a>
+          <a href="case-studies.html">Case Studies &amp; Work</a>
+          <a href="blog.html">Engineering Insights</a>
+          <a href="careers.html">Careers &amp; Culture</a>
+          <a href="estimator.html">Project Cost Calculator</a>
+        </div>
+        <div>
+          <h4>Services</h4>
+          <a href="services.html#web">Web development</a>
+          <a href="services.html#erp">ERP &amp; custom software</a>
+          <a href="services.html#mobile">Mobile app development</a>
+          <a href="services.html#data">Data services &amp; AI</a>
+          <a href="services.html#cloud">Cloud &amp; DevOps</a>
+        </div>
+        <div>
+          <h4>Contact &amp; Hubs</h4>
+          <a href="contact.html">Request a Quote</a>
+          <a href="mailto:hello@roxtech.io">hello@roxtech.io</a>
+          
+          <p style="margin-top:10px; font-size:0.86rem; color:#94A3B8;">
+            <strong>HQ &amp; Engineering CoE:</strong><br>
+            Ahmedabad, Gujarat, India
+          </p>
+        </div>
+      </div>
+
+      <div class="legal"><div>&copy; 2026 RoxTech. All rights reserved.</div><div style="display:flex;gap:20px"><a href="contact.html">Contact</a><a href="services.html">Services</a></div></div></div></footer>
+
+  <!-- Lenis Inertial Smooth Scrolling & Interactive Scripts -->
+  <script src="assets/lenis.min.js"></script>
+  <script src="assets/rox.js"></script>
+  <script src="assets/hero3d.js" defer></script>
+  <script src="assets/chatbot.js" defer></script>
+</body>
+</html>

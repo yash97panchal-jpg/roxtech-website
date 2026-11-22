@@ -1,0 +1,375 @@
+/* RoxTech 2026 visual refresh — lightweight, responsive, no additional dependencies */
+:root{--rx-ink:#101a2b;--rx-blue:#1768e8;--rx-mist:#f4f7fb}
+html{scroll-behavior:smooth}body{font-family:'Source Sans 3',Arial,sans-serif;letter-spacing:-.008em}h1,h2,h3,h4{letter-spacing:-.045em}a,button{transition:background-color .2s,color .2s,transform .2s,border-color .2s}a:focus-visible,button:focus-visible{outline:3px solid #48b8ff;outline-offset:4px}
+header.top{background:rgba(255,255,255,.96)!important;backdrop-filter:blur(18px);box-shadow:0 1px 0 rgba(15,23,42,.06)}
+.brand-wordmark{display:inline-flex!important;align-items:center;gap:12px;text-decoration:none!important;flex-shrink:0}.brand-mark{width:39px;height:39px;border-radius:11px;background:#101d35;display:flex;align-items:center;justify-content:center;gap:4px;transform:rotate(-8deg)}.brand-mark span{width:6px;background:#69d8ff;border-radius:2px;transform:skewY(-20deg)}.brand-mark span:nth-child(1){height:13px}.brand-mark span:nth-child(2){height:24px;background:#fff}.brand-mark span:nth-child(3){height:17px}.brand-name{font-family:'Poppins',sans-serif;color:#111d33;font-weight:800;font-size:23px;letter-spacing:-1.3px;line-height:1.1}.brand-name>span{color:#166be9}.brand-name small{display:block;letter-spacing:3.4px;font:600 8px 'Source Sans 3',sans-serif;color:#66768b;margin-top:4px}
+nav.main{gap:clamp(12px,1.6vw,26px)!important}nav.main a:not(.btn){font-weight:600;color:#334155}nav.main a:not(.btn):hover{color:#1768e8}.btn-primary{background:#1768e8!important;border-color:#1768e8!important;box-shadow:none!important}.btn-primary:hover{background:#1053bd!important;transform:translateY(-2px)}
+.hero{position:relative;overflow:hidden;background:radial-gradient(ellipse at 83% 35%,#17396c 0%,transparent 48%),linear-gradient(135deg,#08111f,#0d2037 70%,#08111f)!important;padding-top:clamp(85px,9vw,135px)!important;padding-bottom:clamp(95px,10vw,145px)!important}.hero:before{content:"";position:absolute;inset:0;opacity:.19;pointer-events:none;background-image:linear-gradient(#7ebaff 1px,transparent 1px),linear-gradient(90deg,#7ebaff 1px,transparent 1px);background-size:90px 90px;mask-image:linear-gradient(90deg,transparent 25%,black)}.hero .wrap{position:relative;z-index:1}.hero h1{font-family:'Poppins',sans-serif;font-size:clamp(2.55rem,4.8vw,4.6rem)!important;line-height:1.12;letter-spacing:-.065em;max-width:780px}.hero h1 .text-gradient{background:linear-gradient(110deg,#7bd9ff,#80a6ff)!important;background-clip:text!important;-webkit-background-clip:text!important}.hero p{max-width:590px;line-height:1.75}.hero .actions{margin-top:30px}.hero-trust-bar{display:flex;align-items:center;gap:12px;margin-top:35px;color:#b8cbe0;font-size:.91rem}.trust-dot{display:none!important}.hero-brand-stage{filter:drop-shadow(0 30px 65px #1b70eb33)}.scene-chip{display:none!important}
+.value-strip{background:#fff;border-bottom:1px solid #e8edf5;padding:27px 0}.value-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:25px}.value-grid>div{display:flex;flex-direction:column;gap:7px;padding:12px 24px;border-left:2px solid #c8d9f2}.value-grid span{font-size:11px;font-weight:800;letter-spacing:2px;color:#3576d5}.value-grid strong{font-size:clamp(16px,1.6vw,21px);color:#14233a;letter-spacing:-.035em}
+section:not(.hero):not(.value-strip) .head h2{letter-spacing:-.055em}.card{border-radius:18px!important;transition:transform .25s,box-shadow .25s,border-color .25s!important}.card:hover{transform:translateY(-5px);box-shadow:0 20px 50px #102c5014!important;border-color:#b8d3f7!important}.footer-brand-logo{max-width:170px}footer{background:#0a1526!important}footer a:hover{color:#75caff!important}
+@media(max-width:1050px){nav.main{gap:12px!important}nav.main a{font-size:.84rem!important}.brand-name{font-size:21px}}
+@media(max-width:850px){.hero .wrap{grid-template-columns:1fr!important}.hero{padding-top:75px!important}.hero-brand-stage{min-height:340px}.scene3d{height:350px;--scale:.72}.value-grid{grid-template-columns:1fr;gap:4px}.value-grid>div{padding:10px 16px}.brand-mark{width:34px;height:34px}.brand-name{font-size:21px}}
+@media(max-width:480px){.hero h1{font-size:clamp(2.3rem,10vw,3.1rem)!important}.hero-brand-stage{min-height:270px}.scene3d{height:290px;--scale:.49}.hero .actions{display:flex;flex-wrap:wrap}.brand-name small{letter-spacing:2.4px}.value-strip{padding:15px 0}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+.brand-logo-container{display:flex!important;align-items:center!important;text-decoration:none!important}
+.brand-header-logo,.brand-logo-img{height:64px!important;max-height:72px!important;width:auto!important;max-width:320px!important;object-fit:contain!important;display:block!important;transition:transform .2s ease!important}
+.brand-logo-container:hover .brand-header-logo,.brand-logo-container:hover .brand-logo-img{transform:scale(1.02)!important}
+@media(max-width:850px){.brand-header-logo,.brand-logo-img{height:52px!important;max-width:240px!important}}
+@media(max-width:480px){.brand-header-logo,.brand-logo-img{height:44px!important;max-width:190px!important}}
+
+
+
+
+
+
+
+
+/* RoxTech Signature 3D Chatbot Symbol Header Branding (Stacked: Symbol on top, RoxTech, Intelligence Technology underneath) */
+.brand-logo-container {
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 2px !important;
+  text-decoration: none !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  flex-shrink: 0 !important;
+  padding: 2px 0 !important;
+}
+
+.brand-symbol-img {
+  width: 48px !important;
+  height: 48px !important;
+  object-fit: contain !important;
+  display: block !important;
+  flex-shrink: 0 !important;
+  filter: drop-shadow(0 4px 12px rgba(22, 107, 233, 0.32)) !important;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  margin: 0 auto !important;
+}
+
+.brand-logo-container:hover .brand-symbol-img {
+  transform: scale(1.08) rotate(2deg) !important;
+}
+
+.brand-text-block {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  margin-top: 1px !important;
+  line-height: 1 !important;
+}
+
+.brand-name {
+  font-family: 'Poppins', sans-serif !important;
+  color: #0f172a !important;
+  font-weight: 800 !important;
+  font-size: 19px !important;
+  letter-spacing: -0.5px !important;
+  line-height: 1.1 !important;
+  text-align: center !important;
+  display: inline-block !important;
+}
+
+.brand-name > span {
+  color: #166be9 !important;
+}
+
+.brand-tagline {
+  display: block !important;
+  letter-spacing: 1.6px !important;
+  font-family: 'Source Sans 3', sans-serif !important;
+  font-size: 8px !important;
+  font-weight: 700 !important;
+  color: #64748b !important;
+  margin-top: 2px !important;
+  text-transform: uppercase !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+}
+
+/* Footer Brand Logo Enhancement */
+.footer-brand-logo {
+  height: 48px !important;
+  width: auto !important;
+  max-width: 260px !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin-bottom: 16px !important;
+  filter: drop-shadow(0 4px 14px rgba(22, 107, 233, 0.32)) !important;
+}
+
+@media (max-width: 850px) {
+  .brand-symbol-img {
+    width: 44px !important;
+    height: 44px !important;
+  }
+  .brand-name {
+    font-size: 16.5px !important;
+  }
+  .brand-tagline {
+    letter-spacing: 1.2px !important;
+    font-size: 7px !important;
+  }
+  .footer-brand-logo {
+    height: 42px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .brand-symbol-img {
+    width: 38px !important;
+    height: 38px !important;
+  }
+  .brand-name {
+    font-size: 14.5px !important;
+  }
+  .brand-tagline {
+    letter-spacing: 1px !important;
+    font-size: 6.5px !important;
+  }
+  .footer-brand-logo {
+    height: 38px !important;
+  }
+}
+
+
+/* Footer Brand - Exact same 3D Symbol as Header */
+.footer-brand-container {
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 2px !important;
+  text-decoration: none !important;
+  margin-bottom: 18px !important;
+  line-height: 1 !important;
+}
+
+.footer-symbol-img {
+  width: 48px !important;
+  height: 48px !important;
+  object-fit: contain !important;
+  display: block !important;
+  filter: drop-shadow(0 4px 14px rgba(56, 189, 248, 0.35)) !important;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  margin-bottom: 2px !important;
+}
+
+.footer-brand-container:hover .footer-symbol-img {
+  transform: scale(1.08) rotate(2deg) !important;
+}
+
+.footer-brand-text {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  line-height: 1 !important;
+}
+
+.footer-brand-name {
+  font-family: 'Poppins', sans-serif !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  font-size: 20px !important;
+  letter-spacing: -0.5px !important;
+  line-height: 1.1 !important;
+}
+
+.footer-brand-name > span {
+  color: #38bdf8 !important;
+}
+
+.footer-brand-tagline {
+  display: block !important;
+  letter-spacing: 1.6px !important;
+  font-family: 'Source Sans 3', sans-serif !important;
+  font-size: 8px !important;
+  font-weight: 700 !important;
+  color: #94a3b8 !important;
+  margin-top: 2px !important;
+  text-transform: uppercase !important;
+  white-space: nowrap !important;
+}
+
+
+/* Footer Branding — Exact Format as Header */
+footer .brand-logo-container {
+  display: inline-flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  margin-bottom: 18px !important;
+  gap: 2px !important;
+  text-decoration: none !important;
+}
+
+footer .brand-symbol-img {
+  width: 48px !important;
+  height: 48px !important;
+  object-fit: contain !important;
+  display: block !important;
+  filter: drop-shadow(0 4px 14px rgba(56, 189, 248, 0.35)) !important;
+  margin: 0 auto !important;
+}
+
+footer .brand-logo-container:hover .brand-symbol-img {
+  transform: scale(1.08) rotate(2deg) !important;
+}
+
+footer .brand-text-block {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  margin-top: 1px !important;
+}
+
+footer .brand-name {
+  color: #ffffff !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 19px !important;
+  letter-spacing: -0.5px !important;
+  line-height: 1.1 !important;
+  text-align: center !important;
+}
+
+footer .brand-name > span {
+  color: #38bdf8 !important;
+}
+
+footer .brand-tagline {
+  color: #94a3b8 !important;
+  display: block !important;
+  letter-spacing: 1.6px !important;
+  font-family: 'Source Sans 3', sans-serif !important;
+  font-size: 8px !important;
+  font-weight: 700 !important;
+  margin-top: 2px !important;
+  text-transform: uppercase !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+}
+
+
+/* ==========================================================================
+   Full Covered & Uncropped Content Images (1200x720 Native Proportions)
+   ========================================================================== */
+.split img,
+.card-img,
+img.card-img,
+.split > img,
+section .split img,
+.grid .card img:not(.brand-symbol-img):not(.footer-symbol-img):not(.testimonial-avatar),
+article.card img {
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 1200 / 720 !important;
+  object-fit: cover !important;
+  display: block !important;
+  max-width: 100% !important;
+}
+
+.testimonial-avatar {
+  width: 68px !important;
+  height: auto !important;
+  aspect-ratio: 1200 / 720 !important;
+  border-radius: 8px !important;
+  object-fit: cover !important;
+  border: 1.5px solid #166be9 !important;
+  flex-shrink: 0 !important;
+  display: block !important;
+}
+
+/* ==========================================================================
+   Hero 3D Model: Cyber 0 1 Binary Code Matrix Background Design
+   ========================================================================== */
+.hero-brand-stage {
+  position: relative !important;
+  overflow: visible !important;
+}
+
+/* Background Cyber 0 1 Binary Code Stream Canvas */
+.hero-binary-canvas {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  border-radius: 20px !important;
+  opacity: 0.9 !important;
+  -webkit-mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, #000 35%, transparent 78%) !important;
+  mask-image: radial-gradient(ellipse 75% 70% at 50% 50%, #000 35%, transparent 78%) !important;
+}
+
+.scene3d {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/* 3D Perspective Binary Matrix Wall (Moves in 3D Depth behind Towers) */
+.scene-binary-wall {
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  transform-style: preserve-3d !important;
+  transform: translateZ(-130px) translateY(-50px) !important;
+  pointer-events: none !important;
+}
+
+.bin-col {
+  position: absolute !important;
+  left: calc(var(--x, 0px) - 10px) !important;
+  top: -190px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  color: rgba(56, 189, 248, 0.45) !important;
+  text-shadow: 0 0 8px rgba(56, 189, 248, 0.6) !important;
+  user-select: none !important;
+  animation: binStreamFlow 7s linear infinite !important;
+  animation-delay: var(--d, 0s) !important;
+}
+
+.bin-col i {
+  font-style: normal !important;
+  display: inline-block !important;
+  transition: color 0.3s ease, text-shadow 0.3s ease !important;
+}
+
+.bin-col i:nth-child(4n+1) {
+  color: rgba(125, 211, 252, 0.9) !important;
+  text-shadow: 0 0 10px rgba(56, 189, 248, 0.95) !important;
+}
+
+.bin-col i:nth-child(6n) {
+  color: rgba(129, 140, 248, 0.75) !important;
+  text-shadow: 0 0 8px rgba(129, 140, 248, 0.7) !important;
+}
+
+@keyframes binStreamFlow {
+  0% {
+    transform: translateY(0);
+    opacity: 0.15;
+  }
+  25% {
+    opacity: 0.85;
+  }
+  75% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(90px);
+    opacity: 0.15;
+  }
+}

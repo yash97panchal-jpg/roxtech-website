@@ -1,0 +1,12 @@
+# OS & Editor Files
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.*
+.vscode/
+.idea/
+*.swp
+*.bak
+push-to-github.bat
+push-to-github.ps1

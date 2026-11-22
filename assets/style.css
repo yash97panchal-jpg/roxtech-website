@@ -1,0 +1,935 @@
+/* =========================================================================
+ * RoxTech — Premier Enterprise IT Services & Solutions Design System
+ * Three-Tier Color System:
+ *   Tier 1 (Foundation / Authority): Deep Corporate Navy (#0B1B3D / #071026)
+ *   Tier 2 (Action / High-Impact):  Electric Orange (#FF5E14 / #E04D09)
+ *   Tier 3 (Precision / Tech):      Sapphire Tech Blue (#2563EB / #1D4ED8)
+ * Canvas: Pure Crisp White (#FFFFFF) & Soft Slate (#F8FAFC / #F1F5F9)
+ * Typography: Poppins (headings), Source Sans 3 (body), Barlow (numbers)
+ * ========================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=Barlow:wght@500;600;700&display=swap');
+
+:root {
+  /* Three-Tier Color System */
+  --tier1-navy: #0B1B3D;
+  --tier1-navy-dark: #071026;
+  --tier1-navy-surface: #0E224D;
+  
+  --tier2-orange: #FF5E14;
+  --tier2-orange-hover: #E04D09;
+  --tier2-orange-light: #FFF4ED;
+  --tier2-orange-border: rgba(255, 94, 20, 0.35);
+
+  --tier3-blue: #2563EB;
+  --tier3-blue-hover: #1D4ED8;
+  --tier3-blue-light: #EFF6FF;
+  --tier3-blue-border: rgba(37, 99, 235, 0.3);
+
+  /* Neutral Corporate Canvas */
+  --enterprise-bg: #FFFFFF;
+  --enterprise-bg-alt: #F8FAFC;
+  --enterprise-bg-slate: #F1F5F9;
+  --enterprise-border: #E2E8F0;
+  --enterprise-border-strong: #CBD5E1;
+  --enterprise-text-title: #0F172A;
+  --enterprise-text-body: #334155;
+  --enterprise-text-muted: #64748B;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: 'Source Sans 3', 'Segoe UI', Roboto, Arial, sans-serif;
+  color: #0F172A;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =========================================================================
+ * EXECUTIVE ENTERPRISE TYPOGRAPHY SYSTEM
+ * High-Contrast, Professional Hierarchy matching Premier IT Consulting Standards
+ * ========================================================================= */
+body {
+  font-family: 'Source Sans 3', 'Segoe UI', Roboto, Arial, sans-serif;
+  overflow-x: hidden;
+  background-color: #FAF9F6;
+  color: #334155;
+  line-height: 1.6;
+}
+
+/* Headings: Deep High-Contrast Corporate Slate (#0F172A) on Content Canvas */
+h1:not(footer *):not([class*="text-white"]):not(.text-white):not([class*="bg-[#0"] *):not(.mobile-drawer-panel *):not(.site-directory-panel *):not(#site-directory-panel *):not(#brand-slider-card *):not(.rox-chat-window *),
+h2:not(footer *):not([class*="text-white"]):not(.text-white):not([class*="bg-[#0"] *):not(.mobile-drawer-panel *):not(.site-directory-panel *):not(#site-directory-panel *):not(#brand-slider-card *):not(.rox-chat-window *),
+h3:not(footer *):not([class*="text-white"]):not(.text-white):not([class*="bg-[#0"] *):not(.mobile-drawer-panel *):not(.site-directory-panel *):not(#site-directory-panel *):not(#brand-slider-card *):not(.rox-chat-window *),
+h4:not(footer *):not([class*="text-white"]):not(.text-white):not([class*="bg-[#0"] *):not(.mobile-drawer-panel *):not(.site-directory-panel *):not(#site-directory-panel *):not(#brand-slider-card *):not(.rox-chat-window *),
+h5:not(footer *):not([class*="text-white"]):not(.text-white):not([class*="bg-[#0"] *):not(.mobile-drawer-panel *):not(.site-directory-panel *):not(#site-directory-panel *):not(#brand-slider-card *):not(.rox-chat-window *),
+h6:not(footer *):not([class*="text-white"]):not(.text-white):not([class*="bg-[#0"] *):not(.mobile-drawer-panel *):not(.site-directory-panel *):not(#site-directory-panel *):not(#brand-slider-card *):not(.rox-chat-window *) {
+  font-family: 'Poppins', 'Segoe UI', Roboto, Arial, sans-serif;
+  letter-spacing: -0.02em;
+  font-weight: 800;
+  color: #0F172A;
+}
+
+/* Body & Text Elements: Crisp Slate on Content Canvas (Excluded on dark containers) */
+p:not(footer *):not([class*="text-white"]):not([class*="text-slate-"]):not([class*="text-gray-"]):not(.mobile-drawer-panel *):not(.site-directory-panel *):not(#site-directory-panel *):not(#brand-slider-card *):not(#roxtech-chatbot-root *):not(.rox-chat-window *):not(.rox-msg-bubble *):not([class*="bg-[#0"] *):not(.bg-slate-900 *):not(.bg-slate-800 *),
+li:not(footer *):not([class*="text-white"]):not([class*="text-slate-"]):not([class*="text-gray-"]):not(.mobile-drawer-panel *):not(.site-directory-panel *):not(#site-directory-panel *):not(#brand-slider-card *):not(#roxtech-chatbot-root *):not(.rox-chat-window *):not(.rox-msg-bubble *):not([class*="bg-[#0"] *):not(.bg-slate-900 *):not(.bg-slate-800 *),
+label:not(footer *):not([class*="text-white"]):not([class*="text-slate-"]):not([class*="text-gray-"]):not(.mobile-drawer-panel *):not(.site-directory-panel *):not(#site-directory-panel *):not(#brand-slider-card *):not(#roxtech-chatbot-root *):not(.rox-chat-window *):not(.rox-msg-bubble *):not([class*="bg-[#0"] *):not(.bg-slate-900 *):not(.bg-slate-800 *),
+dd:not(footer *):not(.mobile-drawer-panel *):not(.site-directory-panel *):not(#site-directory-panel *):not(#brand-slider-card *):not(#roxtech-chatbot-root *),
+dt:not(footer *):not(.mobile-drawer-panel *):not(.site-directory-panel *):not(#site-directory-panel *):not(#brand-slider-card *):not(#roxtech-chatbot-root *),
+th:not(footer *):not(.mobile-drawer-panel *):not(.site-directory-panel *):not(#site-directory-panel *):not(#brand-slider-card *):not(#roxtech-chatbot-root *),
+td:not(footer *):not(.mobile-drawer-panel *):not(.site-directory-panel *):not(#site-directory-panel *):not(#brand-slider-card *):not(#roxtech-chatbot-root *) {
+  color: #334155;
+}
+
+/* Dark Surface Protections: Elements on dark navy/slate must stay white/silver */
+.mobile-drawer-panel,
+.site-directory-panel,
+#site-directory-panel,
+.bg-\[\#071026\],
+.bg-\[\#0B1B3D\],
+.bg-\[\#0b1120\],
+.bg-\[\#0F1118\],
+.bg-slate-900,
+.it-card-navy,
+.rox-chat-window,
+.rox-chat-teaser,
+#brand-slider-card,
+#live-3d-manifesto {
+  color: #FFFFFF;
+}
+
+.mobile-drawer-panel h1, .mobile-drawer-panel h2, .mobile-drawer-panel h3, .mobile-drawer-panel h4,
+.site-directory-panel h1, .site-directory-panel h2, .site-directory-panel h3, .site-directory-panel h4,
+#site-directory-panel h1, #site-directory-panel h2, #site-directory-panel h3, #site-directory-panel h4,
+.bg-\[\#071026\] h1, .bg-\[\#071026\] h2, .bg-\[\#071026\] h3, .bg-\[\#071026\] h4,
+.bg-\[\#0B1B3D\] h1, .bg-\[\#0B1B3D\] h2, .bg-\[\#0B1B3D\] h3, .bg-\[\#0B1B3D\] h4,
+.bg-\[\#0F1118\] h1, .bg-\[\#0F1118\] h2, .bg-\[\#0F1118\] h3, .bg-\[\#0F1118\] h4,
+#brand-slider-card h1, #brand-slider-card h2, #brand-slider-card h3, #brand-slider-card h4,
+.rox-chat-window h1, .rox-chat-window h2, .rox-chat-window h3, .rox-chat-window h4 {
+  color: #FFFFFF !important;
+}
+
+.mobile-drawer-panel p, .site-directory-panel p, #site-directory-panel p,
+.bg-\[\#071026\] p, .bg-\[\#0B1B3D\] p, .bg-\[\#0b1120\] p, .bg-\[\#0F1118\] p,
+.bg-slate-900 p, .bg-slate-800 p,
+#brand-slider-card p {
+  color: #CBD5E1 !important;
+}
+
+.mobile-drawer-panel li, .site-directory-panel li, #site-directory-panel li,
+.mobile-drawer-panel span:not([class*="text-"]):not([class*="bg-"]),
+.site-directory-panel span:not([class*="text-"]):not([class*="bg-"]),
+#site-directory-panel span:not([class*="text-"]):not([class*="bg-"]),
+#brand-slider-card span:not([class*="text-"]):not([class*="bg-"]),
+.bg-\[\#071026\] span:not([class*="text-"]):not([class*="bg-"]),
+.bg-\[\#0B1B3D\] span:not([class*="text-"]):not([class*="bg-"]) {
+  color: inherit;
+}
+
+/* Chatbot explicit readability */
+#roxtech-chatbot-root .rox-msg-bubble p,
+#roxtech-chatbot-root .rox-msg-bubble li,
+#roxtech-chatbot-root .rox-msg-bubble span {
+  color: inherit !important;
+}
+#roxtech-chatbot-root .rox-msg-row.bot .rox-msg-bubble {
+  color: #F1F5F9 !important;
+  background-color: #1E293B !important;
+}
+#roxtech-chatbot-root .rox-msg-row.bot .rox-msg-bubble p {
+  color: #F1F5F9 !important;
+}
+#roxtech-chatbot-root .rox-msg-row.user .rox-msg-bubble,
+#roxtech-chatbot-root .rox-msg-row.user .rox-msg-bubble p {
+  color: #FFFFFF !important;
+}
+#roxtech-chatbot-root .rox-chat-meta p {
+  color: #94A3B8 !important;
+}
+#roxtech-chatbot-root .rox-chat-teaser p {
+  color: #F8FAFC !important;
+}
+
+/* Ensure Slate color utility classes render accurately */
+.text-slate-100 { color: #F1F5F9 !important; }
+.text-slate-200 { color: #E2E8F0 !important; }
+.text-slate-300 { color: #CBD5E1 !important; }
+.text-slate-400 { color: #94A3B8 !important; }
+.text-slate-500 { color: #64748B !important; }
+.text-slate-600 { color: #475569 !important; }
+.text-slate-700 { color: #334155 !important; }
+.text-slate-800 { color: #1E293B !important; }
+.text-slate-900 { color: #0F172A !important; }
+.text-white { color: #FFFFFF !important; }
+.text-black { color: #0F172A !important; } /* Refined modern executive slate-black */
+
+/* =========================================================================
+ * COMPREHENSIVE ENTERPRISE FOOTER — HIGH-CONTRAST DATA VISIBILITY
+ * Overrides global typography specifically within all footers so that:
+ * Global Desk Phone, Inquiries Email, ISO Certifications, Practice Areas,
+ * Industry Verticals, Corporate Links, and Legal Terms are 100% visible,
+ * crisp, readable, and distinct on the #071026 Midnight Navy canvas.
+ * ========================================================================= */
+footer {
+  background-color: #071026 !important;
+  color: #E2E8F0 !important;
+}
+
+/* Footer Section Headings & Category Titles: Bold Pure White */
+footer h1, footer h2, footer h3, footer h4, footer h5, footer h6,
+footer .text-white,
+footer div[class*="font-bold"],
+footer div[class*="tracking-wider"],
+footer strong,
+footer b {
+  color: #FFFFFF !important;
+}
+
+/* Paragraphs & General Body Text in Footer: Crisp Readable Silver */
+footer p,
+footer div.space-y-5 p,
+footer span:not([class*="text-[#FF5E14]"]):not([class*="text-emerald"]):not([class*="text-blue"]):not([class*="bg-emerald"]),
+footer dd,
+footer dt {
+  color: #E2E8F0 !important;
+}
+
+/* Slate utility overrides inside footer to guarantee bright high-contrast text */
+footer .text-slate-200,
+footer .text-slate-300,
+footer .text-slate-400,
+footer .text-gray-200,
+footer .text-gray-300,
+footer .text-gray-400 {
+  color: #CBD5E1 !important;
+}
+
+/* Navigation Links, Practice Area Links, and Buttons in Footer */
+footer ul li,
+footer ul li a,
+footer a:not([class*="text-[#FF5E14]"]):not([class*="text-emerald"]):not([class*="text-blue"]),
+footer button:not([class*="text-[#FF5E14]"]):not([class*="text-emerald"]) {
+  color: #CBD5E1 !important;
+  text-decoration: none !important;
+  font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+footer ul li a:hover,
+footer a:hover,
+footer button:hover {
+  color: #FF5E14 !important;
+}
+
+/* Preserved Accents in Footer */
+footer .text-\[\#FF5E14\],
+footer a.text-\[\#FF5E14\],
+footer span.text-\[\#FF5E14\],
+footer .text-contrast-orange {
+  color: #FF5E14 !important;
+}
+
+/* ISO 9001 / ISO 27001 Certification & Green Shield */
+footer [class*="text-emerald"],
+footer i[data-lucide="shield-check"] {
+  color: #34D399 !important;
+}
+
+footer .bg-emerald-500\/20,
+footer .bg-emerald-500\/10 {
+  background-color: rgba(16, 185, 129, 0.22) !important;
+  color: #34D399 !important;
+}
+
+/* Global Contact Details Block (Phone, Email, Headquarters) */
+footer .footer-contact-block,
+footer .footer-contact-row,
+footer .footer-contact-row strong {
+  color: #FFFFFF !important;
+}
+
+footer a[href^="tel:"],
+footer a[href^="mailto:"],
+footer .footer-contact-link,
+footer .text-blue-300,
+footer .text-blue-400 {
+  color: #93C5FD !important;
+  font-weight: 600;
+}
+
+footer a[href^="tel:"]:hover,
+footer a[href^="mailto:"]:hover,
+footer .footer-contact-link:hover {
+  color: #FF5E14 !important;
+  text-decoration: underline !important;
+}
+
+/* Bottom Bar: Copyright & Compliance Terms */
+footer .border-t,
+footer .text-slate-500,
+footer div.text-slate-500,
+footer div.text-slate-500 a {
+  color: #94A3B8 !important;
+}
+
+footer div.text-slate-500 a:hover,
+footer .border-t a:hover {
+  color: #FF5E14 !important;
+}
+
+/* High Contrast Opposite Color System (Orange & Blue) */
+.text-contrast-orange,
+.text-orange-contrast,
+.text-\[\#FF5E14\],
+span.text-\[\#FF5E14\],
+a.text-\[\#FF5E14\],
+i.text-\[\#FF5E14\] {
+  color: #FF5E14 !important;
+}
+
+.text-contrast-blue,
+.text-blue-contrast,
+.text-\[\#2563EB\],
+span.text-\[\#2563EB\],
+a.text-\[\#2563EB\],
+i.text-\[\#2563EB\] {
+  color: #2563EB !important;
+}
+
+.bg-contrast-orange {
+  background-color: #FF5E14 !important;
+  color: #FFFFFF !important;
+}
+.bg-contrast-blue {
+  background-color: #2563EB !important;
+  color: #FFFFFF !important;
+}
+.badge-contrast-orange {
+  background: #FFF4ED !important;
+  color: #FF5E14 !important;
+  border: 1.5px solid #2563EB !important;
+  font-weight: 700 !important;
+}
+.badge-contrast-blue {
+  background: #EFF6FF !important;
+  color: #2563EB !important;
+  border: 1.5px solid #FF5E14 !important;
+  font-weight: 700 !important;
+}
+
+/* Solid Opaque Corporate Header - 100% Solid Fill, Zero Transparency */
+.header-solid-corporate {
+  background-color: #FAF9F6 !important;
+  background-image: none !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-bottom: 1.5px solid #E2E8F0 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04) !important;
+}
+
+.header-solid-corporate nav a {
+  color: #0F172A !important;
+  font-weight: 700 !important;
+}
+
+.header-solid-corporate nav a:hover,
+.header-solid-corporate nav a.nav-active {
+  color: #FF5E14 !important;
+}
+
+.header-solid-navy {
+  background-color: #071026 !important;
+  background-image: none !important;
+  opacity: 1 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3) !important;
+}
+
+.font-mono, code {
+  font-family: 'Barlow', 'Segoe UI', Roboto, Arial, sans-serif;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+/* Custom Minimal Corporate Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F8FAFC;
+}
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* =========================================================================
+ * MODERN ENTERPRISE IT BUTTONS (Clean, 8px Radius, High Polish)
+ * ========================================================================= */
+.btn-enterprise-primary, .btn-orange-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.4rem;
+  border-radius: 8px;
+  background: #FF5E14;
+  color: #FFFFFF !important;
+  font-family: 'Source Sans 3', 'Segoe UI', Roboto, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: -0.01em;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 4px rgba(255, 94, 20, 0.2);
+  border: 1px solid #FF5E14;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-enterprise-primary *,
+.btn-orange-pill * {
+  color: #FFFFFF !important;
+}
+
+.btn-enterprise-primary:hover, .btn-orange-pill:hover {
+  background: #E04D09;
+  border-color: #E04D09;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(224, 77, 9, 0.3);
+}
+
+.btn-enterprise-navy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.4rem;
+  border-radius: 8px;
+  background: #0B1B3D;
+  color: #FFFFFF !important;
+  font-family: 'Source Sans 3', 'Segoe UI', Roboto, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px solid #1E293B;
+  box-shadow: 0 2px 4px rgba(11, 27, 61, 0.15);
+}
+
+.btn-enterprise-navy:hover {
+  background: #142857;
+  border-color: #2563EB;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(11, 27, 61, 0.25);
+}
+
+.btn-enterprise-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.4rem;
+  border-radius: 8px;
+  background: #FFFFFF;
+  color: #0F172A !important;
+  border: 1px solid #CBD5E1;
+  font-family: 'Source Sans 3', 'Segoe UI', Roboto, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: -0.01em;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-enterprise-outline:hover {
+  border-color: #FF5E14;
+  background: #FFF7ED;
+  color: #FF5E14 !important;
+}
+
+/* =========================================================================
+ * ROXTECH CORPORATE LOGO STYLING & SIZING
+ * ========================================================================= */
+.brand-header-logo {
+  height: 44px;
+  width: auto;
+  max-width: 320px;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 640px) {
+  .brand-header-logo {
+    height: 50px;
+    max-width: 360px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .brand-header-logo {
+    height: 54px;
+    max-width: 400px;
+  }
+}
+
+.brand-footer-logo {
+  height: 48px;
+  width: auto;
+  max-width: 320px;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 640px) {
+  .brand-footer-logo {
+    height: 52px;
+    max-width: 360px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .brand-footer-logo {
+    height: 56px;
+    max-width: 400px;
+  }
+}
+
+.brand-drawer-logo {
+  height: 44px;
+  width: auto;
+  max-width: 280px;
+  object-fit: contain;
+  display: block;
+}
+
+.btn-enterprise-navy:hover {
+  background: #071026;
+  border-color: #FF5E14;
+  transform: translateY(-1px);
+}
+
+.btn-enterprise-outline, .btn-dark-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.35rem;
+  border-radius: 6px;
+  background: #FFFFFF;
+  color: #0F172A !important;
+  font-family: 'Source Sans 3', 'Segoe UI', Roboto, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: -0.01em;
+  border: 1px solid #CBD5E1;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-enterprise-outline:hover, .btn-dark-pill:hover {
+  border-color: #FF5E14;
+  color: #FF5E14 !important;
+  background: #FFF7ED;
+}
+
+/* Secondary Ghost Action */
+.btn-enterprise-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 6px;
+  background: transparent;
+  color: #0F172A !important;
+  font-family: 'Source Sans 3', 'Segoe UI', Roboto, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+.btn-enterprise-ghost:hover {
+  background: #F1F5F9;
+  color: #FF5E14 !important;
+}
+
+/* =========================================================================
+ * REAL ENTERPRISE IT CARDS & SURFACES
+ * ========================================================================= */
+.it-card, .agency-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  transition: all 0.25s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  position: relative;
+}
+
+.it-card:hover, .agency-card:hover {
+  border-color: #CBD5E1;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px -6px rgba(11, 27, 61, 0.08);
+}
+
+.it-card-navy {
+  background: #0E224D;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  transition: all 0.25s ease;
+}
+
+.it-card-navy:hover {
+  border-color: rgba(255, 94, 20, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Subtle architectural blueprint grid overlay */
+.bg-tech-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+}
+
+.text-gradient-orange {
+  background: linear-gradient(135deg, #FF5E14 0%, #EA580C 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Corporate Institutional Badges */
+.it-chip-navy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.75rem;
+  background: #F1F5F9;
+  border: 1px solid #E2E8F0;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #0B1B3D;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.it-chip-orange {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  background: #FFF4ED;
+  border: 1px solid #FFD8C7;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #C2410C;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.it-chip-blue {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #1D4ED8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.it-chip-emerald {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #047857;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.it-chip-purple {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  background: #F5F3FF;
+  border: 1px solid #DDD6FE;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #6D28D9;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.it-chip-amber {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #B45309;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.it-chip-dark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.85rem;
+  background: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #0F172A !important;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Colorful Card Gradient Accents */
+.card-tint-orange {
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFF9F5 100%);
+  border: 1px solid #FED7AA;
+}
+.card-tint-orange:hover {
+  border-color: #FF5E14;
+  box-shadow: 0 12px 28px -6px rgba(255, 94, 20, 0.15);
+}
+
+.card-tint-blue {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F5F8FF 100%);
+  border: 1px solid #BFDBFE;
+}
+.card-tint-blue:hover {
+  border-color: #2563EB;
+  box-shadow: 0 12px 28px -6px rgba(37, 99, 235, 0.15);
+}
+
+.card-tint-emerald {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F4FDF8 100%);
+  border: 1px solid #A7F3D0;
+}
+.card-tint-emerald:hover {
+  border-color: #059669;
+  box-shadow: 0 12px 28px -6px rgba(16, 185, 129, 0.15);
+}
+
+.card-tint-purple {
+  background: linear-gradient(180deg, #FFFFFF 0%, #FAF8FF 100%);
+  border: 1px solid #DDD6FE;
+}
+.card-tint-purple:hover {
+  border-color: #7C3AED;
+  box-shadow: 0 12px 28px -6px rgba(124, 58, 237, 0.15);
+}
+
+.card-tint-amber {
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFFDF5 100%);
+  border: 1px solid #FDE68A;
+}
+.card-tint-amber:hover {
+  border-color: #D97706;
+  box-shadow: 0 12px 28px -6px rgba(217, 119, 6, 0.15);
+}
+
+/* Image Card Hover Zoom Effect */
+.img-card-zoom {
+  overflow: hidden;
+  border-radius: 14px;
+}
+.img-card-zoom img {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 100%;
+}
+.img-card-zoom:hover img {
+  transform: scale(1.04);
+}
+
+/* =========================================================================
+ * SLIDE BAR (HORIZONTAL CAROUSEL) ON PHONE VIEW
+ * ========================================================================= */
+.phone-slide-bar {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  gap: 1rem;
+  padding-bottom: 1rem;
+  scrollbar-width: none; /* Firefox */
+}
+.phone-slide-bar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+.phone-slide-item {
+  flex: 0 0 88%;
+  max-width: 88%;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+
+@media (min-width: 640px) {
+  .phone-slide-item {
+    flex: 0 0 450px;
+    max-width: 450px;
+  }
+}
+
+@media (min-width: 768px) {
+  .phone-slide-bar {
+    display: grid;
+    overflow-x: visible;
+    padding-bottom: 0;
+  }
+  .phone-slide-item {
+    flex: auto;
+    max-width: none;
+  }
+}
+
+/* Slide Bar Indicator Dots */
+.slide-indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: #CBD5E1;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.slide-indicator-dot.active {
+  width: 24px;
+  background: #FF5E14;
+}
+
+/* =========================================================================
+ * SLIDE-OUT SITE DIRECTORY & LIST VIEW DRAWER NAVIGATION
+ * ========================================================================= */
+.mobile-drawer-backdrop, .site-directory-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 16, 38, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.mobile-drawer-backdrop.open, .site-directory-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobile-drawer-panel, .site-directory-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 90%;
+  max-width: 440px;
+  background: #0B1B3D;
+  color: #FFFFFF;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  z-index: 999;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: -12px 0 45px rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+}
+.mobile-drawer-panel.open, .site-directory-panel.open {
+  transform: translateX(0);
+}
+
+.btn-list-view {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  background: #FFFFFF;
+  color: #0B1B3D;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  font-family: 'Source Sans 3', 'Segoe UI', Roboto, Arial, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  text-decoration: none;
+}
+.btn-list-view:hover {
+  background: #F8FAFC;
+  border-color: #FF5E14;
+  color: #FF5E14;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(255, 94, 20, 0.12);
+}
+
+/* FAQ Accordion */
+.faq-content {
+  display: none;
+}
+.faq-content.open {
+  display: block;
+  animation: faqFadeIn 0.25s ease-in-out;
+}
+@keyframes faqFadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Infinite Automatic Moving Alliance Badges Marquee Slider */
+.tech-marquee-wrapper {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.tech-marquee-track {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: max-content;
+  animation: techMarqueeScroll 20s linear infinite;
+}
+
+@keyframes techMarqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.tech-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+

@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Cost &amp; Scope Estimator | RoxTech — Web, ERP, Apps &amp; Data Entry</title>
+  <meta name="description" content="Calculate instant project estimates for Web Development, custom ERP software, Mobile Applications, and Data Entry services with RoxTech.">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+
+  <!-- Typography: Poppins (Headings), Source Sans 3 (Body), Barlow (Numbers) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=Barlow:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Precompiled Local Tailwind CSS -->
+  <link rel="stylesheet" href="assets/tailwind.css">
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/chatbot.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <link rel="stylesheet" href="assets/rox-refresh.css">
+</head>
+<body class="bg-white text-slate-700 font-sans antialiased selection:bg-[#FF5E14] selection:text-white overflow-x-hidden">
+
+  <!-- ========================================================================= -->
+  <!-- MAIN CORPORATE NAVIGATION BAR                                             -->
+  <!-- ========================================================================= -->
+    <header class="sticky top-0 z-50 header-solid-corporate bg-[#FAF9F6] border-b border-slate-200 shadow-sm transition-all duration-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20 sm:h-22">
+        
+        <!-- RoxTech Corporate Brand Logo -->
+        <a href="index.html" class="brand-logo-container" aria-label="RoxTech — Intelligence Technology"><img src="assets/roxtech-symbol-clean.png" alt="RoxTech Symbol" class="brand-symbol-img"><div class="brand-text-block"><span class="brand-name">Rox<span>Tech</span></span><small class="brand-tagline">Intelligence Technology</small></div></a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden lg:flex items-center space-x-8 text-[14px] font-bold text-slate-800">
+          <a href="index.html" class="text-slate-800 hover:text-[#FF5E14] transition-colors">Home</a>
+          <a href="services.html" class="text-slate-800 hover:text-[#FF5E14] transition-colors">Services</a>
+          <a href="case-studies.html" class="text-slate-800 hover:text-[#FF5E14] transition-colors">Case Studies</a>
+          <a href="estimator.html" class="text-[#FF5E14] font-extrabold">Cost Estimator</a>
+          <a href="contact.html" class="text-slate-800 hover:text-[#FF5E14] transition-colors">Contact</a>
+        </nav>
+
+        <!-- Right Side: Client Sign In, Primary CTA, Mobile Toggle -->
+        <div class="flex items-center space-x-3 sm:space-x-3.5">
+          <div class="nav-auth-slot inline-flex items-center"></div>
+
+          <a href="index.html#inquiry-section" onclick="window.handleScheduleInquiryClick(event)" class="btn-enterprise-primary text-xs py-2 px-3.5 sm:px-4">
+            <span>Schedule Inquiry</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+          </a>
+
+          <!-- Mobile Menu Toggle Button -->
+          <button onclick="window.toggleSiteDirectory ? window.toggleSiteDirectory() : (window.toggleMobileDrawer ? window.toggleMobileDrawer() : null)" class="lg:hidden p-2 rounded-lg text-slate-800 hover:text-[#FF5E14] hover:bg-slate-100 border border-slate-300 transition-colors" title="Toggle navigation">
+            <i data-lucide="menu" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="mobile-drawer-backdrop" onclick="window.closeMobileDrawer()" class="mobile-drawer-backdrop lg:hidden"></div>
+    <div id="mobile-drawer-panel" class="mobile-drawer-panel lg:hidden">
+      <div class="p-5 border-b border-slate-200 flex items-center justify-between">
+        <a href="index.html" class="flex items-center">
+          <img src="assets/roxtech-logo-dark.png" alt="RoxTech Logo" class="brand-drawer-logo">
+        </a>
+        <button id="mobile-drawer-close" onclick="window.closeMobileDrawer()" class="p-2 rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-100" title="Close Menu">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="flex-1 overflow-y-auto p-5 space-y-1 text-sm font-semibold text-slate-700">
+        <a href="index.html" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Home</a>
+        <a href="services.html" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Services (4 Core Practices)</a>
+        <a href="index.html#delivery-framework" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Methodology</a>
+        <a href="index.html#industries" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Industries</a>
+        <a href="case-studies.html" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Case Studies</a>
+        <a href="estimator.html" class="block py-2.5 px-3 rounded-md text-[#FF5E14] bg-orange-50 font-bold">Cost Estimator</a>
+        <a href="about.html" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Company</a>
+        <a href="careers.html" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Careers</a>
+        <a href="contact.html" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Contact</a>
+      </div>
+      <div class="p-5 border-t border-slate-200 space-y-2.5 bg-slate-50">
+        <button onclick="window.closeMobileDrawer(); window.openAuthModal('login')" class="w-full py-2.5 text-center text-xs font-bold text-slate-700 border border-slate-300 rounded-md bg-white hover:bg-slate-100 flex items-center justify-center gap-2">
+          <i data-lucide="user-check" class="w-4 h-4 text-[#FF5E14]"></i>
+          <span>Client Sign In</span>
+        </button>
+        <a href="index.html#inquiry-section" onclick="window.closeMobileDrawer()" class="w-full btn-enterprise-primary text-center text-xs py-2.5">
+          Schedule Inquiry
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- 3. HERO BANNER (Executive Deep Navy)                                      -->
+  <!-- ========================================================================= -->
+  <section class="bg-gradient-to-b from-[#0B1B3D] via-[#0A1835] to-[#071026] text-white pt-20 pb-16 lg:pt-24 lg:pb-20 bg-tech-grid relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-semibold text-[#FF5E14]">
+        <i data-lucide="calculator" class="w-3.5 h-3.5"></i>
+        <span>Transparent Enterprise Pricing Calculator</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+        Instant Project Cost &amp; Scope Estimator
+      </h1>
+      <p class="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
+        Select your core practice, project scale tier, and engagement model to generate a transparent ballpark estimate. Submit to receive an official SRS and formal proposal.
+      </p>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- 4. ESTIMATOR CONTENT                                                      -->
+  <!-- ========================================================================= -->
+  <main class="py-14 lg:py-20 bg-[#F8FAFC]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        
+        <!-- Left: Configuration Steps -->
+        <div class="lg:col-span-7 space-y-6">
+          
+          <!-- Step 1: Services Selection (Strictly 4 Services) -->
+          <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 space-y-4 shadow-xs">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <label class="text-xs font-extrabold uppercase text-[#FF5E14] tracking-wider flex items-center gap-1.5">
+                <span class="w-5 h-5 rounded-full bg-[#FF5E14] text-white inline-flex items-center justify-center text-[10px] font-mono">1</span>
+                <span>Select Core IT Service Practice</span>
+              </label>
+              <span class="text-[11px] text-slate-500 font-medium">Step 1 of 3</span>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
+              <!-- Practice 1: Web Development -->
+              <button type="button" class="svc-btn p-4 rounded-2xl border-2 border-[#FF5E14] bg-[#FFF4EE] text-slate-900 text-left transition-all shadow-xs ring-2 ring-[#FF5E14]/20 group flex items-start gap-3.5" data-val="Custom Web Development" data-accent="orange">
+                <div class="w-10 h-10 rounded-xl bg-orange-100 text-[#FF5E14] flex items-center justify-center shrink-0 transition-transform group-hover:scale-105">
+                  <i data-lucide="globe" class="w-5 h-5"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <span class="font-extrabold text-sm text-[#0B1B3D]">Web Development</span>
+                    <span class="it-chip-orange text-[9px]">React • Cloud</span>
+                  </div>
+                  <div class="text-xs text-slate-600 mt-1">Enterprise portals, SaaS dashboards &amp; web apps</div>
+                </div>
+              </button>
+
+              <!-- Practice 2: ERP & Custom Software -->
+              <button type="button" class="svc-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group flex items-start gap-3.5" data-val="ERP & Custom Software Development" data-accent="blue">
+                <div class="w-10 h-10 rounded-xl bg-blue-100 text-[#2563EB] flex items-center justify-center shrink-0 transition-transform group-hover:scale-105">
+                  <i data-lucide="layers" class="w-5 h-5"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <span class="font-extrabold text-sm text-[#0B1B3D]">ERP &amp; Software</span>
+                    <span class="it-chip-blue text-[9px]">PostgreSQL • API</span>
+                  </div>
+                  <div class="text-xs text-slate-500 mt-1">Supply chain, inventory, billing &amp; custom workflows</div>
+                </div>
+              </button>
+
+              <!-- Practice 3: Mobile Apps -->
+              <button type="button" class="svc-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group flex items-start gap-3.5" data-val="Mobile & Application Development" data-accent="emerald">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 transition-transform group-hover:scale-105">
+                  <i data-lucide="smartphone" class="w-5 h-5"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <span class="font-extrabold text-sm text-[#0B1B3D]">Mobile Applications</span>
+                    <span class="it-chip-emerald text-[9px]">iOS • Android</span>
+                  </div>
+                  <div class="text-xs text-slate-500 mt-1">Native &amp; Flutter cross-platform mobile apps</div>
+                </div>
+              </button>
+
+              <!-- Practice 4: Data Entry & BPO -->
+              <button type="button" class="svc-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group flex items-start gap-3.5" data-val="Data Entry & Back-Office Support Services" data-accent="amber">
+                <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0 transition-transform group-hover:scale-105">
+                  <i data-lucide="database" class="w-5 h-5"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <span class="font-extrabold text-sm text-[#0B1B3D]">Data Entry &amp; BPO</span>
+                    <span class="it-chip-amber text-[9px]">99.9% SLA</span>
+                  </div>
+                  <div class="text-xs text-slate-500 mt-1">Document digitization, cleaning &amp; back-office ops</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 2: Project Scope & Complexity -->
+          <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 space-y-4 shadow-xs">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <label class="text-xs font-extrabold uppercase text-[#2563EB] tracking-wider flex items-center gap-1.5">
+                <span class="w-5 h-5 rounded-full bg-[#2563EB] text-white inline-flex items-center justify-center text-[10px] font-mono">2</span>
+                <span>Project Scope &amp; Complexity Tier</span>
+              </label>
+              <span class="text-[11px] text-slate-500 font-medium">Step 2 of 3</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <button type="button" class="scale-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group" data-val="Starter MVP / Basic">
+                <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center mb-2.5 transition-transform group-hover:scale-105">
+                  <i data-lucide="zap" class="w-4 h-4"></i>
+                </div>
+                <div class="text-xs font-extrabold text-[#0B1B3D]">Starter MVP</div>
+                <div class="text-[11px] text-slate-500 mt-1">Core essential workflows &amp; baseline features</div>
+              </button>
+              <button type="button" class="scale-btn p-4 rounded-2xl border-2 border-[#2563EB] bg-blue-50/70 text-slate-900 font-bold text-left transition-all shadow-xs ring-2 ring-[#2563EB]/20 group" data-val="Professional Growth">
+                <div class="w-8 h-8 rounded-lg bg-blue-100 text-[#2563EB] flex items-center justify-center mb-2.5 transition-transform group-hover:scale-105">
+                  <i data-lucide="trending-up" class="w-4 h-4"></i>
+                </div>
+                <div class="text-xs font-extrabold text-[#0B1B3D]">Professional Growth</div>
+                <div class="text-[11px] text-slate-600 mt-1">Multi-module, third-party APIs &amp; auth</div>
+              </button>
+              <button type="button" class="scale-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group" data-val="Full Enterprise Suite">
+                <div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center mb-2.5 transition-transform group-hover:scale-105">
+                  <i data-lucide="shield-check" class="w-4 h-4"></i>
+                </div>
+                <div class="text-xs font-extrabold text-[#0B1B3D]">Enterprise Suite</div>
+                <div class="text-[11px] text-slate-500 mt-1">High-scale, multi-branch &amp; custom security</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Step 3: Engagement & Delivery Model -->
+          <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 space-y-4 shadow-xs">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <label class="text-xs font-extrabold uppercase text-[#FF5E14] tracking-wider flex items-center gap-1.5">
+                <span class="w-5 h-5 rounded-full bg-[#FF5E14] text-white inline-flex items-center justify-center text-[10px] font-mono">3</span>
+                <span>Engagement &amp; Delivery Model</span>
+              </label>
+              <span class="text-[11px] text-slate-500 font-medium">Step 3 of 3</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+              <button type="button" class="time-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group" data-val="Dedicated Agile Pod">
+                <div class="w-8 h-8 rounded-lg bg-blue-100 text-[#2563EB] flex items-center justify-center mb-2 transition-transform group-hover:scale-105">
+                  <i data-lucide="users" class="w-4 h-4"></i>
+                </div>
+                <div class="font-extrabold text-[#0B1B3D]">Dedicated Agile Pod</div>
+                <div class="text-[11px] text-slate-500 mt-1">Full-time scrum team</div>
+              </button>
+              <button type="button" class="time-btn p-4 rounded-2xl border-2 border-[#FF5E14] bg-[#FFF4EE] text-slate-900 font-bold text-left transition-all shadow-xs ring-2 ring-[#FF5E14]/20 group" data-val="Full Turnkey Build">
+                <div class="w-8 h-8 rounded-lg bg-orange-100 text-[#FF5E14] flex items-center justify-center mb-2 transition-transform group-hover:scale-105">
+                  <i data-lucide="package-check" class="w-4 h-4"></i>
+                </div>
+                <div class="font-extrabold text-[#0B1B3D]">Full Turnkey Build</div>
+                <div class="text-[11px] text-slate-600 mt-1">Milestone fixed-scope</div>
+              </button>
+              <button type="button" class="time-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group" data-val="Managed SLA Support">
+                <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center mb-2 transition-transform group-hover:scale-105">
+                  <i data-lucide="headphones" class="w-4 h-4"></i>
+                </div>
+                <div class="font-extrabold text-[#0B1B3D]">Managed SLA Support</div>
+                <div class="text-[11px] text-slate-500 mt-1">Continuous ops &amp; DevOps</div>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Real-Time Dynamic Summary & Submission -->
+        <div class="lg:col-span-5">
+          <div class="sticky top-28 bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-lg space-y-0">
+            <!-- Top Colorful Gradient Accent Bar -->
+            <div class="h-2 w-full bg-gradient-to-r from-[#FF5E14] via-[#2563EB] to-emerald-500"></div>
+
+            <div class="p-6 sm:p-8 space-y-6">
+              
+              <!-- Investment Display Box -->
+              <div class="bg-gradient-to-br from-[#0B1B3D] via-[#0A1835] to-[#071026] text-white p-5 rounded-2xl border border-white/10 shadow-inner relative overflow-hidden">
+                <div class="flex items-center justify-between text-xs font-mono text-slate-300 uppercase tracking-widest mb-1">
+                  <span>Estimated Investment</span>
+                  <div class="flex items-center gap-1 bg-white/10 p-0.5 rounded-lg border border-white/15">
+                    <button type="button" id="curr-inr" class="px-2 py-0.5 rounded text-[11px] font-bold bg-[#FF5E14] text-white transition-all">₹ INR</button>
+                    <button type="button" id="curr-usd" class="px-2 py-0.5 rounded text-[11px] font-bold text-slate-300 hover:text-white transition-all">$ USD</button>
+                  </div>
+                </div>
+                <div id="est-budget" class="text-3xl sm:text-4xl font-black text-[#FF5E14] font-mono tracking-tight mt-1">
+                  ₹1,50,000 – ₹2,90,000
+                </div>
+                <p id="est-tax-note" class="text-[11px] text-slate-300 mt-2 flex items-center gap-1.5">
+                  <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i>
+                  <span>Zero-obligation formal estimation. Domestic GST invoicing &amp; ITC support.</span>
+                </p>
+              </div>
+
+              <!-- Scope Itemized Summary -->
+              <div class="space-y-2.5 py-4 border-y border-slate-200/80 text-xs text-slate-600 bg-slate-50/50 p-4 rounded-xl">
+                <div class="flex justify-between items-center"><span class="text-slate-500">Practice Area:</span><span id="sum-svc" class="font-bold text-slate-900 text-right max-w-[200px] truncate">Custom Web Development</span></div>
+                <div class="flex justify-between items-center"><span class="text-slate-500">Complexity Tier:</span><span id="sum-scale" class="font-bold text-[#2563EB]">Professional Growth</span></div>
+                <div class="flex justify-between items-center"><span class="text-slate-500">Engagement:</span><span id="sum-time" class="font-bold text-[#FF5E14]">Full Turnkey Build</span></div>
+                <div class="flex justify-between items-center"><span class="text-slate-500">Hypercare SLA:</span><span class="font-bold text-emerald-600">6 Months Free Included</span></div>
+              </div>
+
+              <!-- Included Deliverables Checklist -->
+              <div class="space-y-2 text-xs text-slate-600">
+                <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Standard Enterprise Inclusions</div>
+                <div class="grid grid-cols-2 gap-2 text-[11px]">
+                  <div class="flex items-center gap-1.5 text-slate-700"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 shrink-0"></i><span>Full IP &amp; Code Ownership</span></div>
+                  <div class="flex items-center gap-1.5 text-slate-700"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 shrink-0"></i><span>Architecture SRS Scope</span></div>
+                  <div class="flex items-center gap-1.5 text-slate-700"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 shrink-0"></i><span>CI/CD Pipeline Setup</span></div>
+                  <div class="flex items-center gap-1.5 text-slate-700"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 shrink-0"></i><span>QA Automated Testing</span></div>
+                </div>
+              </div>
+
+            <div id="quote-success" class="hidden p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-center space-y-3">
+              <i data-lucide="check-circle-2" class="w-10 h-10 text-emerald-600 mx-auto"></i>
+              <h4 class="font-bold text-emerald-900 text-sm">Quote Request Registered!</h4>
+              <p id="quote-success-msg" class="text-xs text-emerald-700"></p>
+            </div>
+
+            <!-- Customer Verification Badge / Sign In Prompt -->
+            <div id="quote-auth-badge" class="mb-4"></div>
+
+            <form id="quote-form" class="space-y-3 text-xs">
+              <h4 class="font-bold text-[#0B1B3D] text-sm">Receive Formal Quotation &amp; Architecture Scope</h4>
+              <div>
+                <label class="block text-slate-700 font-semibold mb-1">Your Full Name *</label>
+                <input type="text" id="q-name" required placeholder="Your full name" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-hidden focus:border-[#FF5E14]">
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div>
+                  <label class="block text-slate-700 font-semibold mb-1">Email Address *</label>
+                  <input type="email" id="q-email" required placeholder="name@company.com" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-hidden focus:border-[#FF5E14]">
+                </div>
+                <div>
+                  <label class="block text-slate-700 font-semibold mb-1">Country / Region</label>
+                  <select id="q-country" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-hidden focus:border-[#FF5E14]">
+                    <option value="India" selected>India (+91)</option>
+                    <option value="United States">United States (+1)</option>
+                    <option value="United Kingdom">United Kingdom (+44)</option>
+                    <option value="Singapore">Singapore (+65)</option>
+                    <option value="Other">Other Region</option>
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label class="block text-slate-700 font-semibold mb-1">Company / Organization</label>
+                <input type="text" id="q-company" placeholder="Company or enterprise name" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-hidden focus:border-[#FF5E14]">
+              </div>
+              <div>
+                <label class="block text-slate-700 font-semibold mb-1">Project Details or Specific Features</label>
+                <textarea id="q-details" rows="2" placeholder="e.g. Scope, custom modules, mobile app requirements, GST invoicing requirements..." class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-hidden focus:border-[#FF5E14]"></textarea>
+              </div>
+
+              <button type="submit" id="q-submit-btn" class="btn-enterprise-primary w-full justify-center text-sm py-3 mt-2 shadow-md">
+                <span>Send Formal Quote Request</span>
+                <i data-lucide="send" class="w-4 h-4"></i>
+              </button>
+              <div id="q-status" class="text-center text-[11px] text-slate-500"></div>
+            </form>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- 5. COMPREHENSIVE CORPORATE ENTERPRISE FOOTER                              -->
+  <!-- ========================================================================= -->
+  <footer class="bg-[#071026] text-slate-300 pt-16 pb-12 border-t border-white/10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Top Footer: Brand, Mission & Directory -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-white/10">
+        
+        <!-- Brand Info & Verified Contact Desk -->
+        <div class="lg:col-span-2 space-y-4">
+          <a href="index.html" class="brand-logo-container" aria-label="RoxTech — Intelligence Technology"><img src="assets/roxtech-symbol-clean.png" alt="RoxTech Symbol" class="brand-symbol-img"><div class="brand-text-block"><span class="brand-name">Rox<span>Tech</span></span><small class="brand-tagline">Intelligence Technology</small></div></a>
+          <p class="text-xs text-slate-300 leading-relaxed max-w-sm">
+            RoxTech is a premier global enterprise IT services provider delivering custom web development, cloud ERP software, mobile applications, and high-accuracy back-office data operations.
+          </p>
+
+          <div class="flex items-center gap-2 pt-1 text-slate-200">
+            <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+            <span class="text-xs font-bold text-white">ISO 9001:2015 &amp; ISO 27001 Certified Partner</span>
+          </div>
+
+          <!-- Prominent Global Contact Details -->
+          <div class="pt-3 border-t border-white/10 space-y-2 text-xs">
+            <div class="flex items-center gap-2.5">
+              <i data-lucide="map-pin" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+              <strong class="text-white font-bold">India CoE:</strong>
+              <span class="text-slate-300">RoxTech Tower, Sindhu Bhavan Road, Bodakdev, Ahmedabad, Gujarat 380054</span>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <i data-lucide="phone" class="w-4 h-4 text-[#FF5E14] shrink-0"></i>
+              <strong class="text-white font-bold">India Desk:</strong>
+              <a href="tel:+918049123000" class="text-blue-300 hover:text-[#FF5E14] font-semibold transition-colors">+91 79 4912 3000</a>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <i data-lucide="mail" class="w-4 h-4 text-[#FF5E14] shrink-0"></i>
+              <strong class="text-white font-bold">Inquiries:</strong>
+              <a href="mailto:india@roxtech.io" class="text-blue-300 hover:text-[#FF5E14] font-semibold transition-colors">india@roxtech.io</a> / <a href="mailto:enterprise@roxtech.io" class="text-blue-300 hover:text-[#FF5E14] font-semibold transition-colors">enterprise@roxtech.io</a>
+            </div>
+            <div class="flex items-center gap-2.5">
+              <i data-lucide="globe" class="w-4 h-4 text-[#2563EB] shrink-0"></i>
+              <strong class="text-white font-bold">Global Hubs:</strong>
+              <span class="text-slate-300">Ahmedabad HQ (Gujarat, India)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Col 2: Core Practice Areas -->
+        <div class="space-y-3">
+          <div class="text-xs font-bold uppercase tracking-wider text-white">Practice Areas</div>
+          <ul class="space-y-2.5 text-xs text-slate-300">
+            <li><a href="services.html#web-dev" class="hover:text-[#FF5E14] transition-colors">Custom Web Development</a></li>
+            <li><a href="services.html#erp-software" class="hover:text-[#FF5E14] transition-colors">ERP &amp; Custom Software</a></li>
+            <li><a href="services.html#mobile-apps" class="hover:text-[#FF5E14] transition-colors">Mobile App Engineering</a></li>
+            <li><a href="services.html#data-entry" class="hover:text-[#FF5E14] transition-colors">Data Entry &amp; BPO Support</a></li>
+            <li><a href="estimator.html" class="hover:text-[#FF5E14] transition-colors text-[#FF5E14] font-semibold">Scope &amp; Cost Estimator</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Industry Verticals -->
+        <div class="space-y-3">
+          <div class="text-xs font-bold uppercase tracking-wider text-white">Industries</div>
+          <ul class="space-y-2.5 text-xs text-slate-300">
+            <li><a href="index.html#industries" class="hover:text-[#FF5E14] transition-colors">Banking &amp; FinTech (BFSI)</a></li>
+            <li><a href="index.html#industries" class="hover:text-[#FF5E14] transition-colors">Healthcare &amp; Life Sciences</a></li>
+            <li><a href="index.html#industries" class="hover:text-[#FF5E14] transition-colors">Supply Chain &amp; Logistics</a></li>
+            <li><a href="index.html#industries" class="hover:text-[#FF5E14] transition-colors">Retail &amp; Modern E-Commerce</a></li>
+            <li><a href="case-studies.html" class="hover:text-[#FF5E14] transition-colors">Enterprise Case Studies</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Corporate Governance -->
+        <div class="space-y-3">
+          <div class="text-xs font-bold uppercase tracking-wider text-white">Company</div>
+          <ul class="space-y-2.5 text-xs text-slate-300">
+            <li><a href="about.html" class="hover:text-[#FF5E14] transition-colors">About Us &amp; Leadership</a></li>
+            <li><a href="careers.html" class="hover:text-[#FF5E14] transition-colors">Careers</a></li>
+            <li><a href="contact.html" class="hover:text-[#FF5E14] transition-colors">Global Delivery Centers</a></li>
+            <li><button onclick="window.openAuthModal('login')" class="hover:text-[#FF5E14] transition-colors text-left text-slate-300">Client Portal Login</button></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Bottom Bar: Copyright & Compliance -->
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+        <div>
+          &copy; 2026 RoxTech Intelligent Solutions. All rights reserved. Registered Enterprise IT Consulting Partner.
+        </div>
+        <div class="flex items-center space-x-6 text-slate-400">
+          <a href="#" class="hover:text-[#FF5E14] transition-colors">Master Services Agreement (MSA)</a>
+          <a href="#" class="hover:text-[#FF5E14] transition-colors">Privacy Policy</a>
+          <a href="#" class="hover:text-[#FF5E14] transition-colors">SOC2 / ISO 27001</a>
+          <a href="#" class="hover:text-[#FF5E14] transition-colors">NDA Terms</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <script src="assets/main.js"></script>
+  <script src="assets/auth.js"></script>
+  <script>
+    let currentSvc = 'Custom Web Development';
+    let currentScale = 'Professional Growth';
+    let currentTime = 'Full Turnkey Build';
+    let currentCurrency = 'INR';
+
+    const pricingTableUSD = {
+      'Custom Web Development': {
+        'Starter MVP / Basic': '$900 – $1,800',
+        'Professional Growth': '$1,800 – $3,500',
+        'Full Enterprise Suite': '$3,500 – $7,500'
+      },
+      'ERP & Custom Software Development': {
+        'Starter MVP / Basic': '$2,400 – $4,500',
+        'Professional Growth': '$4,500 – $9,800',
+        'Full Enterprise Suite': '$9,800 – $22,000'
+      },
+      'Mobile & Application Development': {
+        'Starter MVP / Basic': '$2,000 – $3,800',
+        'Professional Growth': '$3,800 – $7,900',
+        'Full Enterprise Suite': '$7,900 – $16,500'
+      },
+      'Data Entry & Back-Office Support Services': {
+        'Starter MVP / Basic': '$400 – $900',
+        'Professional Growth': '$900 – $2,200',
+        'Full Enterprise Suite': '$2,200 – $5,500'
+      }
+    };
+
+    const pricingTableINR = {
+      'Custom Web Development': {
+        'Starter MVP / Basic': '₹75,000 – ₹1,50,000',
+        'Professional Growth': '₹1,50,000 – ₹2,90,000',
+        'Full Enterprise Suite': '₹2,90,000 – ₹6,20,000'
+      },
+      'ERP & Custom Software Development': {
+        'Starter MVP / Basic': '₹1,95,000 – ₹3,75,000',
+        'Professional Growth': '₹3,75,000 – ₹8,20,000',
+        'Full Enterprise Suite': '₹8,20,000 – ₹18,50,000'
+      },
+      'Mobile & Application Development': {
+        'Starter MVP / Basic': '₹1,65,000 – ₹3,15,000',
+        'Professional Growth': '₹3,15,000 – ₹6,50,000',
+        'Full Enterprise Suite': '₹6,50,000 – ₹13,80,000'
+      },
+      'Data Entry & Back-Office Support Services': {
+        'Starter MVP / Basic': '₹35,000 – ₹75,000',
+        'Professional Growth': '₹75,000 – ₹1,80,000',
+        'Full Enterprise Suite': '₹1,80,000 – ₹4,50,000'
+      }
+    };
+
+    function updateEstimate() {
+      const table = currentCurrency === 'INR' ? pricingTableINR : pricingTableUSD;
+      const budget = table[currentSvc]?.[currentScale] || (currentCurrency === 'INR' ? '₹1,50,000 – ₹3,00,000' : '$1,500 – $3,000');
+      document.getElementById('est-budget').textContent = budget;
+      document.getElementById('sum-svc').textContent = currentSvc;
+      document.getElementById('sum-scale').textContent = currentScale;
+      document.getElementById('sum-time').textContent = currentTime;
+
+      const taxNote = document.getElementById('est-tax-note');
+      if (taxNote) {
+        taxNote.innerHTML = currentCurrency === 'INR'
+          ? '<i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i><span>Zero-obligation formal estimation. Domestic GST (18%) invoicing &amp; ITC support.</span>'
+          : '<i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i><span>Zero-obligation formal estimation based on selected scope.</span>';
+        if (window.lucide) window.lucide.createIcons();
+      }
+    }
+
+    const currInrBtn = document.getElementById('curr-inr');
+    const currUsdBtn = document.getElementById('curr-usd');
+    if (currInrBtn && currUsdBtn) {
+      currInrBtn.addEventListener('click', () => {
+        currentCurrency = 'INR';
+        currInrBtn.className = 'px-2 py-0.5 rounded text-[11px] font-bold bg-[#FF5E14] text-white transition-all';
+        currUsdBtn.className = 'px-2 py-0.5 rounded text-[11px] font-bold text-slate-300 hover:text-white transition-all';
+        updateEstimate();
+      });
+      currUsdBtn.addEventListener('click', () => {
+        currentCurrency = 'USD';
+        currUsdBtn.className = 'px-2 py-0.5 rounded text-[11px] font-bold bg-[#FF5E14] text-white transition-all';
+        currInrBtn.className = 'px-2 py-0.5 rounded text-[11px] font-bold text-slate-300 hover:text-white transition-all';
+        updateEstimate();
+      });
+    }
+
+    // Bind Practice Buttons with Authentic Brand Accents
+    const svcAccents = {
+      'orange': 'border-2 border-[#FF5E14] bg-[#FFF4EE] text-slate-900 shadow-xs ring-2 ring-[#FF5E14]/20',
+      'blue': 'border-2 border-[#2563EB] bg-blue-50/70 text-slate-900 shadow-xs ring-2 ring-[#2563EB]/20',
+      'emerald': 'border-2 border-emerald-500 bg-emerald-50/70 text-slate-900 shadow-xs ring-2 ring-emerald-500/20',
+      'amber': 'border-2 border-amber-500 bg-amber-50/70 text-slate-900 shadow-xs ring-2 ring-amber-500/20'
+    };
+
+    document.querySelectorAll('.svc-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.svc-btn').forEach(b => {
+          b.className = 'svc-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group flex items-start gap-3.5';
+        });
+        const accent = btn.dataset.accent || 'orange';
+        btn.className = `svc-btn p-4 rounded-2xl ${svcAccents[accent]} text-left transition-all group flex items-start gap-3.5`;
+        currentSvc = btn.dataset.val;
+        updateEstimate();
+      });
+    });
+
+    // Bind Scope Scale Buttons
+    document.querySelectorAll('.scale-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.scale-btn').forEach(b => {
+          b.className = 'scale-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group';
+        });
+        const val = btn.dataset.val;
+        let activeClass = 'border-2 border-[#2563EB] bg-blue-50/70 text-slate-900 font-bold shadow-xs ring-2 ring-[#2563EB]/20';
+        if (val.includes('MVP')) {
+          activeClass = 'border-2 border-emerald-500 bg-emerald-50/70 text-slate-900 font-bold shadow-xs ring-2 ring-emerald-500/20';
+        } else if (val.includes('Enterprise')) {
+          activeClass = 'border-2 border-purple-500 bg-purple-50/70 text-slate-900 font-bold shadow-xs ring-2 ring-purple-500/20';
+        }
+        btn.className = `scale-btn p-4 rounded-2xl ${activeClass} text-left transition-all group`;
+        currentScale = val;
+        updateEstimate();
+      });
+    });
+
+    // Bind Engagement Model Buttons
+    document.querySelectorAll('.time-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.time-btn').forEach(b => {
+          b.className = 'time-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group';
+        });
+        const val = btn.dataset.val;
+        let activeClass = 'border-2 border-[#FF5E14] bg-[#FFF4EE] text-slate-900 font-bold shadow-xs ring-2 ring-[#FF5E14]/20';
+        if (val.includes('Pod')) {
+          activeClass = 'border-2 border-[#2563EB] bg-blue-50/70 text-slate-900 font-bold shadow-xs ring-2 ring-[#2563EB]/20';
+        } else if (val.includes('SLA')) {
+          activeClass = 'border-2 border-emerald-500 bg-emerald-50/70 text-slate-900 font-bold shadow-xs ring-2 ring-emerald-500/20';
+        }
+        btn.className = `time-btn p-4 rounded-2xl ${activeClass} text-left transition-all group`;
+        currentTime = val;
+        updateEstimate();
+      });
+    });
+
+    // Form Submission (Protected with Customer Login)
+    window.submitQuoteForm = async function () {
+      const statusEl = document.getElementById('q-status');
+      const submitBtn = document.getElementById('q-submit-btn');
+      const customer = window.getCurrentCustomer ? window.getCurrentCustomer() : null;
+
+      const payload = {
+        customer_id: customer ? customer.id : null,
+        name: document.getElementById('q-name').value.trim() || (customer ? customer.name : ''),
+        email: document.getElementById('q-email').value.trim() || (customer ? customer.email : ''),
+        country: document.getElementById('q-country')?.value || 'India',
+        company: document.getElementById('q-company').value.trim() || (customer ? customer.company : ''),
+        service: currentSvc,
+        scale: currentScale,
+        timeline: currentTime,
+        estimated_budget: document.getElementById('est-budget').textContent,
+        notes: document.getElementById('q-details').value.trim()
+      };
+
+      if (submitBtn) submitBtn.disabled = true;
+      if (statusEl) statusEl.textContent = 'Submitting your quotation request...';
+
+      try {
+        const res = await fetch(`${API_BASE}/api/leads`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        
+        quoteForm.classList.add('hidden');
+        const badge = document.getElementById('quote-auth-badge');
+        if (badge) badge.classList.add('hidden');
+        const successBox = document.getElementById('quote-success');
+        successBox.classList.remove('hidden');
+        document.getElementById('quote-success-msg').textContent = data.message || 'Quotation registered. Our team will contact you within 4 hours.';
+        if (window.confetti) {
+          window.confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+        }
+      } catch (err) {
+        quoteForm.classList.add('hidden');
+        const successBox = document.getElementById('quote-success');
+        successBox.classList.remove('hidden');
+        document.getElementById('quote-success-msg').textContent = 'Quotation recorded locally. Server will sync when connected.';
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+        if (statusEl) statusEl.textContent = '';
+      }
+    };
+
+    const quoteForm = document.getElementById('quote-form');
+    quoteForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const customer = window.getCurrentCustomer ? window.getCurrentCustomer() : null;
+      if (!customer) {
+        window.openAuthModal((authedCustomer) => {
+          if (window.syncCustomerForms) window.syncCustomerForms();
+          window.submitQuoteForm();
+        }, 'Sign In Required for Formal Quote', 'Please log in or create an account to receive your formal quotation and project architecture scope.');
+        return;
+      }
+      window.submitQuoteForm();
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) window.lucide.createIcons();
+    });
+  </script>
+  <script src="assets/lenis.min.js"></script>
+  <script src="assets/chatbot.js" defer></script>
+</body>
+</html>

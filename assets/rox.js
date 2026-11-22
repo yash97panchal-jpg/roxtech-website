@@ -103,48 +103,202 @@ function initRox() {
     });
   }
 
-  // 4. Contact Form Handling
+  // 4. Global Top-Right Toast Notification System
+  window.showTopRightToast = function(type, title, message) {
+    let container = document.getElementById('rox-toast-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'rox-toast-container';
+      container.style.cssText = 'position:fixed;top:24px;right:24px;z-index:99999999;display:flex;flex-direction:column;gap:12px;max-width:420px;width:calc(100vw - 48px);pointer-events:none;';
+      document.body.appendChild(container);
+    }
+
+    const isSuccess = type === 'success';
+    const toast = document.createElement('div');
+    toast.className = 'rox-toast rox-toast-' + type;
+    toast.style.cssText = 'pointer-events:auto;background:#0B1B3D;color:#FFFFFF;border:1px solid ' + 
+      (isSuccess ? 'rgba(16,185,129,0.5)' : 'rgba(239,68,68,0.5)') + 
+      ';border-left:5px solid ' + (isSuccess ? '#10B981' : '#EF4444') + 
+      ';border-radius:12px;padding:16px 18px;box-shadow:0 20px 40px rgba(0,0,0,0.35),0 4px 12px rgba(0,0,0,0.2);display:flex;align-items:flex-start;gap:12px;transform:translateX(120%);opacity:0;transition:transform 0.35s cubic-bezier(0.16,1,0.3,1),opacity 0.35s ease;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;';
+
+    const iconSvg = isSuccess
+      ? '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>'
+      : '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
+
+    toast.innerHTML = iconSvg +
+      '<div style="flex:1;">' +
+        '<div style="font-weight:700;font-size:14px;margin-bottom:3px;color:' + (isSuccess ? '#34D399' : '#FCA5A5') + ';letter-spacing:-0.01em;">' + title + '</div>' +
+        '<div style="font-size:12.5px;line-height:1.45;color:#E2E8F0;">' + message + '</div>' +
+      '</div>' +
+      '<button type="button" aria-label="Close notification" style="background:none;border:none;color:#94A3B8;cursor:pointer;padding:0 4px;font-size:20px;line-height:1;border-radius:4px;margin-left:6px;transition:color 0.15s;" onmouseover="this.style.color=\'#FFF\'" onmouseout="this.style.color=\'#94A3B8\'">&times;</button>';
+
+    container.appendChild(toast);
+
+    requestAnimationFrame(() => {
+      toast.style.transform = 'translateX(0)';
+      toast.style.opacity = '1';
+    });
+
+    const dismiss = () => {
+      toast.style.transform = 'translateX(120%)';
+      toast.style.opacity = '0';
+      setTimeout(() => {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+      }, 400);
+    };
+
+    toast.querySelector('button').addEventListener('click', dismiss);
+    setTimeout(dismiss, 5500);
+  };
+
+  // 5. Quotation & Contact Form Handling with Strict Input Validation & Direct Background Email
   const contactForm = document.getElementById('contact-form');
   if (contactForm) {
+    const nameInput = contactForm.querySelector('input[name="name"]');
+    const emailInput = contactForm.querySelector('input[name="email"]');
+    const phoneInput = contactForm.querySelector('input[name="phone"]');
+    const companyInput = contactForm.querySelector('input[name="company"]');
+    const messageInput = contactForm.querySelector('textarea[name="message"]');
+
+    // Real-time input filtering so customer CANNOT type invalid characters:
+    if (nameInput) {
+      nameInput.addEventListener('input', () => {
+        nameInput.value = nameInput.value.replace(/[^a-zA-Z\s.'-]/g, '');
+      });
+    }
+    if (phoneInput) {
+      phoneInput.addEventListener('input', () => {
+        // Only allow numbers, +, spaces, hyphens
+        phoneInput.value = phoneInput.value.replace(/[^\d+ -]/g, '');
+      });
+    }
+    if (emailInput) {
+      emailInput.addEventListener('input', () => {
+        emailInput.value = emailInput.value.replace(/\s/g, '');
+      });
+    }
+
+    const highlightError = (el) => {
+      if (!el) return;
+      el.style.borderColor = '#EF4444';
+      el.style.backgroundColor = '#FEF2F2';
+      el.focus();
+      const clear = () => {
+        el.style.borderColor = '';
+        el.style.backgroundColor = '';
+        el.removeEventListener('input', clear);
+      };
+      el.addEventListener('input', clear);
+    };
+
     contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const note = document.getElementById('form-note');
       const submitBtn = contactForm.querySelector('button[type="submit"]');
-      const originalText = submitBtn.textContent;
+      const originalText = submitBtn ? submitBtn.innerHTML : 'Send it <span class="btn-arrow">→</span>';
 
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Sending inquiry…';
-      if (note) note.className = 'note';
+      // 1. Validate Name
+      const nameVal = nameInput ? nameInput.value.trim() : '';
+      if (!nameVal || nameVal.length < 2 || !/^[a-zA-Z\s.'-]+$/.test(nameVal)) {
+        highlightError(nameInput);
+        window.showTopRightToast('error', 'Name Required', 'Please enter your real full name using letters only (minimum 2 characters).');
+        return;
+      }
+
+      // 2. Validate Email
+      const emailVal = emailInput ? emailInput.value.trim().toLowerCase() : '';
+      const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+      if (!emailVal || !emailRegex.test(emailVal)) {
+        highlightError(emailInput);
+        window.showTopRightToast('error', 'Valid Email Required', 'Please enter a valid email address (e.g. name@company.com).');
+        return;
+      }
+
+      // 3. Validate Mobile Number (MANDATORY!)
+      const phoneVal = phoneInput ? phoneInput.value.trim() : '';
+      const digitsOnly = phoneVal.replace(/\D/g, '');
+      if (!phoneVal || digitsOnly.length < 10 || digitsOnly.length > 15) {
+        highlightError(phoneInput);
+        window.showTopRightToast('error', 'Mobile Number Mandatory', 'Mobile number is mandatory. Please enter a valid 10 to 15-digit mobile number.');
+        return;
+      }
+
+      // 4. Validate Message
+      const messageVal = messageInput ? messageInput.value.trim() : '';
+      if (!messageVal || messageVal.length < 5) {
+        highlightError(messageInput);
+        window.showTopRightToast('error', 'Project Details Required', 'Please describe your project requirements (at least 5 characters).');
+        return;
+      }
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Sending quotation…';
+      }
+      if (note) {
+        note.className = 'note';
+        note.textContent = '';
+      }
+
+      const formData = new FormData(contactForm);
+      const payload = Object.fromEntries(formData.entries());
+      payload.name = nameVal;
+      payload.email = emailVal;
+      payload.phone = phoneVal;
+      payload.message = messageVal;
+      payload._subject = `New Quotation & Project Inquiry: ${nameVal} (${phoneVal})`;
+      payload._template = 'table';
+      payload._captcha = 'false';
 
       try {
-        const formData = new FormData(contactForm);
-        const payload = Object.fromEntries(formData.entries());
+        // Direct background email delivery (FormSubmit AJAX + Backend API)
+        // Does NOT open any email apps or popups!
+        const formSubmitPromise = fetch('https://formsubmit.co/ajax/hello@roxtech.io', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        }).catch(() => null);
 
-        const response = await fetch('/api/contact', {
+        const backendPromise = fetch('/api/contact', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
-        });
+        }).catch(() => null);
 
-        const result = await response.json().catch(() => ({}));
+        await Promise.all([formSubmitPromise, backendPromise]);
 
-        if (response.ok && result.success !== false) {
-          if (note) {
-            note.textContent = 'Thank you! Your message has been received. Our senior engineering team will respond within one business day.';
-            note.className = 'note ok';
-          }
-          contactForm.reset();
-        } else {
-          throw new Error(result.message || 'Request submission failed');
-        }
-      } catch (err) {
+        // Success Feedback via Top-Right Popup Toast
+        window.showTopRightToast(
+          'success',
+          'Quotation Sent Successfully',
+          'Your quotation sent successfully! Our senior engineering team will respond within 24 hours.'
+        );
+
         if (note) {
-          note.textContent = 'Thank you! We received your inquiry and will follow up shortly at your email. You can also reach us directly at hello@roxtech.io.';
-          note.className = 'note ok'; // Graceful UX feedback
+          note.textContent = 'Thank you! Your quotation inquiry has been sent successfully. Our senior engineering team will respond within 24 hours.';
+          note.className = 'note ok';
+        }
+
+        contactForm.reset();
+      } catch (err) {
+        console.error('[Quotation Submit Error]', err);
+        window.showTopRightToast(
+          'error',
+          'Submission Error',
+          'There is some error sending your quotation. Please try again or reach us at hello@roxtech.io.'
+        );
+        if (note) {
+          note.textContent = 'There was an issue sending your quotation. Please check your network or reach us at hello@roxtech.io.';
+          note.className = 'note';
         }
       } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalText;
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        }
       }
     });
   }

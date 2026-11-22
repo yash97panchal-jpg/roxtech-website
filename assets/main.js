@@ -10,6 +10,54 @@ function escapeHtml(str) {
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }
 
+// Global Top-Right Toast Notification System
+window.showTopRightToast = function(type, title, message) {
+  let container = document.getElementById('rox-toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'rox-toast-container';
+    container.style.cssText = 'position:fixed;top:24px;right:24px;z-index:99999999;display:flex;flex-direction:column;gap:12px;max-width:420px;width:calc(100vw - 48px);pointer-events:none;';
+    document.body.appendChild(container);
+  }
+
+  const isSuccess = type === 'success';
+  const toast = document.createElement('div');
+  toast.className = 'rox-toast rox-toast-' + type;
+  toast.style.cssText = 'pointer-events:auto;background:#0B1B3D;color:#FFFFFF;border:1px solid ' + 
+    (isSuccess ? 'rgba(16,185,129,0.5)' : 'rgba(239,68,68,0.5)') + 
+    ';border-left:5px solid ' + (isSuccess ? '#10B981' : '#EF4444') + 
+    ';border-radius:12px;padding:16px 18px;box-shadow:0 20px 40px rgba(0,0,0,0.35),0 4px 12px rgba(0,0,0,0.2);display:flex;align-items:flex-start;gap:12px;transform:translateX(120%);opacity:0;transition:transform 0.35s cubic-bezier(0.16,1,0.3,1),opacity 0.35s ease;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;';
+
+  const iconSvg = isSuccess
+    ? '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>'
+    : '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>';
+
+  toast.innerHTML = iconSvg +
+    '<div style="flex:1;">' +
+      '<div style="font-weight:700;font-size:14px;margin-bottom:3px;color:' + (isSuccess ? '#34D399' : '#FCA5A5') + ';letter-spacing:-0.01em;">' + title + '</div>' +
+      '<div style="font-size:12.5px;line-height:1.45;color:#E2E8F0;">' + message + '</div>' +
+    '</div>' +
+    '<button type="button" aria-label="Close notification" style="background:none;border:none;color:#94A3B8;cursor:pointer;padding:0 4px;font-size:20px;line-height:1;border-radius:4px;margin-left:6px;transition:color 0.15s;" onmouseover="this.style.color=\'#FFF\'" onmouseout="this.style.color=\'#94A3B8\'">&times;</button>';
+
+  container.appendChild(toast);
+
+  requestAnimationFrame(() => {
+    toast.style.transform = 'translateX(0)';
+    toast.style.opacity = '1';
+  });
+
+  const dismiss = () => {
+    toast.style.transform = 'translateX(120%)';
+    toast.style.opacity = '0';
+    setTimeout(() => {
+      if (toast.parentNode) toast.parentNode.removeChild(toast);
+    }, 400);
+  };
+
+  toast.querySelector('button').addEventListener('click', dismiss);
+  setTimeout(dismiss, 5500);
+};
+
 // Site Directory & Navigation Drawer Handlers
 window.openSiteDirectory = function() {
   const backdrop = document.getElementById('site-directory-backdrop') || document.getElementById('mobile-drawer-backdrop');

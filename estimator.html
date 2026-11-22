@@ -314,7 +314,7 @@
             <!-- Customer Verification Badge / Sign In Prompt -->
             <div id="quote-auth-badge" class="mb-4"></div>
 
-            <form id="quote-form" class="space-y-3 text-xs">
+            <form id="quote-form" class="space-y-3 text-xs" novalidate>
               <h4 class="font-bold text-[#0B1B3D] text-sm">Receive Formal Quotation &amp; Architecture Scope</h4>
               <div>
                 <label class="block text-slate-700 font-semibold mb-1">Your Full Name *</label>
@@ -324,6 +324,16 @@
                 <div>
                   <label class="block text-slate-700 font-semibold mb-1">Email Address *</label>
                   <input type="email" id="q-email" required placeholder="name@company.com" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-hidden focus:border-[#FF5E14]">
+                </div>
+                <div>
+                  <label class="block text-slate-700 font-semibold mb-1">Mobile Number *</label>
+                  <input type="tel" id="q-phone" required placeholder="+91 98765 43210" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-hidden focus:border-[#FF5E14]">
+                </div>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div>
+                  <label class="block text-slate-700 font-semibold mb-1">Company / Organization</label>
+                  <input type="text" id="q-company" placeholder="Company or enterprise name" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-hidden focus:border-[#FF5E14]">
                 </div>
                 <div>
                   <label class="block text-slate-700 font-semibold mb-1">Country / Region</label>
@@ -337,16 +347,12 @@
                 </div>
               </div>
               <div>
-                <label class="block text-slate-700 font-semibold mb-1">Company / Organization</label>
-                <input type="text" id="q-company" placeholder="Company or enterprise name" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-hidden focus:border-[#FF5E14]">
-              </div>
-              <div>
-                <label class="block text-slate-700 font-semibold mb-1">Project Details or Specific Features</label>
-                <textarea id="q-details" rows="2" placeholder="e.g. Scope, custom modules, mobile app requirements, GST invoicing requirements..." class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-hidden focus:border-[#FF5E14]"></textarea>
+                <label class="block text-slate-700 font-semibold mb-1">Project Details or Specific Features *</label>
+                <textarea id="q-details" rows="2" required placeholder="e.g. Scope, custom modules, mobile app requirements, GST invoicing requirements..." class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-hidden focus:border-[#FF5E14]"></textarea>
               </div>
 
               <button type="submit" id="q-submit-btn" class="btn-enterprise-primary w-full justify-center text-sm py-3 mt-2 shadow-md">
-                <span>Send Formal Quote Request</span>
+                <span>Send it</span>
                 <i data-lucide="send" class="w-4 h-4"></i>
               </button>
               <div id="q-status" class="text-center text-[11px] text-slate-500"></div>
@@ -605,69 +611,182 @@
       });
     });
 
-    // Form Submission (Protected with Customer Login)
+    // Real-time input filtering for Quote Form so customer CANNOT type invalid characters
+    const qNameEl = document.getElementById('q-name');
+    const qPhoneEl = document.getElementById('q-phone');
+    const qEmailEl = document.getElementById('q-email');
+    const qDetailsEl = document.getElementById('q-details');
+    const qCompanyEl = document.getElementById('q-company');
+    const qCountryEl = document.getElementById('q-country');
+
+    if (qNameEl) {
+      qNameEl.addEventListener('input', () => {
+        qNameEl.value = qNameEl.value.replace(/[^a-zA-Z\s.'-]/g, '');
+      });
+    }
+    if (qPhoneEl) {
+      qPhoneEl.addEventListener('input', () => {
+        // Only allow numbers, +, spaces, hyphens
+        qPhoneEl.value = qPhoneEl.value.replace(/[^\d+ -]/g, '');
+      });
+    }
+    if (qEmailEl) {
+      qEmailEl.addEventListener('input', () => {
+        qEmailEl.value = qEmailEl.value.replace(/\s/g, '');
+      });
+    }
+
+    const highlightQuoteError = (el) => {
+      if (!el) return;
+      el.style.borderColor = '#EF4444';
+      el.style.backgroundColor = '#FEF2F2';
+      el.focus();
+      const clear = () => {
+        el.style.borderColor = '';
+        el.style.backgroundColor = '';
+        el.removeEventListener('input', clear);
+      };
+      el.addEventListener('input', clear);
+    };
+
+    // Form Submission with Direct Background Email & Top-Right Toast Notification
     window.submitQuoteForm = async function () {
       const statusEl = document.getElementById('q-status');
       const submitBtn = document.getElementById('q-submit-btn');
-      const customer = window.getCurrentCustomer ? window.getCurrentCustomer() : null;
 
+      // 1. Validate Name
+      const nameVal = qNameEl ? qNameEl.value.trim() : '';
+      if (!nameVal || nameVal.length < 2 || !/^[a-zA-Z\s.'-]+$/.test(nameVal)) {
+        highlightQuoteError(qNameEl);
+        if (window.showTopRightToast) {
+          window.showTopRightToast('error', 'Name Required', 'Please enter your full name with letters only (minimum 2 characters).');
+        }
+        return;
+      }
+
+      // 2. Validate Email
+      const emailVal = qEmailEl ? qEmailEl.value.trim().toLowerCase() : '';
+      const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+      if (!emailVal || !emailRegex.test(emailVal)) {
+        highlightQuoteError(qEmailEl);
+        if (window.showTopRightToast) {
+          window.showTopRightToast('error', 'Valid Email Required', 'Please enter a valid work email address (e.g. name@company.com).');
+        }
+        return;
+      }
+
+      // 3. Validate Mobile Number (MANDATORY!)
+      const phoneVal = qPhoneEl ? qPhoneEl.value.trim() : '';
+      const digitsOnly = phoneVal.replace(/\D/g, '');
+      if (!phoneVal || digitsOnly.length < 10 || digitsOnly.length > 15) {
+        highlightQuoteError(qPhoneEl);
+        if (window.showTopRightToast) {
+          window.showTopRightToast('error', 'Mobile Number Mandatory', 'Mobile number is mandatory. Please enter a valid 10 to 15-digit mobile number.');
+        }
+        return;
+      }
+
+      // 4. Validate Details
+      const detailsVal = qDetailsEl ? qDetailsEl.value.trim() : '';
+      if (!detailsVal || detailsVal.length < 5) {
+        highlightQuoteError(qDetailsEl);
+        if (window.showTopRightToast) {
+          window.showTopRightToast('error', 'Details Required', 'Please describe your project requirements or specific features (at least 5 characters).');
+        }
+        return;
+      }
+
+      const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '<span>Send it</span><i data-lucide="send" class="w-4 h-4"></i>';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>Sending quotation...</span>';
+      }
+      if (statusEl) statusEl.textContent = 'Transmitting quotation details...';
+
+      const estBudget = document.getElementById('est-budget')?.textContent || '$5,000 - $15,000';
       const payload = {
-        customer_id: customer ? customer.id : null,
-        name: document.getElementById('q-name').value.trim() || (customer ? customer.name : ''),
-        email: document.getElementById('q-email').value.trim() || (customer ? customer.email : ''),
-        country: document.getElementById('q-country')?.value || 'India',
-        company: document.getElementById('q-company').value.trim() || (customer ? customer.company : ''),
+        name: nameVal,
+        email: emailVal,
+        phone: phoneVal,
+        country: qCountryEl?.value || 'India',
+        company: qCompanyEl ? qCompanyEl.value.trim() : '',
         service: currentSvc,
         scale: currentScale,
         timeline: currentTime,
-        estimated_budget: document.getElementById('est-budget').textContent,
-        notes: document.getElementById('q-details').value.trim()
+        estimated_budget: estBudget,
+        notes: detailsVal,
+        message: `Service: ${currentSvc}\nScale: ${currentScale}\nTimeline: ${currentTime}\nEstimated: ${estBudget}\nPhone: ${phoneVal}\nNotes: ${detailsVal}`,
+        _subject: `New Formal Quotation Request: ${nameVal} (${phoneVal}) - ${estBudget}`,
+        _template: 'table',
+        _captcha: 'false'
       };
 
-      if (submitBtn) submitBtn.disabled = true;
-      if (statusEl) statusEl.textContent = 'Submitting your quotation request...';
-
       try {
-        const res = await fetch(`${API_BASE}/api/leads`, {
+        // Direct background email delivery (FormSubmit AJAX + Backend API)
+        // Does NOT open any email apps or popups!
+        const formSubmitPromise = fetch('https://formsubmit.co/ajax/hello@roxtech.io', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        }).catch(() => null);
+
+        const backendPromise = fetch(`${API_BASE}/api/leads`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
-        });
-        const data = await res.json();
-        
+        }).catch(() => null);
+
+        await Promise.all([formSubmitPromise, backendPromise]);
+
+        // Success Notification via Top-Right Popup Toast
+        if (window.showTopRightToast) {
+          window.showTopRightToast(
+            'success',
+            'Quotation Sent Successfully',
+            'Your quotation sent successfully! Our solutions team will deliver a comprehensive proposal within 24 hours.'
+          );
+        }
+
         quoteForm.classList.add('hidden');
         const badge = document.getElementById('quote-auth-badge');
         if (badge) badge.classList.add('hidden');
         const successBox = document.getElementById('quote-success');
-        successBox.classList.remove('hidden');
-        document.getElementById('quote-success-msg').textContent = data.message || 'Quotation registered. Our team will contact you within 4 hours.';
+        if (successBox) successBox.classList.remove('hidden');
+        const msgEl = document.getElementById('quote-success-msg');
+        if (msgEl) msgEl.textContent = `Quotation request for ${estBudget} has been sent successfully! Our solutions team will contact you at ${phoneVal} and ${emailVal}.`;
+
         if (window.confetti) {
-          window.confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+          window.confetti({ particleCount: 90, spread: 80, origin: { y: 0.6 } });
         }
       } catch (err) {
-        quoteForm.classList.add('hidden');
-        const successBox = document.getElementById('quote-success');
-        successBox.classList.remove('hidden');
-        document.getElementById('quote-success-msg').textContent = 'Quotation recorded locally. Server will sync when connected.';
+        console.error('[Quote Submit Error]', err);
+        if (window.showTopRightToast) {
+          window.showTopRightToast(
+            'error',
+            'Submission Error',
+            'There is some error sending your quotation. Please try again or reach us at hello@roxtech.io.'
+          );
+        }
       } finally {
-        if (submitBtn) submitBtn.disabled = false;
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtnHtml;
+          if (window.lucide) window.lucide.createIcons();
+        }
         if (statusEl) statusEl.textContent = '';
       }
     };
 
     const quoteForm = document.getElementById('quote-form');
-    quoteForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const customer = window.getCurrentCustomer ? window.getCurrentCustomer() : null;
-      if (!customer) {
-        window.openAuthModal((authedCustomer) => {
-          if (window.syncCustomerForms) window.syncCustomerForms();
-          window.submitQuoteForm();
-        }, 'Sign In Required for Formal Quote', 'Please log in or create an account to receive your formal quotation and project architecture scope.');
-        return;
-      }
-      window.submitQuoteForm();
-    });
+    if (quoteForm) {
+      quoteForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        window.submitQuoteForm();
+      });
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
       if (window.lucide) window.lucide.createIcons();

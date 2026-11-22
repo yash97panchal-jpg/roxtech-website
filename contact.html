@@ -54,30 +54,30 @@
       <div class="wrap">
         <div class="split" style="align-items:start; gap:56px;">
           <!-- Contact Form (Kora Card Style) -->
-          <form id="contact-form" class="card" style="padding: 40px;">
-            <h2 style="font-size:1.6rem; margin-bottom:16px;">Tell us about your project</h2>
+          <form id="contact-form" class="card" style="padding: 40px;" novalidate>
+            <h2 style="font-size:1.6rem; margin-bottom:16px;">Get a Quotation &amp; Project Inquiry</h2>
 
             <div class="row">
               <label>Full name *
-                <input name="name" required autocomplete="name" placeholder="Rajesh Verma">
+                <input name="name" id="c-name" required autocomplete="name" placeholder="Rajesh Verma">
               </label>
               <label>Work email *
-                <input name="email" type="email" required autocomplete="email" placeholder="rajesh@company.com">
+                <input name="email" id="c-email" type="email" required autocomplete="email" placeholder="rajesh@company.com">
               </label>
             </div>
 
             <div class="row">
-              <label>Company / Organization
-                <input name="company" autocomplete="organization" placeholder="Enterprise Systems Ltd">
+              <label>Mobile number *
+                <input name="phone" id="c-phone" type="tel" required autocomplete="tel" placeholder="+91 98765 43210">
               </label>
-              <label>Phone number
-                <input name="phone" type="tel" autocomplete="tel" placeholder="+91 98765 43210">
+              <label>Company / Organization
+                <input name="company" id="c-company" autocomplete="organization" placeholder="Enterprise Systems Ltd">
               </label>
             </div>
 
             <div class="row">
               <label>Country / Region
-                <select name="country">
+                <select name="country" id="c-country">
                   <option value="India" selected>India (+91)</option>
                   <option value="United States">United States (+1)</option>
                   <option value="United Kingdom">United Kingdom (+44)</option>
@@ -87,7 +87,7 @@
                 </select>
               </label>
               <label>Primary service needed
-                <select name="service">
+                <select name="service" id="c-service">
                   <option>Web development</option>
                   <option>ERP and custom software</option>
                   <option>Mobile app</option>
@@ -99,7 +99,7 @@
             </div>
 
             <label>Estimated budget tier
-              <select name="budget">
+              <select name="budget" id="c-budget">
                 <option>Not sure yet</option>
                 <option>Under ₹5 Lakh ($5,000) — Prototype / MVP</option>
                 <option>₹5 Lakh to ₹20 Lakh ($5,000 – $25,000) — Growth Project</option>
@@ -109,13 +109,13 @@
             </label>
 
             <label>Project requirements &amp; timeline *
-              <textarea name="message" rows="5" required placeholder="Tell us about your project goals, technical requirements, current stack, and expected launch timeline..."></textarea>
+              <textarea name="message" id="c-message" rows="5" required placeholder="Tell us about your project goals, technical requirements, current stack, and expected launch timeline..."></textarea>
             </label>
 
             <div id="form-note" class="note" role="status"></div>
 
-            <button class="btn btn-primary" type="submit" style="width:100%; padding:15px; font-size:1.02rem;">
-              Send project inquiry <span class="btn-arrow">→</span>
+            <button class="btn btn-primary" type="submit" id="btn-submit-contact" style="width:100%; padding:15px; font-size:1.02rem;">
+              Send it <span class="btn-arrow">→</span>
             </button>
           </form>
 

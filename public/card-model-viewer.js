@@ -1,6 +1,6 @@
 import {
   ACESFilmicToneMapping, BoxGeometry, Color, CylinderGeometry, DirectionalLight,
-  ExtrudeGeometry, HemisphereLight, Mesh, MeshStandardMaterial, OrthographicCamera,
+  ExtrudeGeometry, HemisphereLight, Matrix3, Mesh, MeshStandardMaterial, OrthographicCamera,
   PCFShadowMap, PlaneGeometry, Scene, Shape, SphereGeometry, TorusGeometry,
   Vector3, WebGLRenderer
 } from 'https://cdn.jsdelivr.net/npm/three@0.181.2/build/three.module.min.js';
@@ -24,6 +24,10 @@ const materials = Object.fromEntries(Object.entries(colors).map(([name, [color, 
 ]));
 const geometryCache = new Map();
 const ballGeometry = new SphereGeometry(1, 28, 16);
+const compactBall = new SphereGeometry(1, 14, 9);
+const compactSceneCache = new Map();
+const studioTarget = new Vector3(0, 0, 1);
+let compactGeometry = false;
 const up = new Vector3(0, 1, 0);
 const sceneCache = new Map();
 const floorMaterial = new MeshStandardMaterial({ color: 0xc6d9f0, roughness: .85 });
@@ -45,12 +49,13 @@ function mesh(scene, geometry, finish, x, y, z) {
 function roundedBox(w, d, h, bevel) {
   const radius = Math.min(bevel, w / 2.01, d / 2.01, h / 2.01);
   if (!radius) return new BoxGeometry(w, d, h);
-  const geometry = new BoxGeometry(1, 1, 1, 9, 9, 9);
+  const segments = compactGeometry ? 3 : 9;
+  const geometry = new BoxGeometry(1, 1, 1, segments, segments, segments);
   const positions = geometry.attributes.position;
   const normals = geometry.attributes.normal;
   const normal = new Vector3();
   const half = new Vector3(w / 2 - radius, d / 2 - radius, h / 2 - radius);
-  const cornerStart = .5 - 2 / 9;
+  const cornerStart = .5 - (compactGeometry ? 1 : 2) / segments;
   const core = component => Math.min(1, Math.max(-1, component / cornerStart));
   const outer = component => Math.sign(component) *
     Math.max(0, (Math.abs(component) - cornerStart) / (.5 - cornerStart));
@@ -75,19 +80,19 @@ const shapes = {
     mesh(scene, g, mat, x, y, z).rotation.z = angle;
   },
   ball(scene, x, y, z, r, mat, scale = [1, 1, 1]) {
-    mesh(scene, ballGeometry, mat, x, y, z).scale.set(r * scale[0], r * scale[1], r * scale[2]);
+    mesh(scene, compactGeometry ? compactBall : ballGeometry, mat, x, y, z).scale.set(r * scale[0], r * scale[1], r * scale[2]);
   },
   cyl(scene, x, y, z, r, height, mat, rotation = [0, 0, 0]) {
-    const g = cached(`cyl:${r},${height}`, () => new CylinderGeometry(r, r, height, 36).rotateX(Math.PI / 2));
+    const g = cached(`cyl:${r},${height}`, () => new CylinderGeometry(r, r, height, compactGeometry ? 16 : 36).rotateX(Math.PI / 2));
     mesh(scene, g, mat, x, y, z).rotation.set(...rotation);
   },
   ring(scene, x, y, z, r, mat, facing) {
-    const g = cached(`ring:${r}`, () => new TorusGeometry(r, .044, 12, 48));
+    const g = cached(`ring:${r}`, () => new TorusGeometry(r, .044, compactGeometry ? 6 : 12, compactGeometry ? 24 : 48));
     if (facing) mesh(scene, g, mat, x, y, z).rotation.x = Math.PI / 2;
     else mesh(scene, g, mat, x, y, z);
   },
   line(scene, points, mat, r = .025) {
-    const unit = cached('tube', () => new CylinderGeometry(1, 1, 1, 12));
+    const unit = cached('tube', () => new CylinderGeometry(1, 1, 1, compactGeometry ? 7 : 12));
     for (let i = 1; i < points.length; i++) {
       const first = new Vector3(...points[i - 1]);
       const end = new Vector3(...points[i]);
@@ -105,7 +110,7 @@ const shapes = {
       const points = [[-.82,.66],[0,.92],[.82,.66],[.75,-.20],[.40,-.64],[0,-.89],[-.40,-.64],[-.75,-.20]];
       points.forEach(([a,b], i) => i ? shape.lineTo(a,b) : shape.moveTo(a,b));
       shape.closePath();
-      return new ExtrudeGeometry(shape, { depth:.23, bevelThickness:.035, bevelSize:.04, bevelSegments:3, steps:1 }).rotateX(Math.PI / 2);
+      return new ExtrudeGeometry(shape, { depth:.23, bevelThickness:.035, bevelSize:.04, bevelSegments:compactGeometry ? 1 : 3, steps:1 }).rotateX(Math.PI / 2);
     });
     mesh(scene, geometry, 'blue', x, y + .10 * scale, z).scale.setScalar(scale);
     shapes.line(scene, [[x-.38*scale,y-.18*scale,z-.05*scale],[x-.10*scale,y-.18*scale,z-.32*scale],[x+.40*scale,y-.18*scale,z+.26*scale]], 'white', .065*scale);
@@ -135,10 +140,145 @@ function sceneFor(name) {
   const floor = new Mesh(cached('studio floor', () => new PlaneGeometry(140, 140)), floorMaterial);
   floor.position.z = -.09;
   floor.receiveShadow = true;
+  floor.userData.isStudioFloor = true;
   scene.add(floor);
   for (const [shape, ...params] of modelData[name]) shapes[shape](scene, ...params);
   sceneCache.set(name, scene);
   return scene;
+}
+
+function faceColor(color, normal) {
+  const key = normal.dot(keyDirection);
+  const fill = normal.dot(fillDirection);
+  const light = .63 + Math.max(key, 0) * .42 + Math.max(fill, 0) * .19;
+  const warm = Math.max(key, 0) * 5;
+  const channel = (shift, bias) => Math.min(255, Math.round(((color >> shift) & 255) * light + bias));
+  return [channel(16, warm), channel(8, 2), channel(0, 7)];
+}
+
+const keyDirection = new Vector3(-3, -5, 8).normalize();
+const fillDirection = new Vector3(5, 4, 4).normalize();
+
+function compactScene(name) {
+  if (compactSceneCache.has(name)) return compactSceneCache.get(name);
+  const scene = sceneFor(name);
+  scene.updateMatrixWorld(true);
+  const faces = [];
+  const points = [];
+  const u = new Vector3(), v = new Vector3(), shading = new Vector3();
+  const normalTransform = new Matrix3();
+  for (const object of scene.children) {
+    if (!object.isMesh || object.userData.isStudioFloor) continue;
+    const { geometry, material: coating } = object;
+    const positions = geometry.getAttribute('position');
+    const normals = geometry.getAttribute('normal');
+    const color = coating.color.getHex();
+    normalTransform.getNormalMatrix(object.matrixWorld);
+    const vertices = Array.from({ length: positions.count }, (_, i) => ({
+      position: new Vector3().fromBufferAttribute(positions, i).applyMatrix4(object.matrixWorld),
+      shade: faceColor(color, shading.fromBufferAttribute(normals, i).applyNormalMatrix(normalTransform))
+    }));
+    for (const vertex of vertices) points.push(vertex);
+    const index = geometry.index;
+    const count = index?.count ?? vertices.length;
+    for (let i = 0; i < count; i += 3) {
+      const a = vertices[index ? index.getX(i) : i];
+      const b = vertices[index ? index.getX(i + 1) : i + 1];
+      const c = vertices[index ? index.getX(i + 2) : i + 2];
+      const normal = u.subVectors(b.position, a.position).cross(v.subVectors(c.position, a.position));
+      if (normal.lengthSq() > 1e-12) faces.push({ a, b, c, normal: normal.clone() });
+    }
+  }
+  const result = { faces, points };
+  compactSceneCache.set(name, result);
+  return result;
+}
+
+function studioBackdrop(ctx, width, height) {
+  const backdrop = ctx.createLinearGradient(0, 0, 0, height);
+  backdrop.addColorStop(0, '#ccdbee');
+  backdrop.addColorStop(1, '#edf3fb');
+  ctx.fillStyle = backdrop;
+  ctx.fillRect(0, 0, width, height);
+
+  ctx.save();
+  ctx.translate(width / 2, height * .74);
+  ctx.scale(width * .36, height * .19);
+  const contact = ctx.createRadialGradient(0, 0, 0, 0, 0, 1);
+  contact.addColorStop(0, 'rgba(35, 62, 98, .31)');
+  contact.addColorStop(1, 'rgba(35, 62, 98, 0)');
+  ctx.fillStyle = contact;
+  ctx.fillRect(-1, -1, 2, 2);
+  ctx.restore();
+  return ctx.getImageData(0, 0, width, height).data;
+}
+
+function paintFace(a, b, c, pixels, depth, width, height) {
+  const abX = b.x - a.x, abY = b.y - a.y;
+  const acX = c.x - a.x, acY = c.y - a.y;
+  const determinant = abX * acY - abY * acX;
+  if (Math.abs(determinant) < 1e-8) return;
+  const inv = 1 / determinant;
+  const minX = Math.max(0, Math.ceil(Math.min(a.x, b.x, c.x) - .5));
+  const maxX = Math.min(width - 1, Math.floor(Math.max(a.x, b.x, c.x) - .5));
+  const minY = Math.max(0, Math.ceil(Math.min(a.y, b.y, c.y) - .5));
+  const maxY = Math.min(height - 1, Math.floor(Math.max(a.y, b.y, c.y) - .5));
+  const dbX = acY * inv, dcX = -abY * inv;
+  const dbY = -acX * inv, dcY = abX * inv;
+  let rowB = (minX + .5 - a.x) * dbX + (minY + .5 - a.y) * dbY;
+  let rowC = (minX + .5 - a.x) * dcX + (minY + .5 - a.y) * dcY;
+  const dzB = b.z - a.z, dzC = c.z - a.z;
+  const [r, g, blue] = a.shade;
+  for (let y = minY; y <= maxY; y++) {
+    let bWeight = rowB, cWeight = rowC;
+    let i = y * width + minX;
+    for (let x = minX; x <= maxX; x++, i++) {
+      if (bWeight >= -1e-8 && cWeight >= -1e-8 && bWeight + cWeight <= 1.00000001) {
+        const z = a.z + bWeight * dzB + cWeight * dzC;
+        if (z > depth[i]) {
+          depth[i] = z;
+          pixels[i * 4] = r + bWeight * (b.shade[0] - r) + cWeight * (c.shade[0] - r);
+          pixels[i * 4 + 1] = g + bWeight * (b.shade[1] - g) + cWeight * (c.shade[1] - g);
+          pixels[i * 4 + 2] = blue + bWeight * (b.shade[2] - blue) + cWeight * (c.shade[2] - blue);
+        }
+      }
+      bWeight += dbX;
+      cWeight += dcX;
+    }
+    rowB += dbY;
+    rowC += dcY;
+  }
+}
+
+function drawOnCanvas(view, width, height) {
+  const { ctx } = view;
+  const { faces, points } = compactScene(view.name);
+  if (view.image?.width !== width || view.image?.height !== height) {
+    view.backdrop = studioBackdrop(ctx, width, height);
+    view.image = ctx.createImageData(width, height);
+    view.depth = new Float32Array(width * height);
+  }
+  const pixels = view.image.data;
+  pixels.set(view.backdrop);
+  view.depth.fill(-Infinity);
+
+  camera.updateMatrixWorld();
+  const rotation = camera.matrixWorld.elements;
+  const right = new Vector3(rotation[0], rotation[1], rotation[2]);
+  const vertical = new Vector3(rotation[4], rotation[5], rotation[6]);
+  const towardViewer = new Vector3(rotation[8], rotation[9], rotation[10]);
+  const scaleX = width / 8.1, scaleY = height / 4.86;
+  const midX = width / 2;
+  const midY = height / 2 + studioTarget.dot(vertical) * scaleY;
+  for (const point of points) {
+    point.x = midX + point.position.dot(right) * scaleX;
+    point.y = midY - point.position.dot(vertical) * scaleY;
+    point.z = point.position.dot(towardViewer);
+  }
+  for (const { a, b, c, normal } of faces) {
+    if (normal.dot(towardViewer) > 0) paintFace(a, b, c, pixels, view.depth, width, height);
+  }
+  ctx.putImageData(view.image, 0, 0);
 }
 
 const camera = new OrthographicCamera(-4.05, 4.05, 2.43, -2.43, .1, 40);
@@ -155,6 +295,7 @@ export function mountCardModels(cards) {
   if (!targets.size) return;
 
   let renderer;
+  let initialized = false;
   let scheduled = 0;
   let renderWidth = 0;
   let renderHeight = 0;
@@ -164,14 +305,15 @@ export function mountCardModels(cards) {
   function draw(view, progress) {
     const { card } = view;
     if (!card.clientWidth || !card.clientHeight) return;
-    const ratio = Math.min(window.devicePixelRatio || 1, 2);
-    const width = Math.min(1440, Math.ceil(card.clientWidth * ratio / 16) * 16);
+    const ratio = Math.max(1.5, Math.min(window.devicePixelRatio || 1, 2));
+    const realWidth = Math.ceil(card.clientWidth * ratio / 16) * 16;
+    const width = Math.min(renderer ? 1440 : 1104, realWidth);
     const height = Math.round(width * card.clientHeight / card.clientWidth);
     if (!view.canvas) {
       view.canvas = document.createElement('canvas');
       view.canvas.className = 'card-model-canvas';
       view.canvas.setAttribute('aria-hidden', 'true');
-      view.ctx = view.canvas.getContext('2d', { alpha: false });
+      view.ctx = view.canvas.getContext('2d', { alpha: false, willReadFrequently: !renderer });
       if (!view.ctx) throw new Error('2D canvas unavailable');
       card.append(view.canvas);
     }
@@ -179,7 +321,7 @@ export function mountCardModels(cards) {
       view.canvas.width = width;
       view.canvas.height = height;
     }
-    if (renderWidth !== width || renderHeight !== height) {
+    if (renderer && (renderWidth !== width || renderHeight !== height)) {
       renderer.setSize(width, height, false);
       renderWidth = width;
       renderHeight = height;
@@ -187,9 +329,13 @@ export function mountCardModels(cards) {
     const angle = Math.sin(progress * 2 * Math.PI) * .22;
     const x = 6.1, y = -10.7;
     camera.position.set(x * Math.cos(angle) - y * Math.sin(angle), x * Math.sin(angle) + y * Math.cos(angle), 6.4);
-    camera.lookAt(0, 0, 1);
-    renderer.render(sceneFor(view.name), camera);
-    view.ctx.drawImage(renderer.domElement, 0, 0, width, height);
+    camera.lookAt(studioTarget);
+    if (renderer) {
+      renderer.render(sceneFor(view.name), camera);
+      view.ctx.drawImage(renderer.domElement, 0, 0, width, height);
+    } else {
+      drawOnCanvas(view, width, height);
+    }
     card.classList.add('card-model-rendered');
   }
 
@@ -202,7 +348,7 @@ export function mountCardModels(cards) {
     let animating = false;
     for (const view of visible) {
       const progress = reduce.matches ? 1 : Math.min(1, (now - view.since) / cycle);
-      if (view.needsFrame || (progress < 1 && now - view.lastFrame >= 33) || (progress === 1 && !view.finished)) {
+      if (view.needsFrame || (progress < 1 && now - view.lastFrame >= (renderer ? 33 : 67)) || (progress === 1 && !view.finished)) {
         try {
           draw(view, progress);
         } catch {
@@ -243,18 +389,25 @@ export function mountCardModels(cards) {
         resize.unobserve(entry.target);
         continue;
       }
-      if (!renderer) {
+      if (!initialized) {
+        initialized = true;
+        const canvas = document.createElement('canvas');
         try {
-          renderer = new WebGLRenderer({ antialias: true, powerPreference: 'low-power' });
-          renderer.toneMapping = ACESFilmicToneMapping;
-          renderer.toneMappingExposure = 1.07;
-          renderer.shadowMap.enabled = true;
-          renderer.shadowMap.type = PCFShadowMap;
-          renderer.domElement.addEventListener('webglcontextlost', setFallback, { once: true });
+          const context = canvas.getContext('webgl2', {
+            antialias: true, alpha: false, powerPreference: 'low-power'
+          });
+          if (context) {
+            renderer = new WebGLRenderer({ canvas, context });
+            renderer.toneMapping = ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.07;
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = PCFShadowMap;
+            canvas.addEventListener('webglcontextlost', setFallback, { once: true });
+          }
         } catch {
-          setFallback();
-          return;
+          renderer = undefined;
         }
+        compactGeometry = !renderer;
       }
       view.since = performance.now();
       view.needsFrame = true;
@@ -285,7 +438,7 @@ const modelData = {
     ["box",-1.8,0.75,0.5,0.08,0.08,0.75,"steel",0.025],
     ["box",-0.3600000000000001,0.20999999999999996,0.5,0.08,0.08,0.75,"steel",0.025],
     ["box",-0.3600000000000001,0.75,0.5,0.08,0.08,0.75,"steel",0.025],
-    ["box",-1.08,0.6799999999999999,1.0136,0.053200000000000004,0.1216,0.2432,"steel"],
+    ["box",-1.08,0.7369999999999999,1.0136,0.053200000000000004,0.0874,0.2432,"steel"],
     ["box",-1.08,0.6799999999999999,0.8996,0.3876,0.1862,0.038000000000000006,"navy"],
     ["box",-1.08,0.6799999999999999,1.291,1.1324,0.0798,0.6156,"navy",0.11],
     ["box",-1.08,0.6363,1.2986,1.045,0.00912,0.5244,"white",0.07],
@@ -303,7 +456,7 @@ const modelData = {
     ["box",0.31479999999999997,0.7257,0.455,0.0728,0.0728,0.6825,"steel",0.025],
     ["box",1.6252,0.23429999999999995,0.455,0.0728,0.0728,0.6825,"steel",0.025],
     ["box",1.6252,0.7257,0.455,0.0728,0.0728,0.6825,"steel",0.025],
-    ["box",0.97,0.662,0.922376,0.048412000000000004,0.110656,0.221312,"steel"],
+    ["box",0.97,0.71387,0.922376,0.048412000000000004,0.07953400000000001,0.221312,"steel"],
     ["box",0.97,0.662,0.818636,0.35271600000000003,0.16944199999999998,0.03458,"navy"],
     ["box",0.97,0.662,1.17481,1.030484,0.072618,0.560196,"navy",0.11],
     ["box",0.97,0.622233,1.1817259999999998,0.95095,0.0082992,0.47720399999999996,"white",0.07],
@@ -373,7 +526,7 @@ const modelData = {
   "web": [
     ["box",0,0,0.12,5.45,3.4,0.4,"platform",0.2],
     ["box",0,-1.65,0.16,5.05,0.085,0.075,"blue",0.028],
-    ["box",-0.59,0.17,0.9895999999999999,0.1652,0.3776,0.7552,"steel"],
+    ["box",-0.59,0.347,0.9895999999999999,0.1652,0.2714,0.7552,"steel"],
     ["box",-0.59,0.17,0.6355999999999999,1.2036,0.5781999999999999,0.118,"navy"],
     ["box",-0.59,0.17,1.851,3.5164,0.24779999999999996,1.9116,"navy",0.11],
     ["box",-0.59,0.034300000000000025,1.8746,3.2449999999999997,0.028319999999999998,1.6283999999999998,"white",0.07],
@@ -397,7 +550,7 @@ const modelData = {
   "speed": [
     ["box",0,0,0.12,5.45,3.4,0.4,"platform",0.2],
     ["box",0,-1.65,0.16,5.05,0.085,0.075,"blue",0.028],
-    ["box",-0.59,0.17,0.9895999999999999,0.1652,0.3776,0.7552,"steel"],
+    ["box",-0.59,0.347,0.9895999999999999,0.1652,0.2714,0.7552,"steel"],
     ["box",-0.59,0.17,0.6355999999999999,1.2036,0.5781999999999999,0.118,"navy"],
     ["box",-0.59,0.17,1.851,3.5164,0.24779999999999996,1.9116,"navy",0.11],
     ["box",-0.59,0.034300000000000025,1.8746,3.2449999999999997,0.028319999999999998,1.6283999999999998,"white",0.07],
@@ -417,7 +570,7 @@ const modelData = {
   "erp": [
     ["box",0,0,0.12,5.45,3.4,0.4,"platform",0.2],
     ["box",0,-1.65,0.16,5.05,0.085,0.075,"blue",0.028],
-    ["box",-0.98,0.48,0.8468,0.1316,0.3008,0.6016,"steel"],
+    ["box",-0.98,0.621,0.8468,0.1316,0.2162,0.6016,"steel"],
     ["box",-0.98,0.48,0.5648,0.9588,0.46059999999999995,0.094,"navy"],
     ["box",-0.98,0.48,1.533,2.8011999999999997,0.1974,1.5228,"navy",0.11],
     ["box",-0.98,0.3719,1.5517999999999998,2.585,0.02256,1.2972,"white",0.07],
@@ -583,7 +736,7 @@ const modelData = {
   "support": [
     ["box",0,0,0.12,5.45,3.4,0.4,"platform",0.2],
     ["box",0,-1.65,0.16,5.05,0.085,0.075,"blue",0.028],
-    ["box",-0.59,0.39,0.798,0.12600000000000003,0.28800000000000003,0.5760000000000001,"steel"],
+    ["box",-0.59,0.525,0.798,0.12600000000000003,0.20700000000000002,0.5760000000000001,"steel"],
     ["box",-0.59,0.39,0.528,0.918,0.441,0.09000000000000001,"navy"],
     ["box",-0.59,0.39,1.4549999999999998,2.682,0.189,1.4580000000000002,"navy",0.11],
     ["box",-0.59,0.2865,1.4729999999999999,2.475,0.0216,1.242,"white",0.07],
@@ -727,7 +880,7 @@ const modelData = {
   "education": [
     ["box",0,0,0.12,5.45,3.4,0.4,"platform",0.2],
     ["box",0,-1.65,0.16,5.05,0.085,0.075,"blue",0.028],
-    ["box",-0.64,0.41,0.8111999999999999,0.13440000000000002,0.3072,0.6144,"steel"],
+    ["box",-0.64,0.5539999999999999,0.8111999999999999,0.13440000000000002,0.2208,0.6144,"steel"],
     ["box",-0.64,0.41,0.5231999999999999,0.9792,0.4704,0.096,"navy"],
     ["box",-0.64,0.41,1.512,2.8608,0.20159999999999997,1.5552000000000001,"navy",0.11],
     ["box",-0.64,0.2996,1.5312000000000001,2.6399999999999997,0.023039999999999998,1.3247999999999998,"white",0.07],

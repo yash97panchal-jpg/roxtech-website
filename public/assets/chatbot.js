@@ -31,8 +31,10 @@
         if (Array.isArray(parsed.messages) && parsed.messages.length > 0) {
           state.messages = parsed.messages;
           state.booking = parsed.booking || null;
-          if (state.booking?.step === 'availability' ||
-              (state.booking?.step === 'time' && parsed.version !== 2)) {
+          if (parsed.version !== 3 && state.booking) {
+            state.booking = null;
+            state.messages.at(-1).pills = null;
+          } else if (state.booking?.step === 'availability' || state.booking?.step === 'time') {
             state.booking.step = 'date';
             state.booking.availableSlots = [];
             state.messages.at(-1).pills = null;
@@ -50,6 +52,16 @@
               }
             }
           }
+          if (parsed.version !== 3) {
+            for (const message of state.messages) {
+              if (message.sender !== 'bot' || !message.text.startsWith('You can reach a RoxTech consultant directly:')) continue;
+              message.text = message.text
+                .split('\n')
+                .filter(line => !line.includes('RoxTech Tower, Sindhu Bhavan Road'))
+                .join('\n')
+                .replace('+91 79 4912 3000 (Toll-Free: 1800 120 7698)', '+91 8460162774');
+            }
+          }
           state.estimate = parsed.estimate || null;
           state.unknownCount = parsed.unknownCount || 0;
           return true;
@@ -64,7 +76,7 @@
   function saveSession() {
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
-        version: 2,
+        version: 3,
         messages: state.messages,
         booking: state.booking,
         estimate: state.estimate,
@@ -311,6 +323,10 @@
           btn.type = 'button';
           btn.className = 'rox-chat-pill';
           btn.textContent = pill.label || pill;
+          if (pill.booked) {
+            btn.classList.add('rox-chat-pill-booked');
+            btn.disabled = true;
+          }
           const val = pill.value || pill.label || pill;
           btn.addEventListener('click', () => {
             // Hide pills immediately once chosen
@@ -451,34 +467,22 @@
   }
 
   // 2) Book a consultation
-  function startBookingFlow(preselectedService) {
-    state.estimate = null;
-    state.booking = {
-      step: 'service',
-      service: preselectedService || '',
-      name: '',
-      email: '',
-      phone: '',
-      date: '',
-      time: '',
-      note: '',
-      availableSlots: []
-    };
+  const BOOKING_SERVICES = [
+    'Web development', 'ERP & custom software', 'Mobile apps',
+    'Cloud and DevOps', 'AI and automation', 'Data services'
+  ];
 
-    if (preselectedService) {
-      askBookingName();
-    } else {
-      botReply("Which service would you like to discuss?", {
-        pills: [
-          { label: 'Web development', value: 'Web development' },
-          { label: 'ERP & custom software', value: 'ERP & custom software' },
-          { label: 'Mobile apps', value: 'Mobile apps' },
-          { label: 'Cloud and DevOps', value: 'Cloud and DevOps' },
-          { label: 'AI and automation', value: 'AI and automation' },
-          { label: 'Data services', value: 'Data services' }
-        ]
-      });
-    }
+  function startBookingFlow() {
+    state.estimate = null;
+    state.booking = { date: '', time: '', service: '', name: '', email: '', phone: '', note: '', slots: [] };
+    askBookingDate();
+  }
+
+  function askBookingService() {
+    state.booking.step = 'service';
+    botReply("Which service would you like to discuss?", {
+      pills: BOOKING_SERVICES.map(service => ({ label: service, value: service }))
+    });
   }
 
   function askBookingName() {
@@ -501,18 +505,15 @@
   // Preferred date: next 14 days, weekdays only
   function generateNextWeekdays(maxDays = 14) {
     const dates = [];
-    const d = new Date();
+    const indiaDate = new Date(Date.now() + 330 * 60_000).toISOString().slice(0, 10);
+    const midnight = Date.parse(indiaDate + 'T00:00:00Z');
     for (let i = 1; i <= maxDays; i++) {
-      const nextD = new Date(d);
-      nextD.setDate(d.getDate() + i);
-      const day = nextD.getDay();
+      const nextD = new Date(midnight + i * 86_400_000);
+      const day = nextD.getUTCDay();
       if (day !== 0 && day !== 6) {
-        const yyyy = nextD.getFullYear();
-        const mm = String(nextD.getMonth() + 1).padStart(2, '0');
-        const dd = String(nextD.getDate()).padStart(2, '0');
-        const val = `${yyyy}-${mm}-${dd}`;
-        const label = nextD.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
-        dates.push({ label, value: val });
+        const value = nextD.toISOString().slice(0, 10);
+        const label = nextD.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' });
+        dates.push({ label, value });
       }
     }
     return dates;
@@ -530,7 +531,8 @@
     const booking = state.booking;
     booking.date = selectedDate;
     booking.step = 'availability';
-    booking.availableSlots = [];
+    booking.slots = [];
+    booking.time = '';
     saveSession();
 
     const dateFormatted = new Date(selectedDate + 'T00:00:00Z').toLocaleDateString('en-US', {
@@ -543,26 +545,20 @@
       });
       if (!res.ok) throw new Error('Availability request failed');
       const data = await res.json();
-      const slots = data.available_slots ?? data.slots;
-      if (data.success === false || !Array.isArray(slots) ||
-          !slots.every(slot => typeof slot === 'string' && /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(slot))) {
+      const slots = data.slots;
+      if (data.success !== true || !Array.isArray(slots) || !slots.length ||
+          !slots.every(slot => slot && typeof slot.booked === 'boolean' && /^(?:1[0-7]):00$/.test(slot.time))) {
         throw new Error('Invalid availability response');
       }
       if (state.booking !== booking || booking.step !== 'availability') return;
 
-      booking.availableSlots = [...new Set(slots)];
-      if (booking.availableSlots.length === 0) {
-        booking.step = 'date';
-        botReply(`There are no available times on ${dateFormatted}. Please choose another date:`, {
-          pills: generateNextWeekdays()
-        });
-        return;
-      }
-
+      booking.slots = slots;
       booking.step = 'time';
-      botReply(`Please select an available time on **${dateFormatted}**:`, {
-        pills: booking.availableSlots.map(slot => ({ label: `${slot} IST`, value: slot }))
-      });
+      const allBooked = slots.every(slot => slot.booked);
+      const message = allBooked
+        ? `All times on **${dateFormatted}** are booked. Please choose another date.`
+        : `Choose a one-hour slot on **${dateFormatted}**. Times are in IST.`;
+      botReply(message, { pills: bookingTimeOptions(slots) });
     } catch (error) {
       if (state.booking !== booking || booking.step !== 'availability') return;
       booking.step = 'date';
@@ -575,6 +571,15 @@
         ]
       });
     }
+  }
+
+  function bookingTimeOptions(slots) {
+    return [
+      ...slots.map(({ time, booked }) => ({
+        label: `${time} IST · ${booked ? 'Booked' : 'Available'}`, value: time, booked
+      })),
+      { label: 'Choose another date', value: 'Choose another date' }
+    ];
   }
 
   function askBookingNote() {
@@ -634,6 +639,11 @@
         b.step = 'date';
         state.isTyping = false;
         await checkAvailabilityAndAskTime(b.date);
+        return;
+      }
+      if (res.status === 400) {
+        b.step = 'date';
+        askBookingDate();
         return;
       }
       if (!res.ok || data.success !== true || !data.id) {
@@ -723,8 +733,7 @@
     state.estimate = null;
     botReply(
       `You can reach a RoxTech consultant directly:\n\n` +
-      `• **RoxTech Technology Center of Excellence (HQ):** RoxTech Tower, Sindhu Bhavan Road, Bodakdev, Ahmedabad, Gujarat 380054, India\n` +
-      `• **Phone:** +91 79 4912 3000 (Toll-Free: 1800 120 7698)\n` +
+      `• **Phone:** +91 8460162774\n` +
       `• **Email:** hello@roxtech.online\n` +
       `• **Hours:** Monday to Friday, 9:00 AM – 7:00 PM IST\n\n` +
       `We reply to all inquiries within one business day.`,
@@ -912,7 +921,7 @@
       return;
     }
 
-    if (lower === 'edit details') {
+    if (b.step === 'confirm' && lower === 'edit details') {
       b.step = 'name';
       botReply("Let's revise your details. What is your full name?");
       return;
@@ -920,14 +929,19 @@
 
     // 1. Service
     if (b.step === 'service') {
-      b.service = raw;
+      const service = BOOKING_SERVICES.find(option => option.toLowerCase() === lower);
+      if (!service) {
+        askBookingService();
+        return;
+      }
+      b.service = service;
       askBookingName();
       return;
     }
 
     // 2. Name
     if (b.step === 'name') {
-      if (raw.trim().length < 2) {
+      if (raw.length < 2 || raw.length > 100) {
         botReply("Please enter your full name (at least 2 letters):");
         return;
       }
@@ -939,7 +953,7 @@
     // 3. Email
     if (b.step === 'email') {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(raw.trim())) {
+      if (raw.length > 254 || !emailRegex.test(raw)) {
         botReply("Please enter a valid email address (e.g., name@company.com):");
         return;
       }
@@ -950,8 +964,12 @@
 
     // 4. Phone (optional)
     if (b.step === 'phone') {
-      b.phone = (lower === 'skip' || lower === 'no') ? 'Not provided' : raw.trim();
-      askBookingDate();
+      if (raw.length > 40) {
+        askBookingPhone();
+        return;
+      }
+      b.phone = (lower === 'skip' || lower === 'no') ? '' : raw;
+      askBookingNote();
       return;
     }
 
@@ -980,21 +998,28 @@
     }
 
     if (b.step === 'time') {
-      const slot = raw.replace(/\s*IST$/i, '').trim();
-      if (!b.availableSlots.includes(slot)) {
-        botReply("Please select an available time:", {
-          pills: b.availableSlots.map(value => ({ label: `${value} IST`, value }))
-        });
+      if (lower === 'choose another date') {
+        askBookingDate();
         return;
       }
-
-      b.time = slot;
-      askBookingNote();
+      const time = raw.replace(/\s*IST$/i, '').trim();
+      if (!b.slots.some(slot => slot.time === time && !slot.booked)) {
+        botReply("Please select an available time:", { pills: bookingTimeOptions(b.slots) });
+        return;
+      }
+      b.time = time;
+      if (!b.service) askBookingService();
+      else if (!b.name) askBookingName();
+      else showBookingSummary();
       return;
     }
 
     // 7. Short project note (optional)
     if (b.step === 'note') {
+      if (raw.length > 1000) {
+        botReply("Please use 1,000 characters or fewer, or skip the note.", { pills: [{ label: 'Skip', value: 'skip' }] });
+        return;
+      }
       b.note = (lower === 'skip' || lower === 'no') ? '' : raw.trim();
       showBookingSummary();
       return;
@@ -1035,15 +1060,36 @@
   // ---------------------------------------------------------------------------
   // INITIALIZATION ON PAGE LOAD
   // ---------------------------------------------------------------------------
+  function observeCardModels() {
+    const models = document.querySelectorAll('.card-model');
+    if (!models.length || !('IntersectionObserver' in window) ||
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const animation = new Image();
+    animation.addEventListener('load', () => {
+      const observer = new IntersectionObserver(entries => {
+        for (const entry of entries) {
+          entry.target.classList.toggle('card-model-moving', entry.isIntersecting);
+        }
+      }, { threshold: .3 });
+      models.forEach(model => observer.observe(model));
+    });
+    animation.src = '/card-motion.webp';
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
+    observeCardModels();
     injectChatUI();
     const hadSession = loadSession();
     if (!hadSession) {
       showGreeting();
-    } else if (state.messages.length > 0) {
+    } else if (state.booking?.step === 'date') {
+      askBookingDate();
+    } else if (!state.booking && !state.estimate && !state.messages.at(-1).pills) {
+      showGreeting();
+    } else {
       renderMessages();
     }
   });
 
 })();
-

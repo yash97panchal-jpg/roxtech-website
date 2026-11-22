@@ -397,7 +397,7 @@
             <div class="flex items-center gap-2.5">
               <i data-lucide="mail" class="w-4 h-4 text-[#FF5E14] shrink-0"></i>
               <strong class="text-white font-bold">Inquiries:</strong>
-              <a href="mailto:india@roxtech.io" class="text-blue-300 hover:text-[#FF5E14] font-semibold transition-colors">india@roxtech.io</a> / <a href="mailto:enterprise@roxtech.io" class="text-blue-300 hover:text-[#FF5E14] font-semibold transition-colors">enterprise@roxtech.io</a>
+              <a href="mailto:hello@roxtech.online" class="text-blue-300 hover:text-[#FF5E14] font-semibold transition-colors">hello@roxtech.online</a>
             </div>
           </div>
         </div>
@@ -714,7 +714,7 @@
       try {
         // Direct background email delivery (FormSubmit AJAX + Backend API)
         // Does NOT open any email apps or popups!
-        const formSubmitPromise = fetch('https://formsubmit.co/ajax/hello@roxtech.io', {
+        const formSubmitPromise = fetch('https://formsubmit.co/ajax/hello@roxtech.online', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -729,7 +729,13 @@
           body: JSON.stringify(payload)
         }).catch(() => null);
 
-        await Promise.all([formSubmitPromise, backendPromise]);
+        const responses = await Promise.all([formSubmitPromise, backendPromise]);
+        const accepted = await Promise.all(responses.map(async response => {
+          if (!response?.ok) return false;
+          const result = await response.json().catch(() => null);
+          return result?.success === true || result?.success === 'true';
+        }));
+        if (!accepted.some(Boolean)) throw new Error('Quotation delivery was not confirmed');
 
         // Success Notification via Top-Right Popup Toast
         if (window.showTopRightToast) {
@@ -757,7 +763,7 @@
           window.showTopRightToast(
             'error',
             'Submission Error',
-            'There is some error sending your quotation. Please try again or reach us at hello@roxtech.io.'
+            'There is some error sending your quotation. Please try again or reach us at hello@roxtech.online.'
           );
         }
       } finally {

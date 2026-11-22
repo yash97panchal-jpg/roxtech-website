@@ -1,0 +1,19 @@
+{
+  "name": "lingering-mountain-bef0",
+  "main": "worker.js",
+  "compatibility_date": "2026-11-21",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "html_handling": "drop-trailing-slash",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/bookings", "/api/bookings/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "BOOKINGS",
+      "database_name": "roxtech-consultations",
+      "database_id": "d8a35c52-b294-42a0-a14b-584d6d5e5e42"
+    }
+  ]
+}

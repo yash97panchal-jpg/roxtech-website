@@ -2,7 +2,7 @@
   "name": "roxtech-website",
   "private": true,
   "scripts": {
-    "deploy": "cf deploy ./public"
+    "deploy": "npx --yes wrangler@4.166.0 deploy"
   },
   "devDependencies": {
     "cf": "1.0.0-rc.2"

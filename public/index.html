@@ -35,7 +35,7 @@
         <a href="about.html">About</a>
         <a href="blog.html">Insights</a>
         <a href="careers.html">Careers</a>
-        <a class="btn btn-primary" href="contact.html">Get a quote <span class="btn-arrow">→</span></a>
+        <a class="btn btn-primary" href="#quote-section">Get a quote <span class="btn-arrow">→</span></a>
       </nav>
     </div>
   </header>
@@ -48,7 +48,7 @@
           <h1>Digital products that <span class="text-gradient">move your business forward.</span></h1>
           <p>From standout websites to custom software, mobile apps and practical AI solutions — we turn complex ideas into experiences people love to use.</p>
           <div class="actions">
-            <a class="btn btn-primary" href="contact.html">Get a free quote <span class="btn-arrow">→</span></a>
+            <a class="btn btn-primary" href="#quote-section">Get a free quote <span class="btn-arrow">→</span></a>
             <a class="btn btn-ghost" href="services.html">See our services</a>
           </div>
           <div class="hero-trust-bar"><span>Independent thinking. Purpose-built technology. Long-term partnerships.</span></div>
@@ -408,16 +408,54 @@
       </div>
     </section>
 
-    <!-- High-Converting CTA Box (Kora Book-a-Call Banner) -->
-    <section class="dark">
+    <!-- High-Converting Quotation Form Section -->
+    <section class="dark" id="quote-section">
       <div class="wrap">
-        <div class="cta-box">
-          <h2>Tell us what you want to build</h2>
-          <p>Share a few details and we will send a clear scope, timeline and price within two business days.</p>
-          <div class="actions">
-            <a class="btn btn-primary" href="contact.html">Start a project <span class="btn-arrow">→</span></a>
-            <a class="btn btn-ghost" href="mailto:hello@roxtech.io">Email our engineers</a>
+        <div class="cta-box" style="text-align:left; max-width:840px; margin:0 auto; padding:40px 32px; background:rgba(11,27,61,0.6); border:1px solid rgba(255,255,255,0.12); border-radius:24px;">
+          <div style="text-align:center; margin-bottom:28px;">
+            <span class="tag" style="background:rgba(255,94,20,0.15); color:#FF5E14; border:1px solid rgba(255,94,20,0.3); padding:4px 12px; border-radius:999px; font-weight:700; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em;">Instant Scoping &amp; Pricing</span>
+            <h2 style="font-size:2rem; margin-top:12px; margin-bottom:8px; color:#FFF;">Get a Quotation</h2>
+            <p style="color:#94A3B8; font-size:0.95rem; max-width:540px; margin:0 auto;">Fill in your project requirements below. Our solutions engineering team will deliver a comprehensive proposal and architectural breakdown within 24 hours.</p>
           </div>
+
+          <form id="home-quote-form" class="card" style="padding:28px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:18px;" novalidate>
+            <div class="row" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin-bottom:16px;">
+              <label style="color:#E2E8F0; font-size:0.86rem; font-weight:600;">Full name *
+                <input name="name" id="hq-name" required autocomplete="name" placeholder="Rajesh Verma" style="width:100%; margin-top:6px; padding:12px 14px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.2); border-radius:10px; color:#FFF; font-size:0.92rem;">
+              </label>
+              <label style="color:#E2E8F0; font-size:0.86rem; font-weight:600;">Work email *
+                <input name="email" id="hq-email" type="email" required autocomplete="email" placeholder="rajesh@company.com" style="width:100%; margin-top:6px; padding:12px 14px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.2); border-radius:10px; color:#FFF; font-size:0.92rem;">
+              </label>
+            </div>
+
+            <div class="row" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin-bottom:16px;">
+              <label style="color:#E2E8F0; font-size:0.86rem; font-weight:600;">Mobile number *
+                <input name="phone" id="hq-phone" type="tel" required autocomplete="tel" placeholder="+91 98765 43210" style="width:100%; margin-top:6px; padding:12px 14px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.2); border-radius:10px; color:#FFF; font-size:0.92rem;">
+              </label>
+              <label style="color:#E2E8F0; font-size:0.86rem; font-weight:600;">Service needed
+                <select name="service" id="hq-service" style="width:100%; margin-top:6px; padding:12px 14px; background:#071026; border:1px solid rgba(255,255,255,0.2); border-radius:10px; color:#FFF; font-size:0.92rem;">
+                  <option value="Custom Web Development">Custom Web Development</option>
+                  <option value="ERP & Custom Software">ERP &amp; Custom Software</option>
+                  <option value="Mobile App Engineering">Mobile App Engineering</option>
+                  <option value="Cloud, DevOps & Security">Cloud, DevOps &amp; Security</option>
+                  <option value="AI & Process Automation">AI &amp; Process Automation</option>
+                  <option value="Data Services & Analytics">Data Services &amp; Analytics</option>
+                </select>
+              </label>
+            </div>
+
+            <div style="margin-bottom:20px;">
+              <label style="color:#E2E8F0; font-size:0.86rem; font-weight:600;">Project requirements &amp; timeline *
+                <textarea name="message" id="hq-message" rows="4" required placeholder="Tell us about your project goals, technical requirements, current stack, and expected launch timeline..." style="width:100%; margin-top:6px; padding:12px 14px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.2); border-radius:10px; color:#FFF; font-family:inherit; font-size:0.92rem;"></textarea>
+              </label>
+            </div>
+
+            <div id="hq-note" class="note" style="margin-bottom:14px; font-size:0.88rem;"></div>
+
+            <button class="btn btn-primary" type="submit" id="btn-submit-home-quote" style="width:100%; padding:15px; font-size:1.05rem; justify-content:center; font-weight:700;">
+              Send it <span class="btn-arrow">→</span>
+            </button>
+          </form>
         </div>
       </div>
     </section>
@@ -464,8 +502,8 @@
 
   <!-- Lenis Inertial Smooth Scrolling & Interactive Scripts -->
   <script src="assets/lenis.min.js"></script>
-  <script src="assets/rox.js"></script>
-  <script src="assets/hero3d.js" defer></script>
-  <script src="assets/chatbot.js" defer></script>
+  <script src="assets/rox.js?v=3.2"></script>
+  <script src="assets/hero3d.js?v=3.2" defer></script>
+  <script src="assets/chatbot.js?v=3.2" defer></script>
 </body>
 </html>

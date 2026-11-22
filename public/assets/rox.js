@@ -302,6 +302,133 @@ function initRox() {
       }
     });
   }
+
+  // 6. Homepage Embedded Quotation Form Handling
+  const homeQuoteForm = document.getElementById('home-quote-form');
+  if (homeQuoteForm) {
+    const hqName = document.getElementById('hq-name');
+    const hqEmail = document.getElementById('hq-email');
+    const hqPhone = document.getElementById('hq-phone');
+    const hqService = document.getElementById('hq-service');
+    const hqMessage = document.getElementById('hq-message');
+    const hqNote = document.getElementById('hq-note');
+    const hqSubmitBtn = document.getElementById('btn-submit-home-quote');
+
+    if (hqName) {
+      hqName.addEventListener('input', () => {
+        hqName.value = hqName.value.replace(/[^a-zA-Z\s.'-]/g, '');
+        hqName.style.borderColor = '';
+      });
+    }
+    if (hqPhone) {
+      hqPhone.addEventListener('input', () => {
+        hqPhone.value = hqPhone.value.replace(/[^\d+ -]/g, '');
+        hqPhone.style.borderColor = '';
+      });
+    }
+    if (hqEmail) {
+      hqEmail.addEventListener('input', () => {
+        hqEmail.value = hqEmail.value.replace(/\s/g, '');
+        hqEmail.style.borderColor = '';
+      });
+    }
+    if (hqMessage) {
+      hqMessage.addEventListener('input', () => {
+        hqMessage.style.borderColor = '';
+      });
+    }
+
+    homeQuoteForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const originalText = hqSubmitBtn ? hqSubmitBtn.innerHTML : 'Send it <span class="btn-arrow">→</span>';
+
+      const nameVal = hqName ? hqName.value.trim() : '';
+      if (!nameVal || nameVal.length < 2 || !/^[a-zA-Z\s.'-]+$/.test(nameVal)) {
+        if (hqName) { hqName.style.borderColor = '#EF4444'; hqName.focus(); }
+        window.showTopRightToast('error', 'Name Required', 'Please enter your full name with letters only (minimum 2 characters).');
+        return;
+      }
+
+      const emailVal = hqEmail ? hqEmail.value.trim().toLowerCase() : '';
+      const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
+      if (!emailVal || !emailRegex.test(emailVal)) {
+        if (hqEmail) { hqEmail.style.borderColor = '#EF4444'; hqEmail.focus(); }
+        window.showTopRightToast('error', 'Valid Email Required', 'Please enter a valid work email address (e.g. name@company.com).');
+        return;
+      }
+
+      const phoneVal = hqPhone ? hqPhone.value.trim() : '';
+      const digitsOnly = phoneVal.replace(/\D/g, '');
+      if (!phoneVal || digitsOnly.length < 10 || digitsOnly.length > 15) {
+        if (hqPhone) { hqPhone.style.borderColor = '#EF4444'; hqPhone.focus(); }
+        window.showTopRightToast('error', 'Mobile Number Mandatory', 'Mobile number is mandatory. Please enter a valid 10 to 15-digit mobile number.');
+        return;
+      }
+
+      const messageVal = hqMessage ? hqMessage.value.trim() : '';
+      if (!messageVal || messageVal.length < 5) {
+        if (hqMessage) { hqMessage.style.borderColor = '#EF4444'; hqMessage.focus(); }
+        window.showTopRightToast('error', 'Details Required', 'Please describe your project requirements (at least 5 characters).');
+        return;
+      }
+
+      if (hqSubmitBtn) {
+        hqSubmitBtn.disabled = true;
+        hqSubmitBtn.innerHTML = 'Sending quotation…';
+      }
+
+      const payload = {
+        name: nameVal,
+        email: emailVal,
+        phone: phoneVal,
+        service: hqService ? hqService.value : 'Custom Web Development',
+        message: messageVal,
+        _subject: `New Homepage Quotation Request: ${nameVal} (${phoneVal})`,
+        _template: 'table',
+        _captcha: 'false'
+      };
+
+      try {
+        const formSubmitPromise = fetch('https://formsubmit.co/ajax/hello@roxtech.io', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(payload)
+        }).catch(() => null);
+
+        const backendPromise = fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).catch(() => null);
+
+        await Promise.all([formSubmitPromise, backendPromise]);
+
+        window.showTopRightToast(
+          'success',
+          'Quotation Sent Successfully',
+          'Your quotation sent successfully! Our senior engineering team will respond within 24 hours.'
+        );
+
+        if (hqNote) {
+          hqNote.textContent = 'Thank you! Your quotation request has been sent successfully. We will follow up within 24 hours.';
+          hqNote.className = 'note ok';
+        }
+
+        homeQuoteForm.reset();
+      } catch (err) {
+        window.showTopRightToast(
+          'error',
+          'Submission Error',
+          'There is some error sending your quotation. Please try again or reach us at hello@roxtech.io.'
+        );
+      } finally {
+        if (hqSubmitBtn) {
+          hqSubmitBtn.disabled = false;
+          hqSubmitBtn.innerHTML = originalText;
+        }
+      }
+    });
+  }
 }
 
 if (document.readyState === 'loading') {

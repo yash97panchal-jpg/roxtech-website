@@ -31,6 +31,25 @@
         if (Array.isArray(parsed.messages) && parsed.messages.length > 0) {
           state.messages = parsed.messages;
           state.booking = parsed.booking || null;
+          if (state.booking?.step === 'availability' ||
+              (state.booking?.step === 'time' && parsed.version !== 2)) {
+            state.booking.step = 'date';
+            state.booking.availableSlots = [];
+            state.messages.at(-1).pills = null;
+          } else if (state.booking?.step === 'submitting') {
+            state.booking.step = 'unconfirmed';
+            state.messages.at(-1).pills = null;
+          }
+          if (parsed.version !== 2) {
+            for (const message of state.messages) {
+              if (message.sender !== 'bot') continue;
+              message.text = message.text.replaceAll('hello@roxtech.io', 'hello@roxtech.online');
+              if (message.link?.url?.match(/^(services|contact|careers|estimator)\.html/)) {
+                message.link.url = '/' + message.link.url;
+                if (message.link.text?.includes('Cloud & DevOps')) message.link.url = '/services.html#cloud';
+              }
+            }
+          }
           state.estimate = parsed.estimate || null;
           state.unknownCount = parsed.unknownCount || 0;
           return true;
@@ -45,6 +64,7 @@
   function saveSession() {
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify({
+        version: 2,
         messages: state.messages,
         booking: state.booking,
         estimate: state.estimate,
@@ -263,7 +283,7 @@
 
       if (msg.link && typeof msg.link.url === 'string') {
         const urlStr = msg.link.url.trim();
-        const isSafe = urlStr.startsWith('/') || /^https?:\/\//i.test(urlStr);
+        const isSafe = (urlStr.startsWith('/') && !urlStr.startsWith('//') && !urlStr.startsWith('/\\')) || /^https?:\/\//i.test(urlStr);
         if (isSafe) {
           const linkEl = document.createElement('a');
           linkEl.className = 'rox-chat-link';
@@ -400,25 +420,25 @@
 
     if (t.includes('website') || t.includes('web') || t.includes('portal') || t.includes('storefront')) {
       text = "We build fast, secure company websites and customer portals designed to convert visitors and load in under two seconds. Every build includes responsive design, secure payments, and easy content editing without needing a developer.";
-      link = { text: 'Explore Web Development →', url: 'services.html#web' };
+      link = { text: 'Explore Web Development →', url: '/services.html#web' };
     } else if (t.includes('manage') || t.includes('software') || t.includes('erp') || t.includes('inventory')) {
       text = "We replace spreadsheets and disconnected tools with tailored systems for inventory, orders, billing, and reporting in one place. Your software includes role-based access, Tally and GST integration, and full team training at handover.";
-      link = { text: 'Explore ERP & Custom Software →', url: 'services.html#erp' };
+      link = { text: 'Explore ERP & Custom Software →', url: '/services.html#erp' };
     } else if (t.includes('mobile') || t.includes('app') || t.includes('ios') || t.includes('android')) {
       text = "We engineer iOS and Android apps from a single Flutter codebase that your customers or field teams will actually use. Each app includes offline mode with auto-sync, push notifications, and App Store and Play Store publishing.";
-      link = { text: 'Explore Mobile Apps →', url: 'services.html#mobile' };
+      link = { text: 'Explore Mobile Apps →', url: '/services.html#mobile' };
     } else if (t.includes('cloud') || t.includes('aws') || t.includes('azure') || t.includes('devops')) {
       text = "We manage seamless migrations, automated deployments, and continuous monitoring on AWS, Azure, or Google Cloud. Our cloud architecture cuts monthly infrastructure spend while maintaining enterprise-grade security.";
-      link = { text: 'Explore Cloud & DevOps →', url: 'services.html#web' };
+      link = { text: 'Explore Cloud & DevOps →', url: '/services.html#cloud' };
     } else if (t.includes('ai') || t.includes('automate') || t.includes('bot') || t.includes('chatbot')) {
       text = "We build custom chatbots, document processing pipelines, and workflow automations that remove repetitive manual work from your team. These smart automation systems integrate directly into your existing databases to save hours every week.";
-      link = { text: 'Explore AI & Automation →', url: 'services.html#data' };
+      link = { text: 'Explore AI & Automation →', url: '/services.html#data' };
     } else if (t.includes('data') || t.includes('clean') || t.includes('catalog') || t.includes('digitiz')) {
       text = "We provide catalog digitization, database cleanup, and bulk data entry delivered at 99.9% accuracy. We also configure interactive dashboards for sales, stock, and operations so decisions rest on accurate numbers.";
-      link = { text: 'Explore Data Services →', url: 'services.html#data' };
+      link = { text: 'Explore Data Services →', url: '/services.html#data' };
     } else {
       text = "We build tailored software, cloud infrastructure, and data workflows designed around how your business operates. Every solution is delivered on time with fixed milestone pricing and complete code ownership.";
-      link = { text: 'View All Services →', url: 'services.html' };
+      link = { text: 'View All Services →', url: '/services.html' };
     }
 
     botReply(text, {
@@ -432,6 +452,7 @@
 
   // 2) Book a consultation
   function startBookingFlow(preselectedService) {
+    state.estimate = null;
     state.booking = {
       step: 'service',
       service: preselectedService || '',
@@ -506,49 +527,51 @@
   }
 
   async function checkAvailabilityAndAskTime(selectedDate) {
-    state.booking.date = selectedDate;
-    state.booking.step = 'time';
+    const booking = state.booking;
+    booking.date = selectedDate;
+    booking.step = 'availability';
+    booking.availableSlots = [];
+    saveSession();
 
-    const parts = selectedDate.split('-').map(Number);
-    const dateFormatted = new Date(parts[0], parts[1] - 1, parts[2]).toLocaleDateString('en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric'
+    const dateFormatted = new Date(selectedDate + 'T00:00:00Z').toLocaleDateString('en-US', {
+      weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC'
     });
 
-    botReply(`Checking available time slots for **${dateFormatted}**...`);
-
     try {
-      const res = await fetch(`/api/bookings/availability?date=${encodeURIComponent(selectedDate)}`);
+      const res = await fetch(`/api/bookings/availability?date=${encodeURIComponent(selectedDate)}`, {
+        signal: AbortSignal.timeout(10000)
+      });
+      if (!res.ok) throw new Error('Availability request failed');
       const data = await res.json();
-      const slots = data.available_slots || data.slots || ['10:00', '12:00', '15:00', '17:00'];
-      state.booking.availableSlots = slots;
+      const slots = data.available_slots ?? data.slots;
+      if (data.success === false || !Array.isArray(slots) ||
+          !slots.every(slot => typeof slot === 'string' && /^(?:[01]\d|2[0-3]):[0-5]\d$/.test(slot))) {
+        throw new Error('Invalid availability response');
+      }
+      if (state.booking !== booking || booking.step !== 'availability') return;
 
-      if (!slots || slots.length === 0) {
-        botReply(`All consultation slots are already booked on ${dateFormatted}. Please select another date:`, {
-          pills: generateNextWeekdays(14)
+      booking.availableSlots = [...new Set(slots)];
+      if (booking.availableSlots.length === 0) {
+        booking.step = 'date';
+        botReply(`There are no available times on ${dateFormatted}. Please choose another date:`, {
+          pills: generateNextWeekdays()
         });
-        state.booking.step = 'date';
         return;
       }
 
-      const slotPills = slots.map(s => ({
-        label: `${s} IST`,
-        value: s
-      }));
-
-      botReply(`Please select a preferred time slot on **${dateFormatted}**:`, {
-        pills: slotPills
+      booking.step = 'time';
+      botReply(`Please select an available time on **${dateFormatted}**:`, {
+        pills: booking.availableSlots.map(slot => ({ label: `${slot} IST`, value: slot }))
       });
-    } catch (err) {
-      console.warn('Availability check error:', err);
-      state.booking.availableSlots = ['10:00', '12:00', '15:00', '17:00'];
-      botReply(`Please select a preferred time slot on **${dateFormatted}**:`, {
+    } catch (error) {
+      if (state.booking !== booking || booking.step !== 'availability') return;
+      booking.step = 'date';
+      botReply("I couldn't verify consultation times. Please try another date or email **hello@roxtech.online** to arrange a call.", {
+        link: { text: 'Contact RoxTech →', url: '/contact.html' },
         pills: [
-          { label: '10:00 IST', value: '10:00' },
-          { label: '12:00 IST', value: '12:00' },
-          { label: '15:00 IST', value: '15:00' },
-          { label: '17:00 IST', value: '17:00' }
+          { label: 'Retry availability', value: selectedDate },
+          { label: 'Choose another date', value: 'Choose another date' },
+          { label: 'Talk to a person', value: 'Talk to a person' }
         ]
       });
     }
@@ -585,11 +608,15 @@
 
   async function submitBooking() {
     const b = state.booking;
-    botReply("Booking your consultation...");
+    b.step = 'submitting';
+    saveSession();
+    state.isTyping = true;
+    renderMessages();
 
     try {
       const res = await fetch('/api/bookings', {
         method: 'POST',
+        signal: AbortSignal.timeout(15000),
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: b.name,
@@ -603,24 +630,32 @@
       });
 
       const data = await res.json();
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || 'Booking submission failed');
+      if (res.status === 409) {
+        b.step = 'date';
+        state.isTyping = false;
+        await checkAvailabilityAndAskTime(b.date);
+        return;
+      }
+      if (!res.ok || data.success !== true || !data.id) {
+        throw new Error('Booking submission failed');
       }
 
       state.booking = null;
       saveSession();
 
-      botReply(`Your consultation is confirmed! Reference ID: **#BKG-${data.id}**.\n\nA calendar invitation and confirmation details have been sent to **${b.email}**. We look forward to meeting with you on **${b.date}** at **${b.time} IST**.`, {
+      botReply(`Your consultation is confirmed! Reference ID: **#BKG-${data.id}**.\n\nYour consultation is scheduled for **${b.date}** at **${b.time} IST**.`, {
         pills: [
           { label: 'Ask something else', value: 'Ask something else' },
           { label: 'Close chat', value: 'Close chat' }
         ]
       });
     } catch (err) {
-      botReply(`We could not complete your booking: ${err.message}. Would you like to select another slot?`, {
+      b.step = 'unconfirmed';
+      botReply("I couldn't verify whether your booking was saved. Please email **hello@roxtech.online** before trying again so we can check for an existing booking.", {
+        link: { text: 'Contact RoxTech →', url: '/contact.html' },
         pills: [
-          { label: 'Choose another slot', value: 'Book a consultation' },
-          { label: 'Talk to a person', value: 'Talk to a person' }
+          { label: 'Talk to a person', value: 'Talk to a person' },
+          { label: 'Main menu', value: 'Menu' }
         ]
       });
     }
@@ -674,7 +709,7 @@
       `Typical delivery timeframe is **${timeline}** in agile sprints. You receive fixed milestone pricing, 100% code ownership, and 30 days of post-launch care. You can also calculate a tailored estimate using our Project Estimator:`;
 
     botReply(reply, {
-      link: { text: 'Open Project Estimator →', url: 'estimator.html' },
+      link: { text: 'Open Project Estimator →', url: '/estimator.html' },
       pills: [
         { label: 'Book a consultation', value: 'Book a consultation' },
         { label: 'Ask something else', value: 'Ask something else' }
@@ -690,11 +725,11 @@
       `You can reach a RoxTech consultant directly:\n\n` +
       `• **RoxTech Technology Center of Excellence (HQ):** RoxTech Tower, Sindhu Bhavan Road, Bodakdev, Ahmedabad, Gujarat 380054, India\n` +
       `• **Phone:** +91 79 4912 3000 (Toll-Free: 1800 120 7698)\n` +
-      `• **Email:** hello@roxtech.io\n` +
+      `• **Email:** hello@roxtech.online\n` +
       `• **Hours:** Monday to Friday, 9:00 AM – 7:00 PM IST\n\n` +
       `We reply to all inquiries within one business day.`,
       {
-        link: { text: 'Go to Contact Page →', url: 'contact.html' },
+        link: { text: 'Go to Contact Page →', url: '/contact.html' },
         pills: [
           { label: 'Book a consultation', value: 'Book a consultation' },
           { label: 'Ask something else', value: 'Ask something else' }
@@ -718,44 +753,14 @@
     const q = text.trim();
     const lower = q.toLowerCase();
 
-    // Active booking flow
-    if (state.booking && state.booking.step) {
-      handleBookingStep(q, lower);
+    const command = lower.replace(/[.!?]+$/, '').trim();
+
+    if (command === 'close chat') {
+      closeChat();
       return;
     }
 
-    // Active estimate flow
-    if (state.estimate && state.estimate.step) {
-      handleEstimateStep(q);
-      return;
-    }
-
-    // Main options
-    if (lower === 'find a service' || lower.includes('find service')) {
-      state.unknownCount = 0;
-      askServiceNeeds();
-      return;
-    }
-
-    if (lower === 'book a consultation' || lower.includes('consultation') || lower.includes('appointment') || lower.includes('schedule a call') || lower.includes('book call')) {
-      state.unknownCount = 0;
-      startBookingFlow();
-      return;
-    }
-
-    if (lower === 'get a price estimate' || lower.includes('price estimate')) {
-      state.unknownCount = 0;
-      startPriceEstimateFlow();
-      return;
-    }
-
-    if (lower === 'talk to a person' || lower.includes('talk to person') || lower.includes('human') || lower.includes('speak with')) {
-      state.unknownCount = 0;
-      showContactInfo();
-      return;
-    }
-
-    if (lower === 'ask something else' || lower === 'menu' || lower === 'start over' || lower === 'restart') {
+    if (/^(?:ask something else|(?:main )?menu|start over|restart)$/.test(command)) {
       state.unknownCount = 0;
       state.booking = null;
       state.estimate = null;
@@ -763,8 +768,37 @@
       return;
     }
 
-    if (lower === 'close chat') {
-      closeChat();
+    if (/^(?:talk to (?:a )?(?:person|human)|speak to (?:a )?human)$/.test(command)) {
+      state.unknownCount = 0;
+      showContactInfo();
+      return;
+    }
+
+    if (state.booking?.step) {
+      handleBookingStep(q, lower);
+      return;
+    }
+
+    if (state.estimate?.step) {
+      handleEstimateStep(q);
+      return;
+    }
+
+    if (/^(?:hi|hello|hey|good (?:morning|afternoon|evening))(?: there| rox| roxtech)?$/.test(command)) {
+      state.unknownCount = 0;
+      showGreeting();
+      return;
+    }
+
+    if (/^(?:thank you|thanks|thank you very much|thanks a lot|thx)$/.test(command)) {
+      state.unknownCount = 0;
+      botReply("You're welcome! How else can I help?", { pills: MAIN_PILLS });
+      return;
+    }
+
+    if (/^(?:find (?:a )?service|show (?:me )?(?:your )?services|what (?:do|can) you do|what services (?:do you offer|are available))$/.test(command)) {
+      state.unknownCount = 0;
+      askServiceNeeds();
       return;
     }
 
@@ -800,75 +834,49 @@
       return;
     }
 
-    // Free-text keyword matchers
-    if (lower.includes('website') || lower.includes('web') || lower.includes('portal') || lower.includes('storefront')) {
+    if (/\b(?:careers?|jobs?|hiring|internships?|vacanc(?:y|ies)|openings|apply)\b/.test(lower)) {
       state.unknownCount = 0;
-      handleServiceRecommendation('website');
-      return;
-    }
-
-    if (lower.includes('erp') || lower.includes('inventory') || lower.includes('billing') || lower.includes('tally')) {
-      state.unknownCount = 0;
-      handleServiceRecommendation('erp');
-      return;
-    }
-
-    if (lower.includes('app') || lower.includes('mobile') || lower.includes('ios') || lower.includes('android') || lower.includes('flutter')) {
-      state.unknownCount = 0;
-      handleServiceRecommendation('mobile');
-      return;
-    }
-
-    if (lower.includes('cloud') || lower.includes('aws') || lower.includes('azure') || lower.includes('devops')) {
-      state.unknownCount = 0;
-      handleServiceRecommendation('cloud');
-      return;
-    }
-
-    if (lower.includes('ai') || lower.includes('chatbot') || lower.includes('automation') || lower.includes('ocr')) {
-      state.unknownCount = 0;
-      handleServiceRecommendation('ai');
-      return;
-    }
-
-    if (lower.includes('data entry') || lower.includes('catalog') || lower.includes('clean data') || lower.includes('digitiz')) {
-      state.unknownCount = 0;
-      handleServiceRecommendation('data');
-      return;
-    }
-
-    if (lower.includes('price') || lower.includes('estimate') || lower.includes('cost') || lower.includes('pricing') || lower.includes('quote')) {
-      state.unknownCount = 0;
-      startPriceEstimateFlow();
-      return;
-    }
-
-    if (lower.includes('career') || lower.includes('job') || lower.includes('hiring') || lower.includes('apply')) {
-      state.unknownCount = 0;
-      botReply("We are actively hiring talented software engineers, product designers, and data specialists across our engineering pods. You can browse our current openings and submit your application on our Careers page.", {
-        link: { text: 'View Careers →', url: 'careers.html' },
+      botReply("You can browse current openings and application instructions on our Careers page.", {
+        link: { text: 'View Careers →', url: '/careers.html' },
         pills: MAIN_PILLS
       });
       return;
     }
 
-    if (lower.includes('ahmedabad') || lower.includes('gujarat') || lower.includes('office') || lower.includes('location') || lower.includes('address') || lower.includes('where are you') || lower.includes('headquarters') || lower.includes('india')) {
+    if (/\b(?:contact|support|phone|e-?mail|reach|human|person|whatsapp)\b/.test(lower)) {
       state.unknownCount = 0;
-      botReply(
-        `**RoxTech Technology Center of Excellence (HQ):**\n\n` +
-        `• **Ahmedabad Headquarters:** RoxTech Tower, Sindhu Bhavan Road, Bodakdev, Ahmedabad, Gujarat 380054, India\n` +
-        `• **Phone:** +91 79 4912 3000 | Toll-Free: 1800 120 7698\n` +
-        `• **Email:** hello@roxtech.io\n` +
-        `• **Support Hours:** 9:00 AM – 7:00 PM IST (Mon–Fri) & 24/7 SLA Engineering Operations`,
-        {
-          link: { text: 'View Office & Contact Details →', url: 'contact.html' },
-          pills: MAIN_PILLS
-        }
-      );
+      showContactInfo();
       return;
     }
 
-    if (lower.includes('contact') || lower.includes('phone') || lower.includes('email') || lower.includes('reach')) {
+    if (/\b(?:consultations?|appointments?|(?:book|schedule|arrange) (?:a )?(?:call|meeting|demo))\b/.test(lower)) {
+      state.unknownCount = 0;
+      startBookingFlow();
+      return;
+    }
+
+    if (/\b(?:prices?|estimates?|costs?|pricing|quot(?:e|es|ation|ations)|budget)\b|how much/.test(lower)) {
+      state.unknownCount = 0;
+      startPriceEstimateFlow();
+      return;
+    }
+
+    const serviceIntents = [
+      [/\b(?:cloud|aws|azure|devops|google cloud)\b/, 'cloud'],
+      [/\b(?:ai|chatbots?|automations?|ocr|machine learning)\b/, 'ai'],
+      [/\b(?:data entry|data services|analytics|dashboards?|catalog(?:ue)?|clean data|data clean(?:ing|up)|digitiz\w*)\b/, 'data'],
+      [/\b(?:erp|inventory|billing|tally|custom software)\b/, 'erp'],
+      [/\b(?:websites?|web|portals?|storefronts?|e-commerce|ecommerce)\b/, 'website'],
+      [/\b(?:apps?|mobile|ios|android|flutter)\b/, 'mobile']
+    ];
+    const service = serviceIntents.find(([pattern]) => pattern.test(lower));
+    if (service) {
+      state.unknownCount = 0;
+      handleServiceRecommendation(service[1]);
+      return;
+    }
+
+    if (/\b(?:ahmedabad|gujarat|office|location|address|headquarters|india)\b|where are you/.test(lower)) {
       state.unknownCount = 0;
       showContactInfo();
       return;
@@ -882,7 +890,7 @@
       });
     } else {
       botReply("I'm sorry, I'm still having trouble understanding your request. Please choose one of the options below or contact our team directly:", {
-        link: { text: 'Contact RoxTech Team →', url: 'contact.html' },
+        link: { text: 'Contact RoxTech Team →', url: '/contact.html' },
         pills: MAIN_PILLS
       });
       state.unknownCount = 0;
@@ -947,53 +955,40 @@
       return;
     }
 
-    // 5. Preferred date
-    if (b.step === 'date') {
-      let dateVal = raw.trim();
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(dateVal)) {
-        const parsed = new Date(dateVal);
-        if (!isNaN(parsed.getTime())) {
-          dateVal = parsed.toISOString().split('T')[0];
-        }
-      }
-
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(dateVal)) {
-        botReply("Please select a date from the options below:", {
-          pills: generateNextWeekdays(14)
-        });
-        return;
-      }
-
-      checkAvailabilityAndAskTime(dateVal);
+    if (b.step === 'availability') {
+      if (lower === 'choose another date') askBookingDate();
       return;
     }
 
-    // 6. Preferred time slot
+    if (b.step === 'unconfirmed') {
+      botReply("Please email **hello@roxtech.online** so we can check your booking.", {
+        link: { text: 'Contact RoxTech →', url: '/contact.html' },
+        pills: [{ label: 'Main menu', value: 'Menu' }]
+      });
+      return;
+    }
+
+    if (b.step === 'date') {
+      const dates = generateNextWeekdays();
+      const date = dates.find(option => option.value === raw || option.label.toLowerCase() === lower);
+      if (date) {
+        checkAvailabilityAndAskTime(date.value);
+      } else {
+        askBookingDate();
+      }
+      return;
+    }
+
     if (b.step === 'time') {
-      let slotVal = raw.replace(/\s*(AM|PM|IST)/gi, '').trim();
-      const validSlots = ['10:00', '12:00', '15:00', '17:00'];
-      if (!validSlots.includes(slotVal)) {
-        botReply("Please select one of the allowed time slots ([10:00] [12:00] [15:00] [17:00] IST):", {
-          pills: (b.availableSlots && b.availableSlots.length > 0 ? b.availableSlots : validSlots).map(s => ({
-            label: `${s} IST`,
-            value: s
-          }))
+      const slot = raw.replace(/\s*IST$/i, '').trim();
+      if (!b.availableSlots.includes(slot)) {
+        botReply("Please select an available time:", {
+          pills: b.availableSlots.map(value => ({ label: `${value} IST`, value }))
         });
         return;
       }
 
-      // Check if slot is already booked on this date
-      if (b.availableSlots && b.availableSlots.length > 0 && !b.availableSlots.includes(slotVal)) {
-        botReply(`Sorry, the ${slotVal} IST slot is already booked for this date. Please choose an available slot:`, {
-          pills: b.availableSlots.map(s => ({
-            label: `${s} IST`,
-            value: s
-          }))
-        });
-        return;
-      }
-
-      b.time = slotVal;
+      b.time = slot;
       askBookingNote();
       return;
     }
@@ -1022,10 +1017,18 @@
   }
 
   function handleEstimateStep(raw) {
+    if (/^cancel(?: estimate)?[.!?]?$/i.test(raw)) {
+      state.estimate = null;
+      botReply("Estimate cancelled. How else can I help?", { pills: MAIN_PILLS });
+      return;
+    }
     if (state.estimate.step === 'type') {
       askEstimateScale(raw);
     } else if (state.estimate.step === 'scale') {
-      showEstimateResult(raw);
+      const scale = ['Starter / MVP', 'Growth / Multi-module', 'Enterprise scale']
+        .find(option => option.toLowerCase().includes(raw.toLowerCase()) && raw.length > 1);
+      if (scale) showEstimateResult(scale);
+      else askEstimateScale(state.estimate.type);
     }
   }
 
@@ -1043,3 +1046,4 @@
   });
 
 })();
+

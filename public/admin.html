@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enterprise Operations & Client Admin Console | RoxTech</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+
+  <!-- Typography: Poppins (Headings), Source Sans 3 (Body), Barlow (Numbers) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=Barlow:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Local Precompiled Tailwind CSS -->
+  <link rel="stylesheet" href="assets/tailwind.css">
+  <!-- Enterprise Design System Stylesheet -->
+  <link rel="stylesheet" href="assets/style.css">
+  <link rel="stylesheet" href="assets/chatbot.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="assets/rox-refresh.css">
+</head>
+<body class="bg-[#F8FAFC] text-slate-800 font-sans antialiased selection:bg-[#FF5E14] selection:text-white">
+
+  <!-- TOP ENTERPRISE UTILITY BAR -->
+  <div class="bg-[#071026] text-slate-400 text-[11px] font-medium border-b border-white/10 py-1.5 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center space-x-4">
+        <span class="flex items-center space-x-1.5 text-slate-300">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i>
+          <span class="font-semibold text-white">Operations Cockpit</span>
+          <span class="text-slate-400">• SQLite WAL Protected</span>
+        </span>
+        <span class="hidden md:inline-block text-slate-500">|</span>
+        <span class="hidden md:inline-block text-slate-300">ISO 27001 Certified Delivery Enclave</span>
+      </div>
+      <div class="flex items-center space-x-4">
+        <span class="text-slate-300">Server Status: <span class="text-emerald-400 font-mono font-semibold">99.98% SLA OK</span></span>
+        <span class="text-slate-500">|</span>
+        <a href="index.html" class="text-[#FF5E14] hover:underline font-semibold flex items-center gap-1">
+          <span>Exit to Website</span>
+          <i data-lucide="external-link" class="w-3 h-3"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CORPORATE NAVBAR -->
+  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <div class="flex items-center gap-4">
+        <button onclick="window.history.length > 1 ? window.history.back() : window.location.href='index.html'" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-slate-200 transition-colors" title="Back to site">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5 text-[#FF5E14]"></i>
+          <span>Back</span>
+        </button>
+
+        <!-- RoxTech Clear Brand Logo -->
+        <a href="index.html" class="brand-logo-container" aria-label="RoxTech — Intelligence Technology"><img src="assets/roxtech-symbol-clean.png" alt="RoxTech Symbol" class="brand-symbol-img"><div class="brand-text-block"><span class="brand-name">Rox<span>Tech</span></span><small class="brand-tagline">Intelligence Technology</small></div></a>
+      </div>
+
+      <div class="flex items-center space-x-3">
+        <button onclick="handleAdminLogout()" id="btn-admin-logout" class="px-3 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-700 text-xs font-semibold border border-red-200 transition-colors hidden items-center gap-1.5">
+          <i data-lucide="log-out" class="w-3.5 h-3.5 text-red-600"></i>
+          <span>Log Out</span>
+        </button>
+        <button onclick="loadAllData()" class="btn-enterprise-outline text-xs px-3.5 py-2 flex items-center gap-2">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-[#2563EB]"></i>
+          <span>Sync Data</span>
+        </button>
+        <a href="index.html" class="btn-enterprise-primary text-xs px-4 py-2 flex items-center gap-1.5">
+          <span>View Live Portal</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- EXECUTIVE BANNER -->
+  <section class="bg-gradient-to-b from-[#0B1B3D] via-[#091530] to-[#071026] text-white py-10 px-4 sm:px-6 lg:px-8 border-b border-slate-800 relative overflow-hidden">
+    <div class="absolute inset-0 bg-tech-grid opacity-20 pointer-events-none"></div>
+    <div class="max-w-7xl mx-auto relative z-10">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div>
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-white/10 text-orange-300 text-xs font-semibold mb-3">
+            <span class="w-2 h-2 rounded-full bg-[#FF5E14]"></span>
+            <span>RoxTech Central Operations Management</span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Enterprise Client & Scoping Operations</h1>
+          <p class="text-slate-300 text-sm mt-1 max-w-2xl">Real-time pipeline of incoming client inquiries, verified customer accounts, development orders, estimator scopes, and talent applications.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-right">
+            <div class="text-[10px] uppercase font-mono text-slate-400">Database Engine</div>
+            <div class="text-sm font-bold text-white font-mono flex items-center justify-end gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+              <span>SQLite • WAL Mode</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ADMIN BODY -->
+  <main class="py-10 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto space-y-8">
+      
+      <!-- METRIC CARDS -->
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        
+        <!-- Inquiries -->
+        <div class="it-card card-tint-orange p-4 rounded-2xl bg-white border border-slate-200 border-t-4 border-t-[#FF5E14] shadow-xs">
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Inquiries</span>
+            <div class="w-8 h-8 rounded-lg bg-orange-100 text-[#FF5E14] flex items-center justify-center">
+              <i data-lucide="message-square" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div id="stat-inquiries" class="text-2xl font-black text-slate-900 font-mono mt-2">0</div>
+          <div class="text-[10px] text-slate-500 mt-1">Client project inquiries</div>
+        </div>
+
+        <!-- Orders -->
+        <div class="it-card card-tint-blue p-4 rounded-2xl bg-white border border-slate-200 border-t-4 border-t-[#2563EB] shadow-xs">
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Orders</span>
+            <div class="w-8 h-8 rounded-lg bg-blue-100 text-[#2563EB] flex items-center justify-center">
+              <i data-lucide="briefcase" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div id="stat-orders" class="text-2xl font-black text-[#2563EB] font-mono mt-2">0</div>
+          <div class="text-[10px] text-slate-500 mt-1">Booked dev orders</div>
+        </div>
+
+        <!-- Quotes -->
+        <div class="it-card card-tint-amber p-4 rounded-2xl bg-white border border-slate-200 border-t-4 border-t-amber-500 shadow-xs">
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Estimates</span>
+            <div class="w-8 h-8 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center">
+              <i data-lucide="calculator" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div id="stat-quotes" class="text-2xl font-black text-amber-600 font-mono mt-2">0</div>
+          <div class="text-[10px] text-slate-500 mt-1">Scope calculations</div>
+        </div>
+
+        <!-- Customers -->
+        <div class="it-card card-tint-emerald p-4 rounded-2xl bg-white border border-slate-200 border-t-4 border-t-emerald-600 shadow-xs">
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Clients</span>
+            <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center">
+              <i data-lucide="users" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div id="stat-customers" class="text-2xl font-black text-emerald-600 font-mono mt-2">0</div>
+          <div class="text-[10px] text-slate-500 mt-1">Registered accounts</div>
+        </div>
+
+        <!-- Job Apps -->
+        <div class="it-card card-tint-purple p-4 rounded-2xl bg-white border border-slate-200 border-t-4 border-t-purple-600 shadow-xs">
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Talent</span>
+            <div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center">
+              <i data-lucide="user-check" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div id="stat-apps" class="text-2xl font-black text-slate-900 font-mono mt-2">0</div>
+          <div class="text-[10px] text-slate-500 mt-1">Pod applications</div>
+        </div>
+
+        <!-- Subscribers -->
+        <div class="it-card p-4 rounded-2xl bg-white border border-slate-200 border-t-4 border-t-slate-700 shadow-xs">
+          <div class="flex items-center justify-between">
+            <span class="text-xs text-slate-500 font-semibold uppercase tracking-wider">Briefs</span>
+            <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center">
+              <i data-lucide="mail" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div id="stat-subs" class="text-2xl font-black text-slate-900 font-mono mt-2">0</div>
+          <div class="text-[10px] text-slate-500 mt-1">Tech brief readers</div>
+        </div>
+
+      </div>
+
+      <!-- TAB SELECTION -->
+      <div class="flex flex-wrap items-center gap-2 border-b border-slate-200 pb-3">
+        <button onclick="switchTab('inquiries')" id="btn-tab-inquiries" class="px-4 py-2 rounded-lg text-xs font-bold bg-[#0B1B3D] text-white transition-colors">
+          Client Inquiries
+        </button>
+        <button onclick="switchTab('orders')" id="btn-tab-orders" class="px-4 py-2 rounded-lg text-xs font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-colors">
+          Client Orders
+        </button>
+        <button onclick="switchTab('quotes')" id="btn-tab-quotes" class="px-4 py-2 rounded-lg text-xs font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-colors">
+          RFPs & Cost Estimates
+        </button>
+        <button onclick="switchTab('customers')" id="btn-tab-customers" class="px-4 py-2 rounded-lg text-xs font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-colors">
+          Verified Customers
+        </button>
+        <button onclick="switchTab('apps')" id="btn-tab-apps" class="px-4 py-2 rounded-lg text-xs font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-colors">
+          Talent Applications
+        </button>
+        <button onclick="switchTab('subs')" id="btn-tab-subs" class="px-4 py-2 rounded-lg text-xs font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-colors">
+          Newsletter Subscribers
+        </button>
+        <button onclick="switchTab('bookings')" id="btn-tab-bookings" class="px-4 py-2 rounded-lg text-xs font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-colors">
+          Bookings
+        </button>
+      </div>
+
+      <!-- MAIN DATA CONTAINER -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        
+        <!-- INQUIRIES TAB -->
+        <div id="view-inquiries" class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-slate-50 text-[11px] font-mono uppercase text-slate-500 border-b border-slate-200">
+              <tr>
+                <th class="p-4">ID</th>
+                <th class="p-4">Client Contact</th>
+                <th class="p-4">Organization</th>
+                <th class="p-4">Practice & Budget</th>
+                <th class="p-4">Project Requirements</th>
+                <th class="p-4">Status</th>
+                <th class="p-4">Timestamp</th>
+              </tr>
+            </thead>
+            <tbody id="table-inquiries" class="divide-y divide-slate-100">
+              <tr><td colspan="7" class="p-6 text-center text-slate-400">Loading inquiries from SQLite database...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- ORDERS TAB -->
+        <div id="view-orders" class="hidden overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-slate-50 text-[11px] font-mono uppercase text-slate-500 border-b border-slate-200">
+              <tr>
+                <th class="p-4">Order ID</th>
+                <th class="p-4">Client Name & Email</th>
+                <th class="p-4">Organization</th>
+                <th class="p-4">Practice Area</th>
+                <th class="p-4">Scope Scale</th>
+                <th class="p-4">Budget Tier</th>
+                <th class="p-4">Status</th>
+                <th class="p-4">Booked Date</th>
+              </tr>
+            </thead>
+            <tbody id="table-orders" class="divide-y divide-slate-100">
+              <tr><td colspan="8" class="p-6 text-center text-slate-400">Loading orders from database...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- QUOTES TAB -->
+        <div id="view-quotes" class="hidden overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-slate-50 text-[11px] font-mono uppercase text-slate-500 border-b border-slate-200">
+              <tr>
+                <th class="p-4">Quote ID</th>
+                <th class="p-4">Contact</th>
+                <th class="p-4">Service</th>
+                <th class="p-4">Scale</th>
+                <th class="p-4">Est. Budget Range</th>
+                <th class="p-4">Status</th>
+                <th class="p-4">Timestamp</th>
+              </tr>
+            </thead>
+            <tbody id="table-quotes" class="divide-y divide-slate-100">
+              <tr><td colspan="7" class="p-6 text-center text-slate-400">Loading quotes from database...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- CUSTOMERS TAB -->
+        <div id="view-customers" class="hidden overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-slate-50 text-[11px] font-mono uppercase text-slate-500 border-b border-slate-200">
+              <tr>
+                <th class="p-4">Client ID</th>
+                <th class="p-4">Name</th>
+                <th class="p-4">Email</th>
+                <th class="p-4">Company</th>
+                <th class="p-4">Created Date</th>
+              </tr>
+            </thead>
+            <tbody id="table-customers" class="divide-y divide-slate-100">
+              <tr><td colspan="5" class="p-6 text-center text-slate-400">Loading customer profiles...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- APPLICATIONS TAB -->
+        <div id="view-apps" class="hidden overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-slate-50 text-[11px] font-mono uppercase text-slate-500 border-b border-slate-200">
+              <tr>
+                <th class="p-4">App ID</th>
+                <th class="p-4">Applicant</th>
+                <th class="p-4">Position</th>
+                <th class="p-4">Experience</th>
+                <th class="p-4">Portfolio / Repo</th>
+                <th class="p-4">Status</th>
+                <th class="p-4">Timestamp</th>
+              </tr>
+            </thead>
+            <tbody id="table-apps" class="divide-y divide-slate-100">
+              <tr><td colspan="7" class="p-6 text-center text-slate-400">Loading applications from database...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- SUBSCRIBERS TAB -->
+        <div id="view-subs" class="hidden overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-slate-50 text-[11px] font-mono uppercase text-slate-500 border-b border-slate-200">
+              <tr>
+                <th class="p-4">Sub ID</th>
+                <th class="p-4">Subscriber Email</th>
+                <th class="p-4">Subscription Date</th>
+              </tr>
+            </thead>
+            <tbody id="table-subs" class="divide-y divide-slate-100">
+              <tr><td colspan="3" class="p-6 text-center text-slate-400">Loading subscribers from database...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- BOOKINGS TAB -->
+        <div id="view-bookings" class="hidden overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-slate-50 text-[11px] font-mono uppercase text-slate-500 border-b border-slate-200">
+              <tr>
+                <th class="p-4">Booking ID</th>
+                <th class="p-4">Name &amp; Contact</th>
+                <th class="p-4">Service</th>
+                <th class="p-4">Date</th>
+                <th class="p-4">Time (IST)</th>
+                <th class="p-4">Status</th>
+                <th class="p-4">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="table-bookings" class="divide-y divide-slate-100">
+              <tr><td colspan="7" class="p-6 text-center text-slate-400">Loading consultation bookings from database...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ADMIN AUTHENTICATION MODAL -->
+  <div id="admin-login-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+    <div class="relative w-full max-w-md bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5 text-slate-800">
+      <div class="text-center space-y-2">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-50 border border-orange-200 text-xs font-bold text-[#FF5E14]">
+          <i data-lucide="shield" class="w-3.5 h-3.5"></i>
+          <span>Operations Security Enclave</span>
+        </div>
+        <h3 class="text-2xl font-extrabold text-[#0B1B3D]">Admin Authentication</h3>
+        <p class="text-xs text-slate-600 leading-relaxed">Enter administrative credentials to manage enterprise operations, inquiries, quotes, and talent applications.</p>
+      </div>
+
+      <div id="admin-login-error" class="hidden p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700 font-medium"></div>
+
+      <form id="admin-login-form" onsubmit="handleAdminLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Username or Email *</label>
+          <input type="text" id="admin-user" required autocomplete="username" placeholder="admin or admin@roxtech.io" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-hidden focus:border-[#FF5E14] focus:bg-white transition-colors">
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">Admin Password *</label>
+          <input type="password" id="admin-pass" required autocomplete="current-password" placeholder="••••••••" class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:outline-hidden focus:border-[#FF5E14] focus:bg-white transition-colors">
+        </div>
+        <div id="admin-mfa-container" class="hidden">
+          <label class="block text-xs font-bold text-[#FF5E14] uppercase tracking-wider mb-1">2FA Verification Code (TOTP / Recovery Code) *</label>
+          <input type="text" id="admin-mfa" autocomplete="one-time-code" placeholder="123456" class="w-full px-4 py-2.5 bg-slate-50 border border-orange-300 rounded-xl text-sm font-mono tracking-widest text-slate-900 focus:outline-hidden focus:border-[#FF5E14] focus:bg-white transition-colors">
+          <span class="text-[11px] text-slate-500 mt-1 block">Enter 6-digit authenticator code or 8-char recovery code.</span>
+        </div>
+        <button type="submit" id="admin-login-btn" class="btn-enterprise-primary w-full py-3 justify-center text-sm font-bold shadow-md">
+          <span>Authenticate &amp; Enter Console</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="assets/main.js"></script>
+  <script src="assets/auth.js"></script>
+  <script>
+    const API_BASE = '';
+    const tabs = ['inquiries', 'orders', 'quotes', 'customers', 'apps', 'subs', 'bookings'];
+
+    function switchTab(tab) {
+      tabs.forEach(t => {
+        const view = document.getElementById(`view-${t}`);
+        const btn = document.getElementById(`btn-tab-${t}`);
+        if (view) view.classList.add('hidden');
+        if (btn) btn.className = 'px-4 py-2 rounded-lg text-xs font-bold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 transition-colors';
+      });
+
+      const activeView = document.getElementById(`view-${tab}`);
+      const activeBtn = document.getElementById(`btn-tab-${tab}`);
+      if (activeView) activeView.classList.remove('hidden');
+      if (activeBtn) activeBtn.className = 'px-4 py-2 rounded-lg text-xs font-bold bg-[#0B1B3D] text-white transition-colors';
+    }
+
+    function escapeAdminHtml(str) {
+      if (str == null) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function escapeAdminAttr(str) {
+      if (str == null) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function sanitizeHttpUrl(url) {
+      if (!url) return null;
+      const str = String(url).trim();
+      if (/^https?:\/\/[^\s"'<>]+$/i.test(str)) {
+        return str;
+      }
+      return null;
+    }
+
+    function getCookie(name) {
+      const match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
+      return match ? decodeURIComponent(match[3]) : null;
+    }
+
+    function getAdminHeaders() {
+      const headers = { 'Accept': 'application/json' };
+      const csrf = getCookie('roxtech_csrf_token');
+      if (csrf) headers['X-CSRF-Token'] = csrf;
+      return headers;
+    }
+
+    function showAdminLoginModal() {
+      const modal = document.getElementById('admin-login-modal');
+      if (modal) modal.classList.remove('hidden');
+      const logoutBtn = document.getElementById('btn-admin-logout');
+      if (logoutBtn) logoutBtn.classList.add('hidden');
+    }
+
+    function hideAdminLoginModal() {
+      const modal = document.getElementById('admin-login-modal');
+      if (modal) modal.classList.add('hidden');
+      const logoutBtn = document.getElementById('btn-admin-logout');
+      if (logoutBtn) logoutBtn.classList.remove('hidden');
+    }
+
+    async function handleAdminLogin(e) {
+      e.preventDefault();
+      const user = document.getElementById('admin-user').value.trim();
+      const pass = document.getElementById('admin-pass').value;
+      const mfaCode = document.getElementById('admin-mfa')?.value.trim() || '';
+      const btn = document.getElementById('admin-login-btn');
+      const errEl = document.getElementById('admin-login-error');
+      const mfaBox = document.getElementById('admin-mfa-container');
+
+      if (!user || !pass) return;
+
+      btn.disabled = true;
+      btn.innerHTML = '<span>Verifying Credentials...</span>';
+      errEl.classList.add('hidden');
+
+      try {
+        const payload = { username: user, password: pass };
+        if (mfaCode) payload.mfa_code = mfaCode;
+
+        const csrfToken = getCookie('roxtech_csrf_token');
+        const headers = { 'Content-Type': 'application/json' };
+        if (csrfToken) headers['X-CSRF-Token'] = csrfToken;
+
+        const res = await fetch(`${API_BASE}/api/admin/login`, {
+          method: 'POST',
+          headers,
+          credentials: 'same-origin',
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+
+        if (data.mfaRequired) {
+          mfaBox.classList.remove('hidden');
+          document.getElementById('admin-mfa').focus();
+          errEl.textContent = 'Multi-factor authentication required. Please enter your 2FA code.';
+          errEl.classList.remove('hidden');
+          return;
+        }
+
+        if (data.success) {
+          // Token is strictly preserved in HttpOnly cookie; never saved in localStorage (Control 14)
+          hideAdminLoginModal();
+          document.getElementById('admin-login-form').reset();
+          if (mfaBox) mfaBox.classList.add('hidden');
+          loadAllData();
+        } else {
+          errEl.textContent = data.message || 'Invalid admin credentials.';
+          errEl.classList.remove('hidden');
+        }
+      } catch (err) {
+        errEl.textContent = 'Server communication error. Please try again.';
+        errEl.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<span>Authenticate &amp; Enter Console</span>';
+        if (window.lucide) lucide.createIcons();
+      }
+    }
+
+    async function handleAdminLogout() {
+      try {
+        await fetch(`${API_BASE}/api/admin/logout`, {
+          method: 'POST',
+          headers: getAdminHeaders(),
+          credentials: 'same-origin'
+        });
+      } catch (_) {}
+      showAdminLoginModal();
+    }
+
+    async function loadAllData() {
+      const headers = getAdminHeaders();
+      const fetchOpts = { headers, credentials: 'same-origin' };
+
+      try {
+        // Stats
+        const statsRes = await fetch(`${API_BASE}/api/stats`, fetchOpts);
+        if (statsRes.status === 401) {
+          showAdminLoginModal();
+          return;
+        }
+        hideAdminLoginModal();
+        const stats = await statsRes.json();
+        if (stats.success && stats.data) {
+          document.getElementById('stat-inquiries').textContent = stats.data.inquiries || 0;
+          document.getElementById('stat-orders').textContent = stats.data.orders || 0;
+          document.getElementById('stat-quotes').textContent = stats.data.quotes || 0;
+          document.getElementById('stat-customers').textContent = stats.data.customers || 0;
+          document.getElementById('stat-apps').textContent = stats.data.applications || 0;
+          document.getElementById('stat-subs').textContent = stats.data.subscribers || 0;
+        }
+
+        // 1. Inquiries
+        const inqsRes = await fetch(`${API_BASE}/api/contact`, fetchOpts);
+        if (inqsRes.status === 401) { showAdminLoginModal(); return; }
+        const inqs = await inqsRes.json();
+        const tbodyInq = document.getElementById('table-inquiries');
+        if (inqs.success && inqs.data && inqs.data.length) {
+          tbodyInq.innerHTML = inqs.data.map(i => `
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="p-4 font-mono text-[#FF5E14] font-bold">#${escapeAdminHtml(i.id)}</td>
+              <td class="p-4">
+                <div class="font-bold text-slate-900">${escapeAdminHtml(i.name)}</div>
+                <div class="text-[11px] text-slate-500 font-mono">${escapeAdminHtml(i.email)}</div>
+                ${i.phone ? `<div class="text-[10px] text-slate-400 font-mono">${escapeAdminHtml(i.phone)}</div>` : ''}
+              </td>
+              <td class="p-4 font-medium text-slate-800">${escapeAdminHtml(i.company || '—')}</td>
+              <td class="p-4">
+                <div class="text-slate-800 font-semibold">${escapeAdminHtml(i.service)}</div>
+                <div class="text-[#FF5E14] font-mono text-[11px] font-bold">${escapeAdminHtml(i.budget)}</div>
+              </td>
+              <td class="p-4 max-w-xs truncate text-[11px] text-slate-600" title="${escapeAdminAttr(i.message)}">${escapeAdminHtml(i.message)}</td>
+              <td class="p-4">
+                <span class="px-2.5 py-1 rounded-full text-[10px] font-semibold font-mono bg-orange-50 text-[#FF5E14] border border-orange-200">
+                  ${escapeAdminHtml(i.status)}
+                </span>
+              </td>
+              <td class="p-4 text-[11px] font-mono text-slate-400 whitespace-nowrap">${escapeAdminHtml(i.created_at)}</td>
+            </tr>
+          `).join('');
+        } else {
+          tbodyInq.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">No client inquiries found.</td></tr>`;
+        }
+
+        // 2. Orders
+        const ordersRes = await fetch(`${API_BASE}/api/orders`, fetchOpts);
+        if (ordersRes.status === 401) { showAdminLoginModal(); return; }
+        const orders = await ordersRes.json();
+        const tbodyOrder = document.getElementById('table-orders');
+        if (orders.success && orders.data && orders.data.length) {
+          tbodyOrder.innerHTML = orders.data.map(o => `
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="p-4 font-mono text-[#2563EB] font-bold">#ORD-${escapeAdminHtml(o.id)}</td>
+              <td class="p-4">
+                <div class="font-bold text-slate-900">${escapeAdminHtml(o.customer_name)}</div>
+                <div class="text-[11px] text-slate-500 font-mono">${escapeAdminHtml(o.customer_email)}</div>
+              </td>
+              <td class="p-4 font-medium text-slate-800">${escapeAdminHtml(o.customer_company || '—')}</td>
+              <td class="p-4 font-semibold text-slate-800">${escapeAdminHtml(o.service_type)}</td>
+              <td class="p-4 text-slate-600">${escapeAdminHtml(o.project_scope)}</td>
+              <td class="p-4 font-mono text-[#FF5E14] font-bold">${escapeAdminHtml(o.budget_tier)}</td>
+              <td class="p-4">
+                <span class="px-2.5 py-1 rounded-full text-[10px] font-semibold font-mono bg-blue-50 text-[#2563EB] border border-blue-200">
+                  ${escapeAdminHtml(o.status || 'BOOKED')}
+                </span>
+              </td>
+              <td class="p-4 text-[11px] font-mono text-slate-400 whitespace-nowrap">${escapeAdminHtml(o.created_at)}</td>
+            </tr>
+          `).join('');
+        } else {
+          tbodyOrder.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-400">No client orders booked yet.</td></tr>`;
+        }
+
+        // 3. Quotes
+        const quotesRes = await fetch(`${API_BASE}/api/quote`, fetchOpts);
+        if (quotesRes.status === 401) { showAdminLoginModal(); return; }
+        const quotes = await quotesRes.json();
+        const tbodyQuote = document.getElementById('table-quotes');
+        if (quotes.success && quotes.data && quotes.data.length) {
+          tbodyQuote.innerHTML = quotes.data.map(q => `
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="p-4 font-mono text-amber-600 font-bold">#Q-${escapeAdminHtml(q.id)}</td>
+              <td class="p-4">
+                <div class="font-bold text-slate-900">${escapeAdminHtml(q.name)}</div>
+                <div class="text-[11px] text-slate-500 font-mono">${escapeAdminHtml(q.email)}</div>
+              </td>
+              <td class="p-4 font-semibold text-slate-800">${escapeAdminHtml(q.service_type)}</td>
+              <td class="p-4 text-slate-600">${escapeAdminHtml(q.project_scale)}</td>
+              <td class="p-4 font-mono text-[#FF5E14] font-bold">${escapeAdminHtml(q.estimated_budget)}</td>
+              <td class="p-4">
+                <span class="px-2.5 py-1 rounded-full text-[10px] font-semibold font-mono bg-amber-50 text-amber-700 border border-amber-200">
+                  ${escapeAdminHtml(q.status)}
+                </span>
+              </td>
+              <td class="p-4 text-[11px] font-mono text-slate-400 whitespace-nowrap">${escapeAdminHtml(q.created_at)}</td>
+            </tr>
+          `).join('');
+        } else {
+          tbodyQuote.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">No cost estimates calculated yet.</td></tr>`;
+        }
+
+        // 4. Customers
+        const custsRes = await fetch(`${API_BASE}/api/customers`, fetchOpts);
+        if (custsRes.status === 401) { showAdminLoginModal(); return; }
+        const custs = await custsRes.json();
+        const tbodyCust = document.getElementById('table-customers');
+        if (custs.success && custs.data && custs.data.length) {
+          tbodyCust.innerHTML = custs.data.map(c => `
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="p-4 font-mono text-emerald-600 font-bold">#C-${escapeAdminHtml(c.id)}</td>
+              <td class="p-4 font-bold text-slate-900">${escapeAdminHtml(c.name)}</td>
+              <td class="p-4 font-mono text-slate-600">${escapeAdminHtml(c.email)}</td>
+              <td class="p-4 text-slate-800">${escapeAdminHtml(c.company || '—')}</td>
+              <td class="p-4 text-[11px] font-mono text-slate-400 whitespace-nowrap">${escapeAdminHtml(c.created_at)}</td>
+            </tr>
+          `).join('');
+        } else {
+          tbodyCust.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">No registered customer accounts yet.</td></tr>`;
+        }
+
+        // 5. Talent Apps
+        const appsRes = await fetch(`${API_BASE}/api/careers/applications`, fetchOpts);
+        if (appsRes.status === 401) { showAdminLoginModal(); return; }
+        const apps = await appsRes.json();
+        const tbodyApps = document.getElementById('table-apps');
+        if (apps.success && apps.data && apps.data.length) {
+          tbodyApps.innerHTML = apps.data.map(a => {
+            const validPortfolio = sanitizeHttpUrl(a.portfolio_link);
+            const validLinkedin = sanitizeHttpUrl(a.linkedin_profile);
+            const validResumeUrl = sanitizeHttpUrl(a.resume_url);
+            const resumeDownload = a.resume_filename ? `/api/admin/resumes/${encodeURIComponent(a.resume_filename)}` : null;
+
+            return `
+              <tr class="hover:bg-slate-50 transition-colors">
+                <td class="p-4 font-mono text-purple-600 font-bold">#APP-${escapeAdminHtml(a.id)}</td>
+                <td class="p-4">
+                  <div class="font-bold text-slate-900">${escapeAdminHtml(a.applicant_name)}</div>
+                  <div class="text-[11px] text-slate-500 font-mono">${escapeAdminHtml(a.email)}</div>
+                  ${a.phone ? `<div class="text-[10px] text-slate-400 font-mono">${escapeAdminHtml(a.phone)}</div>` : ''}
+                </td>
+                <td class="p-4 font-semibold text-slate-800">${escapeAdminHtml(a.position_title)}</td>
+                <td class="p-4 font-mono text-emerald-600 font-semibold">${escapeAdminHtml(a.experience_years)}</td>
+                <td class="p-4">
+                  <div class="flex flex-col gap-1 text-[11px]">
+                    ${validPortfolio ? `<a href="${escapeAdminAttr(validPortfolio)}" target="_blank" rel="noopener noreferrer" class="text-[#2563EB] hover:underline font-semibold flex items-center gap-1">Portfolio &rarr;</a>` : ''}
+                    ${validLinkedin ? `<a href="${escapeAdminAttr(validLinkedin)}" target="_blank" rel="noopener noreferrer" class="text-[#2563EB] hover:underline font-semibold flex items-center gap-1">LinkedIn &rarr;</a>` : ''}
+                    ${resumeDownload ? `<a href="${escapeAdminAttr(resumeDownload)}" target="_blank" rel="noopener noreferrer" class="text-purple-600 hover:underline font-semibold flex items-center gap-1">Download Resume &darr;</a>` : (validResumeUrl ? `<a href="${escapeAdminAttr(validResumeUrl)}" target="_blank" rel="noopener noreferrer" class="text-purple-600 hover:underline font-semibold flex items-center gap-1">Resume Link &rarr;</a>` : '')}
+                    ${!validPortfolio && !validLinkedin && !resumeDownload && !validResumeUrl ? '—' : ''}
+                  </div>
+                </td>
+                <td class="p-4">
+                  <span class="px-2.5 py-1 rounded-full text-[10px] font-semibold font-mono bg-purple-50 text-purple-700 border border-purple-200">
+                    ${escapeAdminHtml(a.status)}
+                  </span>
+                </td>
+                <td class="p-4 text-[11px] font-mono text-slate-400 whitespace-nowrap">${escapeAdminHtml(a.created_at)}</td>
+              </tr>
+            `;
+          }).join('');
+        } else {
+          tbodyApps.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">No applications received yet.</td></tr>`;
+        }
+
+        // 6. Subscribers
+        const subsRes = await fetch(`${API_BASE}/api/newsletter`, fetchOpts);
+        if (subsRes.status === 401) { showAdminLoginModal(); return; }
+        const subs = await subsRes.json();
+        const tbodySubs = document.getElementById('table-subs');
+        if (subs.success && subs.data && subs.data.length) {
+          tbodySubs.innerHTML = subs.data.map(s => `
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="p-4 font-mono text-slate-500 font-bold">#S-${escapeAdminHtml(s.id)}</td>
+              <td class="p-4 text-slate-900 font-semibold font-mono">${escapeAdminHtml(s.email)}</td>
+              <td class="p-4 text-[11px] font-mono text-slate-400 whitespace-nowrap">${escapeAdminHtml(s.subscribed_at)}</td>
+            </tr>
+          `).join('');
+        } else {
+          tbodySubs.innerHTML = `<tr><td colspan="3" class="p-6 text-center text-slate-400">No subscribers yet.</td></tr>`;
+        }
+
+        // 7. Bookings
+        const bRes = await fetch(`${API_BASE}/api/bookings`, fetchOpts).then(r => r.json());
+        const tbodyBookings = document.getElementById('table-bookings');
+        if (tbodyBookings && bRes.success && bRes.data && bRes.data.length) {
+          tbodyBookings.innerHTML = bRes.data.map(b => `
+            <tr class="hover:bg-slate-50 transition-colors">
+              <td class="p-4 font-mono text-[#0AA5E6] font-bold">#BKG-${escapeAdminHtml(b.id)}</td>
+              <td class="p-4">
+                <div class="font-bold text-slate-900">${escapeAdminHtml(b.name)}</div>
+                <div class="text-[11px] text-slate-500 font-mono">${escapeAdminHtml(b.email)}</div>
+                ${b.phone ? `<div class="text-[10px] text-slate-400 font-mono">${escapeAdminHtml(b.phone)}</div>` : ''}
+              </td>
+              <td class="p-4 font-semibold text-slate-800">${escapeAdminHtml(b.service)}</td>
+              <td class="p-4 font-medium text-slate-900">${escapeAdminHtml(b.booking_date)}</td>
+              <td class="p-4 font-mono text-[#0AA5E6] font-semibold">${escapeAdminHtml(b.booking_time)} IST</td>
+              <td class="p-4">
+                <span class="px-2.5 py-1 rounded-full text-[10px] font-semibold font-mono ${
+                  b.status === 'confirmed' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
+                  b.status === 'cancelled' ? 'bg-red-50 text-red-700 border border-red-200' :
+                  'bg-amber-50 text-amber-700 border border-amber-200'
+                }">
+                  ${escapeAdminHtml(b.status)}
+                </span>
+              </td>
+              <td class="p-4">
+                <div class="flex items-center gap-1.5">
+                  ${b.status !== 'confirmed' ? `<button onclick="updateBookingStatus(${b.id}, 'confirmed')" class="px-2.5 py-1 text-[11px] font-semibold rounded bg-emerald-600 text-white hover:bg-emerald-700 transition-colors">Confirm</button>` : ''}
+                  ${b.status !== 'cancelled' ? `<button onclick="updateBookingStatus(${b.id}, 'cancelled')" class="px-2.5 py-1 text-[11px] font-semibold rounded bg-red-600 text-white hover:bg-red-700 transition-colors">Cancel</button>` : ''}
+                </div>
+              </td>
+            </tr>
+          `).join('');
+        } else if (tbodyBookings) {
+          tbodyBookings.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">No consultation bookings found.</td></tr>`;
+        }
+
+        if (window.lucide) {
+          lucide.createIcons();
+        }
+      } catch (err) {
+        console.warn('Backend server sync error:', err);
+      }
+    }
+
+    async function updateBookingStatus(id, newStatus) {
+      try {
+        const headers = { 'Content-Type': 'application/json', ...getAdminHeaders() };
+        const res = await fetch(`${API_BASE}/api/bookings/${id}`, {
+          method: 'PATCH',
+          headers,
+          credentials: 'same-origin',
+          body: JSON.stringify({ status: newStatus })
+        });
+        const data = await res.json();
+        if (data.success) {
+          loadAllData();
+        } else {
+          alert(data.message || 'Error updating booking');
+        }
+      } catch (e) {
+        console.error(e);
+        alert('Failed to update booking status.');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadAllData();
+      if (window.lucide) lucide.createIcons();
+    });
+  </script>
+  <script src="assets/chatbot.js" defer></script>
+</body>
+</html>

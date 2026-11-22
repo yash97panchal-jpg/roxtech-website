@@ -1,0 +1,1552 @@
+/* ==========================================================================
+   RoxTech — LaunchNow "Kora" Template Design System
+   Preserving: RoxTech Brand Logo, Exact Color Palette, Content & Structure
+   Features: Typography (Poppins / Source Sans 3 / Barlow), Bento Cards, Glass Header,
+             Interactive Process, Pricing/Engagement Tiers, Lenis Smooth Scroll,
+             and Meaningful Brand Logo Animations.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=Barlow:wght@500;600;700&display=swap');
+
+:root {
+  /* Brand Color Palette */
+  --bg: #F8FAFC;
+  --bg-alt: #F1F5F9;
+  --surface: #FFFFFF;
+  --line: #E2E8F0;
+  --line-light: #EEF2F6;
+
+  /* RoxTech Navy & Midnight Brand Tones */
+  --navy: #0A1A33;
+  --navy-2: #102445;
+  --navy-surface: #0E1F3D;
+  --dark-canvas: #060B13;
+  --dark-panel: #0A1120;
+  --dark-card: #0D1629;
+  --dark-card-hover: #131F38;
+  --dark-border: #1E293B;
+
+  /* RoxTech Cyan & Accent Colors */
+  --cyan: #0AA5E6;
+  --cyan-bright: #38BDF8;
+  --cyan-light: #7DD3FC;
+  --cyan-soft: #E3F5FD;
+  --blue: #3B82F6;
+  --indigo: #6366F1;
+  --emerald: #10B981;
+
+  /* Text & Inks */
+  --ink: #0A1A33;
+  --ink-heading: #0F172A;
+  --muted: #51627D;
+  --muted-light: #94A3B8;
+
+  /* Typography */
+  --font-head: 'Poppins', 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-body: 'Source Sans 3', 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-num: 'Barlow', 'Segoe UI', Roboto, Arial, sans-serif;   /* numbers, stats, prices, step counters */
+  --font-mono: var(--font-num);
+
+  /* Geometry & Radius */
+  --r-sm: 8px;
+  --r: 16px;
+  --r-lg: 24px;
+  --r-full: 9999px;
+  --max: 1200px;
+
+  /* Header + logo sizing */
+  --header-h: 96px;
+  --logo-h: 64px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Base Styles & Resets */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-variant-numeric: lining-nums;
+}
+
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--ink);
+  background: var(--bg);
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+  border-radius: var(--r-sm);
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-head);
+  color: var(--ink-heading);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  font-weight: 700;
+}
+
+h1 {
+  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+}
+
+h2 {
+  font-size: clamp(1.85rem, 3.4vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.16;
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+p {
+  color: var(--muted);
+  font-size: 1.02rem;
+  line-height: 1.65;
+}
+
+.wrap {
+  width: min(var(--max), 92%);
+  margin-inline: auto;
+}
+
+section {
+  padding: 100px 0;
+  position: relative;
+}
+
+.head {
+  margin-bottom: 56px;
+  max-width: 720px;
+}
+
+.head.centered {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.lead {
+  font-size: 1.18rem;
+  color: var(--muted);
+  margin-top: 14px;
+  line-height: 1.6;
+}
+
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark .head h2 {
+  color: #FFFFFF;
+}
+
+.dark .lead, .dark p {
+  color: #94A3B8;
+}
+
+
+/* ==========================================================================
+   Header & Floating Navigation (Kora Glass Style)
+   ========================================================================== */
+header.top {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(248, 250, 252, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.85);
+  transition: all 0.3s ease;
+}
+
+.scrolled header.top {
+  background: rgba(248, 250, 252, 0.94);
+  box-shadow: 0 10px 30px -10px rgba(10, 26, 51, 0.08);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-h);
+}
+
+/* Interactive Brand Logo Container & Animation */
+.brand-logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  position: relative;
+}
+
+.brand-logo-img {
+  height: var(--logo-h);
+  width: auto;
+  max-width: 62vw;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Meaningful Logo Animation in Header */
+.brand-logo-container:hover .brand-logo-img {
+  transform: scale(1.02);
+}
+
+
+nav.main {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+nav.main a {
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.96rem;
+  color: var(--muted);
+  position: relative;
+  padding: 6px 0;
+  transition: color 0.2s ease;
+}
+
+nav.main a:hover {
+  color: var(--ink-heading);
+}
+
+nav.main a[aria-current="page"] {
+  color: var(--ink-heading);
+  font-weight: 600;
+}
+
+nav.main a[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--cyan);
+  border-radius: var(--r-full);
+}
+
+.menu-btn {
+  display: none;
+  background: #FFFFFF;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  padding: 8px 14px;
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.menu-btn:hover {
+  border-color: var(--cyan);
+}
+
+/* ==========================================================================
+   Buttons (Kora Style with Arrow Nudge)
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 26px;
+  border-radius: var(--r-full);
+  font-family: var(--font-body);
+  font-size: 0.98rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.btn .btn-arrow {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.btn:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+.btn-primary {
+  background: var(--cyan);
+  color: #FFFFFF;
+  box-shadow:
+    0 1px 2px rgba(10, 26, 51, 0.25),
+    0 8px 16px -8px rgba(10, 26, 51, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary:hover {
+  background: #0993CE;
+  transform: translateY(-2px);
+  box-shadow:
+    0 2px 4px rgba(10, 26, 51, 0.25),
+    0 14px 22px -10px rgba(10, 26, 51, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-ghost {
+  background: #FFFFFF;
+  border: 1px solid var(--line);
+  color: var(--ink-heading);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.btn-ghost:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px -8px rgba(10, 26, 51, 0.25);
+}
+
+.dark .btn-ghost {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+}
+
+.dark .btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--cyan-bright);
+  color: var(--cyan-bright);
+}
+
+nav.main .btn {
+  padding: 9px 20px;
+  font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   Hero Section & Interactive Brand Logo Showcase
+   ========================================================================== */
+.hero {
+  background: var(--dark-canvas);
+  color: #FFFFFF;
+  padding: 110px 0 120px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Modern subtle mesh background grid */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(circle at 60% 40%, #000 35%, transparent 75%);
+  pointer-events: none;
+}
+
+.hero .wrap {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.hero h1 {
+  color: #FFFFFF;
+}
+
+.hero h1 .text-gradient {
+  color: var(--cyan-bright);
+}
+
+.hero p {
+  color: #94A3B8;
+  font-size: 1.22rem;
+  margin: 24px 0 36px;
+  max-width: 58ch;
+  line-height: 1.6;
+}
+
+.hero .actions {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.hero-trust-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 40px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.88rem;
+  color: #94A3B8;
+}
+
+.hero-stars {
+  color: #FBBF24;
+  letter-spacing: 2px;
+  font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   Hero Interactive Logo Animation Showcase (Signature Feature!)
+   ========================================================================== */
+.hero-brand-stage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1000px;
+}
+
+.hero-brand-card {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  aspect-ratio: 1 / 1;
+  background: radial-gradient(circle at 50% 50%, rgba(13, 22, 41, 0.92) 0%, rgba(6, 11, 19, 0.95) 100%);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: var(--r-lg);
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 24px 48px -18px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+  overflow: hidden;
+}
+
+.hero-brand-card:hover {
+  border-color: rgba(148, 163, 184, 0.4);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 32px 60px -20px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Orbital Rotating Gyro Rings */
+.gyro-ring {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.gyro-ring-outer {
+  width: 320px;
+  height: 320px;
+  border: 1px dashed rgba(56, 189, 248, 0.28);
+  animation: logoGyroSpin 36s linear infinite;
+}
+
+.gyro-ring-inner {
+  width: 250px;
+  height: 250px;
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  border-top-color: var(--cyan);
+  border-bottom-color: var(--blue);
+  animation: logoGyroCounter 24s linear infinite;
+}
+
+@keyframes logoGyroSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes logoGyroCounter {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+/* The Animated Floating RoxTech Symbol */
+.hero-symbol-wrapper {
+  position: relative;
+  z-index: 5;
+  width: 170px;
+  height: 170px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: logoSymbolFloat 6s ease-in-out infinite;
+}
+
+@keyframes logoSymbolFloat {
+  0%, 100% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-10px) scale(1.02); }
+}
+
+.hero-symbol-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 14px 12px rgba(0, 0, 0, 0.45));
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.hero-brand-card:hover .hero-symbol-img {
+  filter: drop-shadow(0 20px 16px rgba(0, 0, 0, 0.5));
+}
+
+
+/* Inner Page Hero (Subpages) */
+.page-hero {
+  background: var(--dark-canvas);
+  color: #FFFFFF;
+  padding: 90px 0 80px;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--dark-border);
+}
+
+.page-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(circle at 50% 50%, #000 30%, transparent 80%);
+  pointer-events: none;
+}
+
+.page-hero .wrap {
+  position: relative;
+  z-index: 2;
+  max-width: 860px;
+}
+
+.page-hero h1 {
+  color: #FFFFFF;
+  margin-bottom: 16px;
+}
+
+.page-hero p {
+  color: #94A3B8;
+  font-size: 1.25rem;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   Stats Strip / Quantitative Metrics (Kora Metric Bar)
+   ========================================================================== */
+.stats {
+  background: var(--navy);
+  color: #FFFFFF;
+  padding: 48px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  z-index: 5;
+}
+
+.stats .wrap {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+}
+
+.stat-item {
+  position: relative;
+  padding-left: 20px;
+  border-left: 2px solid rgba(10, 165, 230, 0.35);
+}
+
+.stat-item strong {
+  display: block;
+  font-family: var(--font-num);
+  font-variant-numeric: lining-nums tabular-nums;
+  font-size: clamp(2.2rem, 3.4vw, 3rem);
+  font-weight: 700;
+  color: var(--cyan-bright);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+
+.stat-item span {
+  display: block;
+  font-size: 0.95rem;
+  color: #94A3B8;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   Grids & Kora Bento Cards
+   ========================================================================== */
+.grid {
+  display: grid;
+  gap: 28px;
+}
+
+.g2 { grid-template-columns: repeat(2, 1fr); }
+.g3 { grid-template-columns: repeat(3, 1fr); }
+.g4 { grid-template-columns: repeat(4, 1fr); }
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 34px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(10, 26, 51, 0.18);
+  box-shadow: 0 16px 28px -10px rgba(10, 26, 51, 0.22);
+}
+
+.dark .card {
+  background: var(--dark-card);
+  border-color: var(--dark-border);
+}
+
+.dark .card:hover {
+  background: var(--dark-card-hover);
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+}
+
+/* Card Icons */
+.card .ico {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background: var(--cyan-soft);
+  display: grid;
+  place-items: center;
+  margin-bottom: 20px;
+  color: var(--cyan);
+  transition: all 0.25s ease;
+}
+
+.card:hover .ico {
+  background: var(--cyan);
+  color: #FFFFFF;
+  transform: scale(1.05);
+}
+
+.card .ico svg {
+  width: 26px;
+  height: 26px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.card h3 {
+  margin-bottom: 12px;
+  font-size: 1.28rem;
+}
+
+.card p {
+  color: var(--muted);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+.card-img {
+  width: 100%;
+  aspect-ratio: 1200 / 720;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border: 1px solid var(--line);
+  transition: transform 0.35s ease;
+  display: block;
+}
+
+.card:hover .card-img {
+  width: 100%;
+  aspect-ratio: 1200 / 720;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  border: 1px solid var(--line);
+  transition: transform 0.35s ease;
+  display: block;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.tag {
+  display: inline-block;
+  font-family: var(--font-num);
+  font-variant-numeric: lining-nums tabular-nums;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #0369A1;
+  background: var(--cyan-soft);
+  border-radius: var(--r-full);
+  padding: 4px 12px;
+}
+
+.dark .tag {
+  background: rgba(10, 165, 230, 0.15);
+  color: var(--cyan-bright);
+}
+
+/* Card Links */
+.card.link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.card-action-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 20px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--cyan);
+  transition: gap 0.2s ease;
+}
+
+.card:hover .card-action-link {
+  gap: 10px;
+}
+
+/* ==========================================================================
+   Split Feature Rows (Alternating Kora Showcase)
+   ========================================================================== */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+
+.split img {
+  border-radius: var(--r);
+  border: 1px solid var(--line);
+  aspect-ratio: 1200 / 720;
+  object-fit: cover;
+  width: 100%;
+  height: auto;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08);
+  display: block;
+}
+
+.split + .split {
+  margin-top: 96px;
+}
+
+.split.rev > *:first-child {
+  order: 2;
+}
+
+.split ul {
+  margin-top: 24px;
+  list-style: none;
+}
+
+.split li {
+  padding-left: 32px;
+  position: relative;
+  margin-bottom: 14px;
+  color: var(--muted);
+  font-size: 1.02rem;
+}
+
+.split li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.45em;
+  width: 16px;
+  height: 9px;
+  border-left: 2.5px solid var(--cyan);
+  border-bottom: 2.5px solid var(--cyan);
+  transform: rotate(-45deg);
+}
+
+/* ==========================================================================
+   Process Section (Kora 5-Step Workflow)
+   ========================================================================== */
+.steps {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
+}
+
+.step-card {
+  background: var(--dark-card);
+  border: 1px solid var(--dark-border);
+  border-radius: var(--r);
+  padding: 26px 22px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.step-card:hover {
+  border-color: rgba(56, 189, 248, 0.4);
+  transform: translateY(-4px);
+}
+
+.step-number {
+  font-family: var(--font-num);
+  font-variant-numeric: lining-nums tabular-nums;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--cyan-bright);
+  margin-bottom: 12px;
+  display: inline-block;
+  padding: 3px 8px;
+  background: rgba(10, 165, 230, 0.12);
+  border-radius: var(--r-sm);
+}
+
+.step-card h3 {
+  color: #FFFFFF;
+  margin-bottom: 8px;
+  font-size: 1.15rem;
+}
+
+.step-card p {
+  color: #94A3B8;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+/* ==========================================================================
+   Pricing / Engagement Models (Signature Kora Component)
+   ========================================================================== */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  margin-top: 40px;
+}
+
+.pricing-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  padding: 38px 32px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pricing-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--cyan);
+  box-shadow: 0 16px 28px -10px rgba(10, 26, 51, 0.22);
+}
+
+.pricing-card.featured {
+  background: var(--surface);
+  border: 2px solid var(--cyan);
+  box-shadow: 0 2px 4px rgba(10, 26, 51, 0.06), 0 18px 32px -14px rgba(10, 26, 51, 0.25);
+}
+
+.pricing-pill {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--cyan);
+  color: #FFFFFF;
+  font-family: var(--font-num);
+  font-variant-numeric: lining-nums tabular-nums;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 4px 14px;
+  border-radius: var(--r-full);
+  box-shadow: 0 6px 12px -6px rgba(10, 26, 51, 0.4);
+}
+
+.pricing-tier {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--ink-heading);
+  margin-bottom: 8px;
+}
+
+.pricing-desc {
+  font-size: 0.95rem;
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+
+.pricing-price {
+  font-family: var(--font-head);
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--ink-heading);
+  letter-spacing: -0.03em;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.pricing-price small {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.pricing-features {
+  list-style: none;
+  margin-bottom: 32px;
+  flex-grow: 1;
+}
+
+.pricing-features li {
+  padding-left: 28px;
+  position: relative;
+  margin-bottom: 12px;
+  font-size: 0.94rem;
+  color: var(--muted);
+}
+
+.pricing-features li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.45em;
+  width: 14px;
+  height: 8px;
+  border-left: 2px solid var(--cyan);
+  border-bottom: 2px solid var(--cyan);
+  transform: rotate(-45deg);
+}
+
+/* ==========================================================================
+   Case Studies & Quantitative Metrics
+   ========================================================================== */
+.meta {
+  display: flex;
+  gap: 28px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+.meta strong {
+  display: block;
+  font-family: var(--font-head);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--cyan);
+  line-height: 1.1;
+}
+
+.meta span {
+  font-size: 0.88rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   Testimonials (Kora Review Cards)
+   ========================================================================== */
+.testimonial {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.testimonial-stars {
+  color: #F59E0B;
+  letter-spacing: 2px;
+  font-size: 1rem;
+  margin-bottom: 16px;
+}
+
+.testimonial .quote {
+  font-size: 1.05rem;
+  color: var(--ink-heading);
+  line-height: 1.65;
+  margin-bottom: 24px;
+  font-style: normal;
+}
+
+.testimonial-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px solid var(--line-light);
+}
+
+.testimonial-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--cyan);
+  flex-shrink: 0;
+}
+
+.testimonial .author strong {
+  display: block;
+  font-family: var(--font-head);
+  font-weight: 700;
+  color: var(--ink-heading);
+  font-size: 0.98rem;
+}
+
+.testimonial .author span {
+  display: block;
+  font-size: 0.86rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* ==========================================================================
+   FAQ Section (Kora Smooth Accordion)
+   ========================================================================== */
+.faq {
+  max-width: 860px;
+  margin-inline: auto;
+  display: grid;
+  gap: 16px;
+}
+
+.faq details {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 6px 24px;
+  transition: all 0.25s ease;
+}
+
+.faq details:hover {
+  border-color: rgba(10, 165, 230, 0.4);
+}
+
+.faq details[open] {
+  border-color: var(--cyan);
+  box-shadow: 0 10px 22px -12px rgba(10, 26, 51, 0.2);
+}
+
+.faq summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-head);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--ink-heading);
+  padding: 18px 0;
+  user-select: none;
+}
+
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::marker { display: none; }
+
+.faq summary::after {
+  content: "+";
+  font-family: var(--font-head);
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--cyan);
+  transition: transform 0.25s ease;
+  margin-left: 16px;
+  flex-shrink: 0;
+}
+
+.faq details[open] summary::after {
+  transform: rotate(45deg);
+}
+
+.faq details p {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.65;
+  padding: 0 0 20px;
+}
+
+/* ==========================================================================
+   Conversion CTA Box (Kora Book-a-Call Banner)
+   ========================================================================== */
+.cta-box {
+  background: linear-gradient(180deg, #102445 0%, var(--dark-canvas) 100%);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  border-radius: var(--r-lg);
+  padding: 80px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.cta-box h2 {
+  color: #FFFFFF;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.cta-box p {
+  color: #94A3B8;
+  font-size: 1.2rem;
+  max-width: 60ch;
+  margin: 0 auto 36px;
+  position: relative;
+  z-index: 2;
+}
+
+.cta-box .actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  flex-wrap: wrap;
+}
+
+/* Section Colors */
+.dark {
+  background: var(--dark-canvas);
+  color: #FFFFFF;
+}
+
+.alt {
+  background: var(--surface);
+  border-block: 1px solid var(--line);
+}
+
+/* ==========================================================================
+   Forms & Contact Card
+   ========================================================================== */
+form {
+  display: grid;
+  gap: 18px;
+}
+
+label {
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--ink-heading);
+  display: grid;
+  gap: 6px;
+}
+
+input, select, textarea {
+  font-family: var(--font-body);
+  font-size: 0.98rem;
+  padding: 13px 16px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-sm);
+  background: #FFFFFF;
+  color: var(--ink-heading);
+  width: 100%;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px var(--cyan-soft);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.note {
+  padding: 14px 18px;
+  border-radius: var(--r-sm);
+  font-size: 0.95rem;
+  display: none;
+}
+
+.note.ok {
+  display: block;
+  background: #E5F7EC;
+  color: #14532D;
+  border: 1px solid #BBF7D0;
+}
+
+.note.err {
+  display: block;
+  background: #FDECEC;
+  color: #7F1D1D;
+  border: 1px solid #FECACA;
+}
+
+/* ==========================================================================
+   Footer (Kora Multi-Column Authority Footer)
+   ========================================================================== */
+footer {
+  background: var(--dark-canvas);
+  color: #94A3B8;
+  padding: 80px 0 36px;
+  font-size: 0.96rem;
+  border-top: 1px solid var(--dark-border);
+}
+
+footer .cols {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+  gap: 48px;
+}
+
+.footer-brand-logo {
+  height: 56px;
+  width: auto;
+  margin-bottom: 18px;
+}
+
+
+footer h4 {
+  color: #FFFFFF;
+  font-size: 1.05rem;
+  margin-bottom: 18px;
+}
+
+footer a {
+  display: block;
+  color: #94A3B8;
+  text-decoration: none;
+  margin-bottom: 10px;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+footer a:hover {
+  color: var(--cyan-bright);
+  transform: translateX(2px);
+}
+
+footer .legal {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 56px;
+  padding-top: 28px;
+  font-size: 0.88rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* ==========================================================================
+   Responsive Breakpoints
+   ========================================================================== */
+@media (max-width: 1024px) {
+  :root {
+    --header-h: 96px;
+    --logo-h: 70px;
+  }
+  .hero .wrap, .split, .g2 {
+    grid-template-columns: 1fr;
+  }
+  .g3, .g4, .stats .wrap, .steps, .pricing-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .split.rev > *:first-child {
+    order: 0;
+  }
+  .hero-brand-stage {
+    order: -1;
+    margin-bottom: 24px;
+  }
+  footer .cols {
+    grid-template-columns: 1fr 1fr;
+  }
+  .menu-btn {
+    display: block;
+  }
+  nav.main {
+    display: none;
+    position: absolute;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    background: rgba(248, 250, 252, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px 6%;
+    border-bottom: 1px solid var(--line);
+    gap: 18px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  }
+  nav.main.open {
+    display: flex;
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --header-h: 82px;
+    --logo-h: 58px;
+  }
+  section {
+    padding: 72px 0;
+  }
+  .g3, .g4, .stats .wrap, .row, .steps, .pricing-grid, footer .cols {
+    grid-template-columns: 1fr;
+  }
+  .stat-item {
+    border-left: none;
+    border-top: 2px solid rgba(10, 165, 230, 0.35);
+    padding-left: 0;
+    padding-top: 14px;
+  }
+  .hero-brand-card {
+    max-width: 320px;
+    padding: 20px;
+  }
+  .gyro-ring-outer {
+    width: 240px;
+    height: 240px;
+  }
+  .gyro-ring-inner {
+    width: 190px;
+    height: 190px;
+  }
+  .hero-symbol-wrapper {
+    width: 120px;
+    height: 120px;
+  }
+  .cta-box {
+    padding: 50px 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   Card Depth System: neutral layered shadows, subtle 3D tilt, no glow
+   ========================================================================== */
+.grid,
+.pricing-grid,
+.steps {
+  perspective: 1400px;
+}
+
+.card,
+.pricing-card,
+.step-card {
+  --rx: 0deg;
+  --ry: 0deg;
+  --lift: 0px;
+  transform-style: preserve-3d;
+  transform: translateY(var(--lift)) rotateX(var(--rx)) rotateY(var(--ry));
+  box-shadow:
+    0 1px 2px rgba(10, 26, 51, 0.06),
+    0 10px 24px -14px rgba(10, 26, 51, 0.18);
+  transition:
+    transform 0.45s var(--ease),
+    box-shadow 0.45s var(--ease),
+    border-color 0.3s ease,
+    background 0.3s ease;
+  will-change: transform;
+}
+
+.card:hover,
+.pricing-card:hover,
+.step-card:hover {
+  --lift: -8px;
+  transform: translateY(var(--lift)) rotateX(var(--rx)) rotateY(var(--ry));
+  box-shadow:
+    0 2px 4px rgba(10, 26, 51, 0.06),
+    0 18px 30px -10px rgba(10, 26, 51, 0.22),
+    0 38px 56px -30px rgba(10, 26, 51, 0.28);
+  border-color: rgba(10, 26, 51, 0.18);
+}
+
+.dark .card,
+.step-card {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.3),
+    0 12px 26px -14px rgba(0, 0, 0, 0.55);
+}
+
+.dark .card:hover,
+.step-card:hover {
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.35),
+    0 20px 32px -10px rgba(0, 0, 0, 0.6),
+    0 40px 60px -30px rgba(0, 0, 0, 0.6);
+  border-color: rgba(148, 163, 184, 0.35);
+}
+
+.pricing-card.featured {
+  box-shadow:
+    0 2px 4px rgba(10, 26, 51, 0.06),
+    0 18px 32px -14px rgba(10, 26, 51, 0.25);
+}
+
+/* Fast response while the pointer is moving over a card (set by rox.js) */
+.card.is-tilting,
+.pricing-card.is-tilting,
+.step-card.is-tilting {
+  transition:
+    transform 0.12s ease-out,
+    box-shadow 0.45s var(--ease),
+    border-color 0.3s ease;
+}
+
+/* Accent line that draws in along the top edge on hover */
+.card::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  height: 3px;
+  border-radius: var(--r) var(--r) 0 0;
+  background: var(--cyan);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.45s var(--ease);
+  pointer-events: none;
+}
+
+.card:hover::before {
+  transform: scaleX(1);
+}
+
+/* Raised icon tile, lifts toward the viewer on hover */
+.card .ico {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -2px 0 rgba(10, 26, 51, 0.06),
+    0 8px 14px -8px rgba(10, 26, 51, 0.3);
+  transition:
+    transform 0.45s var(--ease),
+    background 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.45s var(--ease);
+}
+
+.card:hover .ico {
+  transform: translateZ(32px) scale(1.05);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 16px 20px -10px rgba(10, 26, 51, 0.4);
+}
+
+.card h3 {
+  transition: transform 0.45s var(--ease);
+}
+
+.card:hover h3 {
+  transform: translateZ(14px);
+}
+
+.pricing-card:hover .pricing-tier {
+  transform: translateZ(14px);
+}
+
+.step-card .step-number {
+  transition: transform 0.45s var(--ease);
+}
+
+.step-card:hover .step-number {
+  transform: translateZ(22px);
+}
+
+/* Service cards without tech chips: keep spacing even above the link */
+.card > p {
+  margin-bottom: 4px;
+}
+
+@media (prefers-reduced-motion: reduce), (hover: none) {
+  .card,
+  .pricing-card,
+  .step-card {
+    transform: none !important;
+    will-change: auto;
+  }
+  .card:hover .ico,
+  .card:hover h3 {
+    transform: none;
+  }
+}
+
+/* Keep the header CTA text readable (nav link colour was overriding the button) */
+nav.main a.btn-primary,
+nav.main a.btn-primary:hover {
+  color: #FFFFFF;
+}

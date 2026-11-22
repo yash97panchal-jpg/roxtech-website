@@ -1,0 +1,8 @@
+# RoxTech Robots Policy
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /admin
+Disallow: /api/
+
+Sitemap: https://roxtech.io/sitemap.xml

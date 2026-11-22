@@ -1,0 +1,11 @@
+# RoxTech Clean URL Rewrites for Cloudflare Workers & Pages
+/about          /about.html         200
+/services       /services.html      200
+/industries     /industries.html    200
+/case-studies   /case-studies.html  200
+/careers        /careers.html       200
+/blog           /blog.html          200
+/contact        /contact.html       200
+/estimator      /estimator.html     200
+/portfolio      /case-studies.html  301
+/admin          /admin.html         200

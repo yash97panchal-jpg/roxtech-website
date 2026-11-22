@@ -1,0 +1,11 @@
+{
+  "name": "roxtech-website",
+  "private": true,
+  "scripts": {
+    "deploy": "cf deploy ./public"
+  },
+  "devDependencies": {
+    "cf": "1.0.0-rc.2"
+  },
+  "type": "module"
+}

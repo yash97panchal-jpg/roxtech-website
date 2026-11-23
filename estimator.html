@@ -1,111 +1,104 @@
 <!DOCTYPE html>
+<!-- Lucide icons
+ISC License
+
+Copyright (c) 2026 Lucide Icons and Contributors
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+---
+
+The following Lucide icons are derived from the Feather project:
+
+airplay, alert-circle, alert-octagon, alert-triangle, aperture, arrow-down-circle, arrow-down-left, arrow-down-right, arrow-down, arrow-left-circle, arrow-left, arrow-right-circle, arrow-right, arrow-up-circle, arrow-up-left, arrow-up-right, arrow-up, at-sign, calendar, cast, check, chevron-down, chevron-left, chevron-right, chevron-up, chevrons-down, chevrons-left, chevrons-right, chevrons-up, circle, clipboard, clock, code, columns, command, compass, corner-down-left, corner-down-right, corner-left-down, corner-left-up, corner-right-down, corner-right-up, corner-up-left, corner-up-right, crosshair, database, divide-circle, divide-square, dollar-sign, download, external-link, feather, frown, hash, headphones, help-circle, info, italic, key, layout, life-buoy, link-2, link, loader, lock, log-in, log-out, maximize, meh, minimize, minimize-2, minus-circle, minus-square, minus, monitor, moon, more-horizontal, more-vertical, move, music, navigation-2, navigation, octagon, pause-circle, percent, plus-circle, plus-square, plus, power, radio, rss, search, server, share, shopping-bag, sidebar, smartphone, smile, square, table-2, tablet, target, terminal, trash-2, trash, triangle, tv, type, upload, x-circle, x-octagon, x-square, x, zoom-in, zoom-out
+
+The MIT License (MIT) (for the icons listed above)
+
+Copyright (c) 2013-present Cole Bemis
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
 <html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project Cost &amp; Scope Estimator | RoxTech — Web, ERP, Apps &amp; Data Entry</title>
-  <meta name="description" content="Calculate instant project estimates for Web Development, custom ERP software, Mobile Applications, and Data Entry services with RoxTech.">
+  <title>Project quote planner | RoxTech</title>
+  <meta name="description" content="Describe your project and request a written quote for Web Development, custom ERP software, Mobile Applications, and Data Entry services with RoxTech.">
   <link rel="icon" type="image/png" href="assets/favicon.png">
 
-  <!-- Typography: Poppins (Headings), Source Sans 3 (Body), Barlow (Numbers) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=Barlow:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Precompiled Local Tailwind CSS -->
   <link rel="stylesheet" href="assets/tailwind.css">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/chatbot.css">
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <link rel="stylesheet" href="assets/rox-refresh.css">
+  <link rel="canonical" href="https://roxtech.online/estimator">
+  <link rel="stylesheet" href="/assets/launch.css">
+  <script defer src="/assets/launch.js"></script>
 </head>
 <body class="bg-white text-slate-700 font-sans antialiased selection:bg-[#FF5E14] selection:text-white overflow-x-hidden">
 
   <!-- ========================================================================= -->
   <!-- MAIN CORPORATE NAVIGATION BAR                                             -->
   <!-- ========================================================================= -->
-    <header class="sticky top-0 z-50 header-solid-corporate bg-[#FAF9F6] border-b border-slate-200 shadow-sm transition-all duration-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-20 sm:h-22">
-        
-        <!-- RoxTech Corporate Brand Logo -->
-        <a href="index.html" class="brand-logo-container" aria-label="RoxTech — Intelligence Technology"><img src="assets/roxtech-symbol-clean.png" alt="RoxTech Symbol" class="brand-symbol-img"><div class="brand-text-block"><span class="brand-name">Rox<span>Tech</span></span><small class="brand-tagline">Intelligence Technology</small></div></a>
-
-        <!-- Desktop Navigation Links -->
-        <nav class="hidden lg:flex items-center space-x-8 text-[14px] font-bold text-slate-800">
-          <a href="index.html" class="text-slate-800 hover:text-[#FF5E14] transition-colors">Home</a>
-          <a href="services.html" class="text-slate-800 hover:text-[#FF5E14] transition-colors">Services</a>
-          <a href="case-studies.html" class="text-slate-800 hover:text-[#FF5E14] transition-colors">Case Studies</a>
-          <a href="estimator.html" class="text-[#FF5E14] font-extrabold">Cost Estimator</a>
-          <a href="contact.html" class="text-slate-800 hover:text-[#FF5E14] transition-colors">Contact</a>
-        </nav>
-
-        <!-- Right Side: Client Sign In, Primary CTA, Mobile Toggle -->
-        <div class="flex items-center space-x-3 sm:space-x-3.5">
-          <div class="nav-auth-slot inline-flex items-center"></div>
-
-          <a href="index.html#inquiry-section" onclick="window.handleScheduleInquiryClick(event)" class="btn-enterprise-primary text-xs py-2 px-3.5 sm:px-4">
-            <span>Schedule Inquiry</span>
-            <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
-          </a>
-
-          <!-- Mobile Menu Toggle Button -->
-          <button onclick="window.toggleSiteDirectory ? window.toggleSiteDirectory() : (window.toggleMobileDrawer ? window.toggleMobileDrawer() : null)" class="lg:hidden p-2 rounded-lg text-slate-800 hover:text-[#FF5E14] hover:bg-slate-100 border border-slate-300 transition-colors" title="Toggle navigation">
-            <i data-lucide="menu" class="w-5 h-5"></i>
-          </button>
-        </div>
-
-      </div>
-    </div>
-
-    <div id="mobile-drawer-backdrop" onclick="window.closeMobileDrawer()" class="mobile-drawer-backdrop lg:hidden"></div>
-    <div id="mobile-drawer-panel" class="mobile-drawer-panel lg:hidden">
-      <div class="p-5 border-b border-slate-200 flex items-center justify-between">
-        <a href="index.html" class="flex items-center">
-          <img src="assets/roxtech-logo-dark.png" alt="RoxTech Logo" class="brand-drawer-logo">
-        </a>
-        <button id="mobile-drawer-close" onclick="window.closeMobileDrawer()" class="p-2 rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-100" title="Close Menu">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-      <div class="flex-1 overflow-y-auto p-5 space-y-1 text-sm font-semibold text-slate-700">
-        <a href="index.html" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Home</a>
-        <a href="services.html" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Services (4 Core Practices)</a>
-        <a href="index.html#delivery-framework" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Methodology</a>
-        <a href="index.html#industries" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Industries</a>
-        <a href="case-studies.html" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Case Studies</a>
-        <a href="estimator.html" class="block py-2.5 px-3 rounded-md text-[#FF5E14] bg-orange-50 font-bold">Cost Estimator</a>
-        <a href="about.html" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Company</a>
-        <a href="careers.html" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Careers</a>
-        <a href="contact.html" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Contact</a>
-      </div>
-      <div class="p-5 border-t border-slate-200 space-y-2.5 bg-slate-50">
-        <button onclick="window.closeMobileDrawer(); window.openAuthModal('login')" class="w-full py-2.5 text-center text-xs font-bold text-slate-700 border border-slate-300 rounded-md bg-white hover:bg-slate-100 flex items-center justify-center gap-2">
-          <i data-lucide="user-check" class="w-4 h-4 text-[#FF5E14]"></i>
-          <span>Client Sign In</span>
-        </button>
-        <a href="index.html#inquiry-section" onclick="window.closeMobileDrawer()" class="w-full btn-enterprise-primary text-center text-xs py-2.5">
-          Schedule Inquiry
-        </a>
-      </div>
+    <header class="top launch-header">
+    <div class="wrap bar">
+      <a href="index.html" class="brand-logo-container" aria-label="RoxTech — Intelligence Technology"><img src="assets/roxtech-symbol-clean.png" alt="RoxTech Symbol" class="brand-symbol-img"><div class="brand-text-block"><span class="brand-name">Rox<span>Tech</span></span><small class="brand-tagline">Intelligence Technology</small></div></a>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="nav">Menu</button>
+      <nav class="main" id="nav" aria-label="Main navigation">
+        <a href="/services">Services</a>
+        <a href="/case-studies">Work</a>
+        <a href="/about">About</a>
+        <a href="/contact">Contact</a>
+        <a class="btn btn-ghost book-call" href="/contact#book-a-call" data-calendar-link>Book a free 20-minute call</a>
+        <a class="btn btn-primary" href="/contact">Get a quote</a>
+      </nav>
     </div>
   </header>
 
   <!-- ========================================================================= -->
   <!-- 3. HERO BANNER (Executive Deep Navy)                                      -->
   <!-- ========================================================================= -->
-  <section class="bg-gradient-to-b from-[#0B1B3D] via-[#0A1835] to-[#071026] text-white pt-20 pb-16 lg:pt-24 lg:pb-20 bg-tech-grid relative">
+  <section class="bg-[#071026] text-white pt-20 pb-16 lg:pt-24 lg:pb-20 relative">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-3">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-semibold text-[#FF5E14]">
-        <i data-lucide="calculator" class="w-3.5 h-3.5"></i>
-        <span>Transparent Enterprise Pricing Calculator</span>
+        <svg aria-hidden="true" class="w-3.5 h-3.5 lucide lucide-calculator" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="16" height="20" x="4" y="2" rx="2" /> <line x1="8" x2="16" y1="6" y2="6" /> <line x1="16" x2="16" y1="14" y2="18" /> <path d="M16 10h.01" /> <path d="M12 10h.01" /> <path d="M8 10h.01" /> <path d="M12 14h.01" /> <path d="M8 14h.01" /> <path d="M12 18h.01" /> <path d="M8 18h.01" /> </svg>
+        <span>Project quote planner</span>
       </div>
       <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-        Instant Project Cost &amp; Scope Estimator
+        Plan your project quote
       </h1>
       <p class="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
-        Select your core practice, project scale tier, and engagement model to generate a transparent ballpark estimate. Submit to receive an official SRS and formal proposal.
+        Select the service, scope and delivery model you have in mind. RoxTech will follow up to discuss a written quote.
       </p>
     </div>
   </section>
@@ -113,14 +106,14 @@
   <!-- ========================================================================= -->
   <!-- 4. ESTIMATOR CONTENT                                                      -->
   <!-- ========================================================================= -->
-  <main class="py-14 lg:py-20 bg-[#F8FAFC]">
+  <main class="estimator-content py-14 lg:py-20 bg-[#F8FAFC]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
+
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
+
         <!-- Left: Configuration Steps -->
         <div class="lg:col-span-7 space-y-6">
-          
+
           <!-- Step 1: Services Selection (Strictly 4 Services) -->
           <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 space-y-4 shadow-xs">
             <div class="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -130,59 +123,59 @@
               </label>
               <span class="text-[11px] text-slate-500 font-medium">Step 1 of 3</span>
             </div>
-            
+
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
               <!-- Practice 1: Web Development -->
-              <button type="button" class="svc-btn p-4 rounded-2xl border-2 border-[#FF5E14] bg-[#FFF4EE] text-slate-900 text-left transition-all shadow-xs ring-2 ring-[#FF5E14]/20 group flex items-start gap-3.5" data-val="Custom Web Development" data-accent="orange">
+              <button type="button" aria-pressed="true" class="svc-btn p-4 rounded-2xl border-2 border-[#FF5E14] bg-[#FFF4EE] text-slate-900 text-left transition-all shadow-xs ring-2 ring-[#FF5E14]/20 group flex items-start gap-3.5" data-val="Custom Web Development" data-accent="orange">
                 <div class="w-10 h-10 rounded-xl bg-orange-100 text-[#FF5E14] flex items-center justify-center shrink-0 transition-transform group-hover:scale-105">
-                  <i data-lucide="globe" class="w-5 h-5"></i>
+                  <svg aria-hidden="true" class="w-5 h-5 lucide lucide-globe" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="12" r="10" /> <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /> <path d="M2 12h20" /> </svg>
                 </div>
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center justify-between">
                     <span class="font-extrabold text-sm text-[#0B1B3D]">Web Development</span>
-                    <span class="it-chip-orange text-[9px]">React • Cloud</span>
+
                   </div>
                   <div class="text-xs text-slate-600 mt-1">Enterprise portals, SaaS dashboards &amp; web apps</div>
                 </div>
               </button>
 
               <!-- Practice 2: ERP & Custom Software -->
-              <button type="button" class="svc-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group flex items-start gap-3.5" data-val="ERP & Custom Software Development" data-accent="blue">
+              <button type="button" aria-pressed="false" class="svc-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group flex items-start gap-3.5" data-val="ERP & Custom Software Development" data-accent="blue">
                 <div class="w-10 h-10 rounded-xl bg-blue-100 text-[#2563EB] flex items-center justify-center shrink-0 transition-transform group-hover:scale-105">
-                  <i data-lucide="layers" class="w-5 h-5"></i>
+                  <svg aria-hidden="true" class="w-5 h-5 lucide lucide-layers" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z" /> <path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12" /> <path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17" /> </svg>
                 </div>
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center justify-between">
                     <span class="font-extrabold text-sm text-[#0B1B3D]">ERP &amp; Software</span>
-                    <span class="it-chip-blue text-[9px]">PostgreSQL • API</span>
+
                   </div>
                   <div class="text-xs text-slate-500 mt-1">Supply chain, inventory, billing &amp; custom workflows</div>
                 </div>
               </button>
 
               <!-- Practice 3: Mobile Apps -->
-              <button type="button" class="svc-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group flex items-start gap-3.5" data-val="Mobile & Application Development" data-accent="emerald">
+              <button type="button" aria-pressed="false" class="svc-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group flex items-start gap-3.5" data-val="Mobile & Application Development" data-accent="emerald">
                 <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0 transition-transform group-hover:scale-105">
-                  <i data-lucide="smartphone" class="w-5 h-5"></i>
+                  <svg aria-hidden="true" class="w-5 h-5 lucide lucide-smartphone" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <rect width="14" height="20" x="5" y="2" rx="2" ry="2" /> <path d="M12 18h.01" /> </svg>
                 </div>
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center justify-between">
                     <span class="font-extrabold text-sm text-[#0B1B3D]">Mobile Applications</span>
-                    <span class="it-chip-emerald text-[9px]">iOS • Android</span>
+
                   </div>
-                  <div class="text-xs text-slate-500 mt-1">Native &amp; Flutter cross-platform mobile apps</div>
+                  <div class="text-xs text-slate-500 mt-1">Mobile tools for customers and teams</div>
                 </div>
               </button>
 
               <!-- Practice 4: Data Entry & BPO -->
-              <button type="button" class="svc-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group flex items-start gap-3.5" data-val="Data Entry & Back-Office Support Services" data-accent="amber">
+              <button type="button" aria-pressed="false" class="svc-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group flex items-start gap-3.5" data-val="Data Entry & Back-Office Support Services" data-accent="amber">
                 <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0 transition-transform group-hover:scale-105">
-                  <i data-lucide="database" class="w-5 h-5"></i>
+                  <svg aria-hidden="true" class="w-5 h-5 lucide lucide-database" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <ellipse cx="12" cy="5" rx="9" ry="3" /> <path d="M3 5V19A9 3 0 0 0 21 19V5" /> <path d="M3 12A9 3 0 0 0 21 12" /> </svg>
                 </div>
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center justify-between">
                     <span class="font-extrabold text-sm text-[#0B1B3D]">Data Entry &amp; BPO</span>
-                    <span class="it-chip-amber text-[9px]">99.9% SLA</span>
+
                   </div>
                   <div class="text-xs text-slate-500 mt-1">Document digitization, cleaning &amp; back-office ops</div>
                 </div>
@@ -200,23 +193,23 @@
               <span class="text-[11px] text-slate-500 font-medium">Step 2 of 3</span>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <button type="button" class="scale-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group" data-val="Starter MVP / Basic">
+              <button type="button" aria-pressed="false" class="scale-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group" data-val="Starter MVP / Basic">
                 <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center mb-2.5 transition-transform group-hover:scale-105">
-                  <i data-lucide="zap" class="w-4 h-4"></i>
+                  <svg aria-hidden="true" class="w-4 h-4 lucide lucide-zap" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z" /> </svg>
                 </div>
                 <div class="text-xs font-extrabold text-[#0B1B3D]">Starter MVP</div>
                 <div class="text-[11px] text-slate-500 mt-1">Core essential workflows &amp; baseline features</div>
               </button>
-              <button type="button" class="scale-btn p-4 rounded-2xl border-2 border-[#2563EB] bg-blue-50/70 text-slate-900 font-bold text-left transition-all shadow-xs ring-2 ring-[#2563EB]/20 group" data-val="Professional Growth">
+              <button type="button" aria-pressed="true" class="scale-btn p-4 rounded-2xl border-2 border-[#2563EB] bg-blue-50/70 text-slate-900 font-bold text-left transition-all shadow-xs ring-2 ring-[#2563EB]/20 group" data-val="Professional Growth">
                 <div class="w-8 h-8 rounded-lg bg-blue-100 text-[#2563EB] flex items-center justify-center mb-2.5 transition-transform group-hover:scale-105">
-                  <i data-lucide="trending-up" class="w-4 h-4"></i>
+                  <svg aria-hidden="true" class="w-4 h-4 lucide lucide-trending-up" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M16 7h6v6" /> <path d="m22 7-8.5 8.5-5-5L2 17" /> </svg>
                 </div>
                 <div class="text-xs font-extrabold text-[#0B1B3D]">Professional Growth</div>
-                <div class="text-[11px] text-slate-600 mt-1">Multi-module, third-party APIs &amp; auth</div>
+                <div class="text-[11px] text-slate-600 mt-1">Connected workflows with account access</div>
               </button>
-              <button type="button" class="scale-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group" data-val="Full Enterprise Suite">
+              <button type="button" aria-pressed="false" class="scale-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group" data-val="Full Enterprise Suite">
                 <div class="w-8 h-8 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center mb-2.5 transition-transform group-hover:scale-105">
-                  <i data-lucide="shield-check" class="w-4 h-4"></i>
+                  <svg aria-hidden="true" class="w-4 h-4 lucide lucide-shield-check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> <path d="m9 12 2 2 4-4" /> </svg>
                 </div>
                 <div class="text-xs font-extrabold text-[#0B1B3D]">Enterprise Suite</div>
                 <div class="text-[11px] text-slate-500 mt-1">High-scale, multi-branch &amp; custom security</div>
@@ -234,26 +227,26 @@
               <span class="text-[11px] text-slate-500 font-medium">Step 3 of 3</span>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
-              <button type="button" class="time-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group" data-val="Dedicated Agile Pod">
+              <button type="button" aria-pressed="false" class="time-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group" data-val="Ongoing development">
                 <div class="w-8 h-8 rounded-lg bg-blue-100 text-[#2563EB] flex items-center justify-center mb-2 transition-transform group-hover:scale-105">
-                  <i data-lucide="users" class="w-4 h-4"></i>
+                  <svg aria-hidden="true" class="w-4 h-4 lucide lucide-users" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /> <path d="M16 3.128a4 4 0 0 1 0 7.744" /> <path d="M22 21v-2a4 4 0 0 0-3-3.87" /> <circle cx="9" cy="7" r="4" /> </svg>
                 </div>
-                <div class="font-extrabold text-[#0B1B3D]">Dedicated Agile Pod</div>
-                <div class="text-[11px] text-slate-500 mt-1">Full-time scrum team</div>
+                <div class="font-extrabold text-[#0B1B3D]">Ongoing development</div>
+                <div class="text-[11px] text-slate-500 mt-1">An agreed backlog of improvements</div>
               </button>
-              <button type="button" class="time-btn p-4 rounded-2xl border-2 border-[#FF5E14] bg-[#FFF4EE] text-slate-900 font-bold text-left transition-all shadow-xs ring-2 ring-[#FF5E14]/20 group" data-val="Full Turnkey Build">
+              <button type="button" aria-pressed="true" class="time-btn p-4 rounded-2xl border-2 border-[#FF5E14] bg-[#FFF4EE] text-slate-900 font-bold text-left transition-all shadow-xs ring-2 ring-[#FF5E14]/20 group" data-val="Full Turnkey Build">
                 <div class="w-8 h-8 rounded-lg bg-orange-100 text-[#FF5E14] flex items-center justify-center mb-2 transition-transform group-hover:scale-105">
-                  <i data-lucide="package-check" class="w-4 h-4"></i>
+                  <svg aria-hidden="true" class="w-4 h-4 lucide lucide-package-check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M12 22V12" /> <path d="m16 17 2 2 4-4" /> <path d="M21 11.127V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.729l7 4a2 2 0 0 0 2 .001l1.32-.753" /> <path d="M3.29 7 12 12l8.71-5" /> <path d="m7.5 4.27 8.997 5.148" /> </svg>
                 </div>
                 <div class="font-extrabold text-[#0B1B3D]">Full Turnkey Build</div>
                 <div class="text-[11px] text-slate-600 mt-1">Milestone fixed-scope</div>
               </button>
-              <button type="button" class="time-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group" data-val="Managed SLA Support">
+              <button type="button" aria-pressed="false" class="time-btn p-4 rounded-2xl border-2 border-slate-200 bg-white text-slate-700 text-left transition-all hover:border-slate-300 group" data-val="Agreed support">
                 <div class="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center mb-2 transition-transform group-hover:scale-105">
-                  <i data-lucide="headphones" class="w-4 h-4"></i>
+                  <svg aria-hidden="true" class="w-4 h-4 lucide lucide-headphones" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3" /> </svg>
                 </div>
-                <div class="font-extrabold text-[#0B1B3D]">Managed SLA Support</div>
-                <div class="text-[11px] text-slate-500 mt-1">Continuous ops &amp; DevOps</div>
+                <div class="font-extrabold text-[#0B1B3D]">Agreed support</div>
+                <div class="text-[11px] text-slate-500 mt-1">Maintenance terms agreed separately</div>
               </button>
             </div>
           </div>
@@ -264,25 +257,25 @@
         <div class="lg:col-span-5">
           <div class="sticky top-28 bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-lg space-y-0">
             <!-- Top Colorful Gradient Accent Bar -->
-            <div class="h-2 w-full bg-gradient-to-r from-[#FF5E14] via-[#2563EB] to-emerald-500"></div>
+            <div class="h-2 w-full bg-[#2563EB]" aria-hidden="true"></div>
 
             <div class="p-6 sm:p-8 space-y-6">
-              
+
               <!-- Investment Display Box -->
-              <div class="bg-gradient-to-br from-[#0B1B3D] via-[#0A1835] to-[#071026] text-white p-5 rounded-2xl border border-white/10 shadow-inner relative overflow-hidden">
+              <div class="bg-[#071026] text-white p-5 rounded-2xl border border-white/10 shadow-inner relative overflow-hidden">
                 <div class="flex items-center justify-between text-xs font-mono text-slate-300 uppercase tracking-widest mb-1">
-                  <span>Estimated Investment</span>
+                  <span>Quote Currency</span>
                   <div class="flex items-center gap-1 bg-white/10 p-0.5 rounded-lg border border-white/15">
-                    <button type="button" id="curr-inr" class="px-2 py-0.5 rounded text-[11px] font-bold bg-[#FF5E14] text-white transition-all">₹ INR</button>
-                    <button type="button" id="curr-usd" class="px-2 py-0.5 rounded text-[11px] font-bold text-slate-300 hover:text-white transition-all">$ USD</button>
+                    <button type="button" id="curr-inr" aria-pressed="true" class="px-2 py-0.5 rounded text-[11px] font-bold bg-[#FF5E14] text-white transition-all">₹ INR</button>
+                    <button type="button" id="curr-usd" aria-pressed="false" class="px-2 py-0.5 rounded text-[11px] font-bold text-slate-300 hover:text-white transition-all">$ USD</button>
                   </div>
                 </div>
                 <div id="est-budget" class="text-3xl sm:text-4xl font-black text-[#FF5E14] font-mono tracking-tight mt-1">
-                  ₹1,50,000 – ₹2,90,000
+                  Request a quote in INR
                 </div>
                 <p class="text-[11px] text-slate-300 mt-2 flex items-center gap-1.5">
-                  <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i>
-                  <span>No-obligation estimate based on the scope you select.</span>
+                  <svg aria-hidden="true" class="w-3.5 h-3.5 text-emerald-400 shrink-0 lucide lucide-check-circle" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M21.801 10A10 10 0 1 1 17 3.335" /> <path d="m9 11 3 3L22 4" /> </svg>
+                  <span>Quote based on the scope you select.</span>
                 </p>
               </div>
 
@@ -291,31 +284,31 @@
                 <div class="flex justify-between items-center"><span class="text-slate-500">Practice Area:</span><span id="sum-svc" class="font-bold text-slate-900 text-right max-w-[200px] truncate">Custom Web Development</span></div>
                 <div class="flex justify-between items-center"><span class="text-slate-500">Complexity Tier:</span><span id="sum-scale" class="font-bold text-[#2563EB]">Professional Growth</span></div>
                 <div class="flex justify-between items-center"><span class="text-slate-500">Engagement:</span><span id="sum-time" class="font-bold text-[#FF5E14]">Full Turnkey Build</span></div>
-                <div class="flex justify-between items-center"><span class="text-slate-500">Hypercare SLA:</span><span class="font-bold text-emerald-600">6 Months Free Included</span></div>
+                <div class="flex justify-between items-center"><span class="text-slate-500">Support:</span><span class="font-bold text-slate-800">Agreed in writing</span></div>
               </div>
 
               <!-- Included Deliverables Checklist -->
               <div class="space-y-2 text-xs text-slate-600">
-                <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Standard Enterprise Inclusions</div>
+                <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">What to agree on</div>
                 <div class="grid grid-cols-2 gap-2 text-[11px]">
-                  <div class="flex items-center gap-1.5 text-slate-700"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 shrink-0"></i><span>Full IP &amp; Code Ownership</span></div>
-                  <div class="flex items-center gap-1.5 text-slate-700"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 shrink-0"></i><span>Architecture SRS Scope</span></div>
-                  <div class="flex items-center gap-1.5 text-slate-700"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 shrink-0"></i><span>CI/CD Pipeline Setup</span></div>
-                  <div class="flex items-center gap-1.5 text-slate-700"><i data-lucide="check" class="w-3.5 h-3.5 text-emerald-500 shrink-0"></i><span>QA Automated Testing</span></div>
+                  <div class="flex items-center gap-1.5 text-slate-700"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emerald-500 shrink-0 lucide lucide-check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg><span>Ownership and handover</span></div>
+                  <div class="flex items-center gap-1.5 text-slate-700"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emerald-500 shrink-0 lucide lucide-check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg><span>Written project scope</span></div>
+                  <div class="flex items-center gap-1.5 text-slate-700"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emerald-500 shrink-0 lucide lucide-check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg><span>Release and delivery plan</span></div>
+                  <div class="flex items-center gap-1.5 text-slate-700"><svg aria-hidden="true" class="w-3.5 h-3.5 text-emerald-500 shrink-0 lucide lucide-check" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M20 6 9 17l-5-5" /> </svg><span>QA Automated Testing</span></div>
                 </div>
               </div>
 
             <div id="quote-success" class="hidden p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-center space-y-3">
-              <i data-lucide="check-circle-2" class="w-10 h-10 text-emerald-600 mx-auto"></i>
-              <h4 class="font-bold text-emerald-900 text-sm">Quote Request Registered!</h4>
+              <svg aria-hidden="true" class="w-10 h-10 text-emerald-600 mx-auto lucide lucide-check-circle-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <circle cx="12" cy="12" r="10" /> <path d="m16 9-5.5 5.5L8 12" /> </svg>
+              <h4 class="font-bold text-emerald-900 text-sm">Quote request received</h4>
               <p id="quote-success-msg" class="text-xs text-emerald-700"></p>
             </div>
 
             <!-- Customer Verification Badge / Sign In Prompt -->
-            <div id="quote-auth-badge" class="mb-4"></div>
 
             <form id="quote-form" class="space-y-3 text-xs" novalidate>
-              <h4 class="font-bold text-[#0B1B3D] text-sm">Receive Formal Quotation &amp; Architecture Scope</h4>
+            <p class="form-privacy">We use your details to respond to this request. <a href="/privacy">Privacy notice</a></p>
+              <h4 class="font-bold text-[#0B1B3D] text-sm">Request a written quote</h4>
               <div>
                 <label class="block text-slate-700 font-semibold mb-1">Your Full Name *</label>
                 <input type="text" id="q-name" required placeholder="Your full name" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-hidden focus:border-[#FF5E14]">
@@ -327,7 +320,7 @@
                 </div>
                 <div>
                   <label class="block text-slate-700 font-semibold mb-1">Mobile Number *</label>
-                  <input type="tel" id="q-phone" required placeholder="+91 98765 43210" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-hidden focus:border-[#FF5E14]">
+                  <input type="tel" id="q-phone" required placeholder="Include country code" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-hidden focus:border-[#FF5E14]">
                 </div>
               </div>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -353,7 +346,7 @@
 
               <button type="submit" id="q-submit-btn" class="btn-enterprise-primary w-full justify-center text-sm py-3 mt-2 shadow-md">
                 <span>Send it</span>
-                <i data-lucide="send" class="w-4 h-4"></i>
+                <svg aria-hidden="true" class="w-4 h-4 lucide lucide-send" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" /> <path d="m21.854 2.147-10.94 10.939" /> </svg>
               </button>
               <div id="q-status" class="text-center text-[11px] text-slate-500"></div>
             </form>
@@ -371,10 +364,10 @@
   <!-- ========================================================================= -->
   <footer class="bg-[#071026] text-slate-300 pt-16 pb-12 border-t border-white/10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
+
       <!-- Top Footer: Brand, Mission & Directory -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-white/10">
-        
+
         <!-- Brand Info & Verified Contact Desk -->
         <div class="lg:col-span-2 space-y-4">
           <a href="index.html" class="brand-logo-container" aria-label="RoxTech — Intelligence Technology"><img src="assets/roxtech-symbol-clean.png" alt="RoxTech Symbol" class="brand-symbol-img"><div class="brand-text-block"><span class="brand-name">Rox<span>Tech</span></span><small class="brand-tagline">Intelligence Technology</small></div></a>
@@ -385,14 +378,14 @@
           <!-- Prominent Global Contact Details -->
           <div class="pt-3 border-t border-white/10 space-y-2 text-xs">
             <div class="flex items-center gap-2.5">
-              <i data-lucide="phone" class="w-4 h-4 text-[#FF5E14] shrink-0"></i>
+              <svg aria-hidden="true" class="w-4 h-4 text-[#FF5E14] shrink-0 lucide lucide-phone" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" /> </svg>
               <strong class="text-white font-bold">Contact:</strong>
               <a href="tel:+918460162774" class="text-blue-300 hover:text-[#FF5E14] font-semibold transition-colors">+91 8460162774</a>
             </div>
             <div class="flex items-center gap-2.5">
-              <i data-lucide="mail" class="w-4 h-4 text-[#FF5E14] shrink-0"></i>
+              <svg aria-hidden="true" class="w-4 h-4 text-[#FF5E14] shrink-0 lucide lucide-mail" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" /> <rect x="2" y="4" width="20" height="16" rx="2" /> </svg>
               <strong class="text-white font-bold">Inquiries:</strong>
-              <a href="mailto:india@roxtech.io" class="text-blue-300 hover:text-[#FF5E14] font-semibold transition-colors">india@roxtech.io</a> / <a href="mailto:enterprise@roxtech.io" class="text-blue-300 hover:text-[#FF5E14] font-semibold transition-colors">enterprise@roxtech.io</a>
+              <a href="mailto:hello@roxtech.online" class="text-blue-300 hover:text-[#FF5E14] font-semibold transition-colors">hello@roxtech.online</a>
             </div>
           </div>
         </div>
@@ -401,10 +394,10 @@
         <div class="space-y-3">
           <div class="text-xs font-bold uppercase tracking-wider text-white">Practice Areas</div>
           <ul class="space-y-2.5 text-xs text-slate-300">
-            <li><a href="services.html#web-dev" class="hover:text-[#FF5E14] transition-colors">Custom Web Development</a></li>
-            <li><a href="services.html#erp-software" class="hover:text-[#FF5E14] transition-colors">ERP &amp; Custom Software</a></li>
-            <li><a href="services.html#mobile-apps" class="hover:text-[#FF5E14] transition-colors">Mobile App Engineering</a></li>
-            <li><a href="services.html#data-entry" class="hover:text-[#FF5E14] transition-colors">Data Entry &amp; BPO Support</a></li>
+            <li><a href="/services#web" class="hover:text-[#FF5E14] transition-colors">Custom Web Development</a></li>
+            <li><a href="/services#custom-software" class="hover:text-[#FF5E14] transition-colors">ERP &amp; Custom Software</a></li>
+            <li><a href="/services#mobile" class="hover:text-[#FF5E14] transition-colors">Mobile App Engineering</a></li>
+            <li><a href="/services#data" class="hover:text-[#FF5E14] transition-colors">Data Entry &amp; BPO Support</a></li>
             <li><a href="estimator.html" class="hover:text-[#FF5E14] transition-colors text-[#FF5E14] font-semibold">Scope &amp; Cost Estimator</a></li>
           </ul>
         </div>
@@ -413,11 +406,11 @@
         <div class="space-y-3">
           <div class="text-xs font-bold uppercase tracking-wider text-white">Industries</div>
           <ul class="space-y-2.5 text-xs text-slate-300">
-            <li><a href="index.html#industries" class="hover:text-[#FF5E14] transition-colors">Banking &amp; FinTech (BFSI)</a></li>
-            <li><a href="index.html#industries" class="hover:text-[#FF5E14] transition-colors">Healthcare &amp; Life Sciences</a></li>
-            <li><a href="index.html#industries" class="hover:text-[#FF5E14] transition-colors">Supply Chain &amp; Logistics</a></li>
-            <li><a href="index.html#industries" class="hover:text-[#FF5E14] transition-colors">Retail &amp; Modern E-Commerce</a></li>
-            <li><a href="case-studies.html" class="hover:text-[#FF5E14] transition-colors">Enterprise Case Studies</a></li>
+            <li><a href="/industries" class="hover:text-[#FF5E14] transition-colors">Banking &amp; FinTech (BFSI)</a></li>
+            <li><a href="/industries" class="hover:text-[#FF5E14] transition-colors">Healthcare &amp; Life Sciences</a></li>
+            <li><a href="/industries" class="hover:text-[#FF5E14] transition-colors">Supply Chain &amp; Logistics</a></li>
+            <li><a href="/industries" class="hover:text-[#FF5E14] transition-colors">Retail &amp; Modern E-Commerce</a></li>
+            <li><a href="case-studies.html" class="hover:text-[#FF5E14] transition-colors">Sample projects</a></li>
           </ul>
         </div>
 
@@ -426,9 +419,7 @@
           <div class="text-xs font-bold uppercase tracking-wider text-white">Company</div>
           <ul class="space-y-2.5 text-xs text-slate-300">
             <li><a href="about.html" class="hover:text-[#FF5E14] transition-colors">About Us &amp; Leadership</a></li>
-            <li><a href="careers.html" class="hover:text-[#FF5E14] transition-colors">Careers</a></li>
             <li><a href="contact.html" class="hover:text-[#FF5E14] transition-colors">Contact RoxTech</a></li>
-            <li><button onclick="window.openAuthModal('login')" class="hover:text-[#FF5E14] transition-colors text-left text-slate-300">Client Portal Login</button></li>
           </ul>
         </div>
 
@@ -441,8 +432,9 @@
         </div>
         <div class="flex items-center space-x-6 text-slate-400">
           <a href="#" class="hover:text-[#FF5E14] transition-colors">Master Services Agreement (MSA)</a>
-          <a href="#" class="hover:text-[#FF5E14] transition-colors">Privacy Policy</a>
-          <a href="#" class="hover:text-[#FF5E14] transition-colors">NDA Terms</a>
+          <a href="/privacy" class="hover:text-[#FF5E14] transition-colors">Privacy Policy</a>
+          <a href="/security" class="hover:text-[#FF5E14] transition-colors">Security</a>
+          <a href="/terms" class="hover:text-[#FF5E14] transition-colors">Terms</a>
         </div>
       </div>
 
@@ -450,66 +442,23 @@
   </footer>
 
   <script src="assets/main.js"></script>
-  <script src="assets/auth.js"></script>
+  <script src="/assets/inquiry.js"></script>
   <script>
     let currentSvc = 'Custom Web Development';
     let currentScale = 'Professional Growth';
     let currentTime = 'Full Turnkey Build';
     let currentCurrency = 'INR';
 
-    const pricingTableUSD = {
-      'Custom Web Development': {
-        'Starter MVP / Basic': '$900 – $1,800',
-        'Professional Growth': '$1,800 – $3,500',
-        'Full Enterprise Suite': '$3,500 – $7,500'
-      },
-      'ERP & Custom Software Development': {
-        'Starter MVP / Basic': '$2,400 – $4,500',
-        'Professional Growth': '$4,500 – $9,800',
-        'Full Enterprise Suite': '$9,800 – $22,000'
-      },
-      'Mobile & Application Development': {
-        'Starter MVP / Basic': '$2,000 – $3,800',
-        'Professional Growth': '$3,800 – $7,900',
-        'Full Enterprise Suite': '$7,900 – $16,500'
-      },
-      'Data Entry & Back-Office Support Services': {
-        'Starter MVP / Basic': '$400 – $900',
-        'Professional Growth': '$900 – $2,200',
-        'Full Enterprise Suite': '$2,200 – $5,500'
-      }
-    };
-
-    const pricingTableINR = {
-      'Custom Web Development': {
-        'Starter MVP / Basic': '₹75,000 – ₹1,50,000',
-        'Professional Growth': '₹1,50,000 – ₹2,90,000',
-        'Full Enterprise Suite': '₹2,90,000 – ₹6,20,000'
-      },
-      'ERP & Custom Software Development': {
-        'Starter MVP / Basic': '₹1,95,000 – ₹3,75,000',
-        'Professional Growth': '₹3,75,000 – ₹8,20,000',
-        'Full Enterprise Suite': '₹8,20,000 – ₹18,50,000'
-      },
-      'Mobile & Application Development': {
-        'Starter MVP / Basic': '₹1,65,000 – ₹3,15,000',
-        'Professional Growth': '₹3,15,000 – ₹6,50,000',
-        'Full Enterprise Suite': '₹6,50,000 – ₹13,80,000'
-      },
-      'Data Entry & Back-Office Support Services': {
-        'Starter MVP / Basic': '₹35,000 – ₹75,000',
-        'Professional Growth': '₹75,000 – ₹1,80,000',
-        'Full Enterprise Suite': '₹1,80,000 – ₹4,50,000'
-      }
-    };
-
     function updateEstimate() {
-      const table = currentCurrency === 'INR' ? pricingTableINR : pricingTableUSD;
-      const budget = table[currentSvc]?.[currentScale] || (currentCurrency === 'INR' ? '₹1,50,000 – ₹3,00,000' : '$1,500 – $3,000');
-      document.getElementById('est-budget').textContent = budget;
+      document.getElementById('est-budget').textContent = 'Request a quote in ' + currentCurrency;
       document.getElementById('sum-svc').textContent = currentSvc;
       document.getElementById('sum-scale').textContent = currentScale;
       document.getElementById('sum-time').textContent = currentTime;
+      for (const [selector, current] of [['.svc-btn', currentSvc], ['.scale-btn', currentScale], ['.time-btn', currentTime]]) {
+        document.querySelectorAll(selector).forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.val === current)));
+      }
+      document.getElementById('curr-inr').setAttribute('aria-pressed', String(currentCurrency === 'INR'));
+      document.getElementById('curr-usd').setAttribute('aria-pressed', String(currentCurrency === 'USD'));
     }
 
     const currInrBtn = document.getElementById('curr-inr');
@@ -576,9 +525,9 @@
         });
         const val = btn.dataset.val;
         let activeClass = 'border-2 border-[#FF5E14] bg-[#FFF4EE] text-slate-900 font-bold shadow-xs ring-2 ring-[#FF5E14]/20';
-        if (val.includes('Pod')) {
+        if (val === 'Ongoing development') {
           activeClass = 'border-2 border-[#2563EB] bg-blue-50/70 text-slate-900 font-bold shadow-xs ring-2 ring-[#2563EB]/20';
-        } else if (val.includes('SLA')) {
+        } else if (val === 'Agreed support') {
           activeClass = 'border-2 border-emerald-500 bg-emerald-50/70 text-slate-900 font-bold shadow-xs ring-2 ring-emerald-500/20';
         }
         btn.className = `time-btn p-4 rounded-2xl ${activeClass} text-left transition-all group`;
@@ -672,14 +621,14 @@
         return;
       }
 
-      const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '<span>Send it</span><i data-lucide="send" class="w-4 h-4"></i>';
+      const originalBtnHtml = submitBtn ? submitBtn.innerHTML : '<span>Send it</span><svg aria-hidden="true" class="w-4 h-4 lucide lucide-send" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" > <path d="M14.536 21.686a.5.5 0 0 0 .937-.024l6.5-19a.496.496 0 0 0-.635-.635l-19 6.5a.5.5 0 0 0-.024.937l7.93 3.18a2 2 0 0 1 1.112 1.11z" /> <path d="m21.854 2.147-10.94 10.939" /> </svg>';
       if (submitBtn) {
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span>Sending quotation...</span>';
       }
       if (statusEl) statusEl.textContent = 'Transmitting quotation details...';
 
-      const estBudget = document.getElementById('est-budget')?.textContent || '$5,000 - $15,000';
+      const quoteCurrency = currentCurrency;
       const payload = {
         name: nameVal,
         email: emailVal,
@@ -689,68 +638,42 @@
         service: currentSvc,
         scale: currentScale,
         timeline: currentTime,
-        estimated_budget: estBudget,
         notes: detailsVal,
-        message: `Service: ${currentSvc}\nScale: ${currentScale}\nTimeline: ${currentTime}\nEstimated: ${estBudget}\nPhone: ${phoneVal}\nNotes: ${detailsVal}`,
-        _subject: `New Formal Quotation Request: ${nameVal} (${phoneVal}) - ${estBudget}`,
-        _template: 'table',
-        _captcha: 'false'
+        message: `Service: ${currentSvc}\nScale: ${currentScale}\nTimeline: ${currentTime}\nQuote currency: ${quoteCurrency}\nPhone: ${phoneVal}\nNotes: ${detailsVal}`,
+
       };
 
       try {
-        // Direct background email delivery (FormSubmit AJAX + Backend API)
-        // Does NOT open any email apps or popups!
-        const formSubmitPromise = fetch('https://formsubmit.co/ajax/hello@roxtech.io', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        }).catch(() => null);
-
-        const backendPromise = fetch(`${API_BASE}/api/leads`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        }).catch(() => null);
-
-        await Promise.all([formSubmitPromise, backendPromise]);
+        await submitRoxTechInquiry('/api/leads', payload);
 
         // Success Notification via Top-Right Popup Toast
         if (window.showTopRightToast) {
           window.showTopRightToast(
             'success',
             'Quotation Sent Successfully',
-            'Your quotation sent successfully! Our solutions team will deliver a comprehensive proposal within 24 hours.'
+            'Your project details were received. RoxTech will follow up with you.'
           );
         }
 
         quoteForm.classList.add('hidden');
-        const badge = document.getElementById('quote-auth-badge');
-        if (badge) badge.classList.add('hidden');
         const successBox = document.getElementById('quote-success');
         if (successBox) successBox.classList.remove('hidden');
         const msgEl = document.getElementById('quote-success-msg');
-        if (msgEl) msgEl.textContent = `Quotation request for ${estBudget} has been sent successfully! Our solutions team will contact you at ${phoneVal} and ${emailVal}.`;
+        if (msgEl) msgEl.textContent = `Your request for a quote in ${quoteCurrency} was received. RoxTech will contact you at ${phoneVal} or ${emailVal}.`;
 
-        if (window.confetti) {
-          window.confetti({ particleCount: 90, spread: 80, origin: { y: 0.6 } });
-        }
       } catch (err) {
         console.error('[Quote Submit Error]', err);
         if (window.showTopRightToast) {
           window.showTopRightToast(
             'error',
             'Submission Error',
-            'There is some error sending your quotation. Please try again or reach us at hello@roxtech.io.'
+            'There is some error sending your quotation. Please try again or reach us at hello@roxtech.online.'
           );
         }
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.innerHTML = originalBtnHtml;
-          if (window.lucide) window.lucide.createIcons();
         }
         if (statusEl) statusEl.textContent = '';
       }
@@ -765,10 +688,13 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      if (window.lucide) window.lucide.createIcons();
     });
   </script>
   <script src="assets/lenis.min.js"></script>
   <script src="assets/chatbot.js" defer></script>
+  <a class="whatsapp-float" href="https://wa.me/918460162774" aria-label="Message RoxTech on WhatsApp">
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20.4a9 9 0 1 0-4.3-4.3L2 22Z"/></svg>
+    <span>WhatsApp</span>
+  </a>
 </body>
 </html>

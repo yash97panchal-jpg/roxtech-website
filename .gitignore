@@ -4,6 +4,10 @@ Thumbs.db
 *.log
 .env
 .env.*
+.dev.vars
+.dev.vars.*
+.wrangler/
+node_modules/
 .vscode/
 .idea/
 *.swp

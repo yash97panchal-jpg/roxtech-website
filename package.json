@@ -2,10 +2,14 @@
   "name": "roxtech-website",
   "private": true,
   "scripts": {
+    "test": "node --test",
     "deploy": "npx --yes wrangler@4.166.0 deploy"
   },
   "devDependencies": {
     "cf": "1.0.0-rc.2"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "jose": "6.2.18"
+  }
 }

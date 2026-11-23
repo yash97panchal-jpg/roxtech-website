@@ -11,6 +11,13 @@
   const STORAGE_KEY = 'rox_chat_session';
   const TEASER_KEY = 'rox_chat_teaser_dismissed';
 
+  const CONTACT_INTRO = 'You can reach a RoxTech consultant directly:';
+  const CONTACT_REPLY =
+    CONTACT_INTRO + '\n\n' +
+    '• **Phone:** +91 8460162774\n' +
+    '• **Email:** hello@roxtech.online\n' +
+    '• **Hours:** Monday to Friday, 9:00 AM – 7:00 PM IST';
+
   // ---------------------------------------------------------------------------
   // STATE MANAGEMENT
   // ---------------------------------------------------------------------------
@@ -52,14 +59,9 @@
               }
             }
           }
-          if (parsed.version !== 3) {
-            for (const message of state.messages) {
-              if (message.sender !== 'bot' || !message.text.startsWith('You can reach a RoxTech consultant directly:')) continue;
-              message.text = message.text
-                .split('\n')
-                .filter(line => !line.includes('RoxTech Tower, Sindhu Bhavan Road'))
-                .join('\n')
-                .replace('+91 79 4912 3000 (Toll-Free: 1800 120 7698)', '+91 8460162774');
+          for (const message of state.messages) {
+            if (message.sender === 'bot' && message.text.startsWith(CONTACT_INTRO)) {
+              message.text = CONTACT_REPLY;
             }
           }
           state.estimate = parsed.estimate || null;
@@ -732,11 +734,7 @@
     state.booking = null;
     state.estimate = null;
     botReply(
-      `You can reach a RoxTech consultant directly:\n\n` +
-      `• **Phone:** +91 8460162774\n` +
-      `• **Email:** hello@roxtech.online\n` +
-      `• **Hours:** Monday to Friday, 9:00 AM – 7:00 PM IST\n\n` +
-      `We reply to all inquiries within one business day.`,
+      CONTACT_REPLY,
       {
         link: { text: 'Go to Contact Page →', url: '/contact.html' },
         pills: [

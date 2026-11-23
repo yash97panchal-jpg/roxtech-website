@@ -30,3 +30,20 @@ RETURNING approval_reference;
 ```
 
 The first approval turns on passkey checks for the owner. The owner then verifies the passkey at [roxtech.online/admin/passkey](https://roxtech.online/admin/passkey). Successful passkey verification creates a new, 30-minute admin session and invalidates the Google-only session. Use the same approval process to enroll a backup or replace a lost passkey. Set `revoked_at` on a lost key to disable it and its sessions while retaining enforcement.
+
+## Inquiries and releases
+
+Apply `inquiry-schema.sql` once to the `BOOKINGS` database before deploying the inquiry endpoints. Homepage and contact inquiries use `POST /api/contact`, and estimator requests use `POST /api/leads`. The authenticated Inquiries tab shows the newest 100 requests. Saving an inquiry does not send an email.
+
+Run `npm test` before merging. For a local copy with isolated D1 data, run the following commands from the repository root.
+
+```sh
+npx wrangler@4.166.0 d1 execute BOOKINGS --local --file booking-schema.sql
+npx wrangler@4.166.0 d1 execute BOOKINGS --local --file admin-schema.sql
+npx wrangler@4.166.0 d1 execute BOOKINGS --local --file inquiry-schema.sql
+npx wrangler@4.166.0 dev --local
+```
+
+Use `/api/health` for HTTP uptime checks. Workers Logs captures explicit application errors. Automatic per-request logging is disabled.
+
+In **Workers & Pages → lingering-mountain-bef0 → Deployments**, select a known-good deployment to roll back code. Match the Worker version to the database schema. D1 Time Travel is a separate recovery mechanism. Record the current D1 bookmark before a restore and verify the expected timestamp, because restoring changes the production database. Keep OAuth credentials separate from Git in Cloudflare secrets and the owner's password manager.

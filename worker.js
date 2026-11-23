@@ -114,16 +114,16 @@ function adminJson(data, status, headers) {
   return json(data, status, { ...adminHeaders, ...headers });
 }
 
-function adminPage(body, status = 200) {
+function adminPage(body, authenticated) {
+  const formTargets = authenticated ? "'self'" : "'self' https://accounts.google.com";
   return new Response(body, {
-    status,
     headers: {
       ...adminHeaders,
       'Referrer-Policy': 'same-origin',
       'Content-Type': 'text/html; charset=utf-8',
       'X-Frame-Options': 'DENY',
       'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
-      'Content-Security-Policy': "default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'",
+      'Content-Security-Policy': `default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self'; connect-src 'self'; form-action ${formTargets}; frame-ancestors 'none'; base-uri 'none'`,
     },
   });
 }
@@ -185,7 +185,7 @@ async function adminRequest(request, env, url) {
     const error = url.searchParams.get('error') === 'signin';
     const page = authenticated ? dashboard : signInPage.replace('<!-- SIGN_IN_ERROR -->', error
       ? '<p role="alert" class="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700">Sign-in could not be completed. Try again with the authorized Google account.</p>' : '');
-    return adminPage(request.method === 'HEAD' ? null : page);
+    return adminPage(request.method === 'HEAD' ? null : page, authenticated);
   }
 
   if (path === '/api/admin/google' || path === GOOGLE_CALLBACK) {

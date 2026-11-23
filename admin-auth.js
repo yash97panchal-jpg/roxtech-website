@@ -9,6 +9,7 @@ const FLOW_COOKIE = '__Host-roxtech-admin-flow';
 const SESSION_COOKIE = '__Host-roxtech-admin-session';
 const FLOW_TTL = 10 * 60;
 const SESSION_TTL = 8 * 60 * 60;
+const VERIFIED_SESSION_TTL = 30 * 60;
 const tokenPattern = /^[A-Za-z0-9_-]{43}$/;
 const encoder = new TextEncoder();
 
@@ -19,11 +20,11 @@ export const adminHeaders = {
   'X-Robots-Tag': 'noindex, nofollow',
 };
 
-function epochSeconds() {
+export function epochSeconds() {
   return Math.floor(Date.now() / 1000);
 }
 
-function base64url(bytes) {
+export function base64url(bytes) {
   return btoa(String.fromCharCode(...bytes)).replaceAll('+', '-').replaceAll('/', '_').replace(/=+$/, '');
 }
 
@@ -195,14 +196,60 @@ export async function completeGoogleSignIn(request, env, params) {
   return redirect('/admin', clearFlow, cookie(SESSION_COOKIE, token, SESSION_TTL));
 }
 
-export async function hasAdminSession(request, env) {
+export async function getAdminSession(request, env) {
   const token = cookieToken(request, SESSION_COOKIE);
-  if (!token || !oauthConfigured(env)) return false;
+  if (!token || !oauthConfigured(env)) return null;
   const digest = await tokenDigest(env, 'session', token);
-  const session = await env.BOOKINGS.prepare(`
-    SELECT email FROM admin_sessions WHERE token_digest = ? AND expires_at > ?
-  `).bind(digest, epochSeconds()).first();
-  return session?.email === adminEmail(env);
+  return env.BOOKINGS.prepare(`
+    SELECT s.token_digest, s.email, s.expires_at,
+           NOT EXISTS (
+             SELECT 1 FROM admin_passkeys k WHERE k.email = s.email AND k.approved_at IS NOT NULL
+           ) OR EXISTS (
+             SELECT 1 FROM admin_passkey_verifications v
+             JOIN admin_passkeys k ON k.credential_id = v.credential_id
+             WHERE v.session_digest = s.token_digest AND k.email = s.email
+               AND k.approved_at IS NOT NULL AND k.revoked_at IS NULL
+           ) AS authorized
+    FROM admin_sessions s
+    WHERE s.token_digest = ? AND s.email = ? AND s.expires_at > ?
+  `).bind(digest, adminEmail(env), epochSeconds()).first();
+}
+
+export async function hasAdminSession(request, env) {
+  return Boolean((await getAdminSession(request, env))?.authorized);
+}
+
+export async function verifyAdminPasskeySession(env, session, credential, newCounter) {
+  const token = randomToken();
+  const digest = await tokenDigest(env, 'session', token);
+  const now = epochSeconds();
+  const expiry = Math.min(session.expires_at, now + VERIFIED_SESSION_TTL);
+  if (expiry <= now) return null;
+  const db = env.BOOKINGS;
+  // Issue a new cookie so a copied Google-only cookie can never become an admin session.
+  await db.batch([
+    db.prepare(`
+      INSERT INTO admin_sessions (token_digest, email, expires_at)
+      SELECT ?, s.email, ? FROM admin_sessions s JOIN admin_passkeys k ON k.email = s.email
+      WHERE s.token_digest = ? AND s.expires_at > ? AND k.credential_id = ?
+        AND k.counter = ? AND k.approved_at IS NOT NULL AND k.revoked_at IS NULL
+    `).bind(digest, expiry, session.token_digest, now, credential.credential_id, credential.counter),
+    db.prepare(`
+      INSERT INTO admin_passkey_verifications (session_digest, credential_id)
+      SELECT token_digest, ? FROM admin_sessions WHERE token_digest = ?
+    `).bind(credential.credential_id, digest),
+    db.prepare(`
+      UPDATE admin_passkeys SET counter = ? WHERE credential_id = ?
+        AND EXISTS (SELECT 1 FROM admin_sessions WHERE token_digest = ?)
+    `).bind(newCounter, credential.credential_id, digest),
+    db.prepare(`
+      DELETE FROM admin_sessions WHERE token_digest = ?
+        AND EXISTS (SELECT 1 FROM admin_sessions WHERE token_digest = ?)
+    `).bind(session.token_digest, digest),
+  ]);
+  const verified = await db.prepare('SELECT 1 FROM admin_passkey_verifications WHERE session_digest = ?')
+    .bind(digest).first();
+  return verified ? cookie(SESSION_COOKIE, token, expiry - now) : null;
 }
 
 export async function signOut(request, env) {

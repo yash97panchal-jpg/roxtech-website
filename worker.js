@@ -1,9 +1,11 @@
 import dashboard from './admin.html';
 import signInPage from './admin-login.html';
+import passkeyPage from './admin-passkey.html';
 import {
   ADMIN_ORIGIN, GOOGLE_CALLBACK, adminHeaders, completeGoogleSignIn,
-  hasAdminSession, oauthConfigured, sameAdminOrigin, signOut, startGoogleSignIn,
+  getAdminSession, hasAdminSession, oauthConfigured, sameAdminOrigin, signOut, startGoogleSignIn,
 } from './admin-auth.js';
+import { handleAdminPasskey } from './admin-passkey.js';
 
 const HOUR_SLOTS = Array.from({ length: 8 }, (_, hour) => `${hour + 10}:00`);
 const SERVICES = [
@@ -12,7 +14,7 @@ const SERVICES = [
 ];
 const DAY = 86_400_000;
 const IST_OFFSET = 330 * 60_000;
-const ADMIN_DOCUMENTS = new Set(['/admin', '/admin.html', '/admin/']);
+const ADMIN_DOCUMENTS = new Set(['/admin', '/admin.html', '/admin/', '/admin/passkey', '/admin/passkey/setup']);
 const ADMIN_READ_PATHS = new Set([
   '/api/stats', '/api/contact', '/api/orders', '/api/quote', '/api/customers',
   '/api/careers/applications', '/api/newsletter',
@@ -114,8 +116,9 @@ function adminJson(data, status, headers) {
   return json(data, status, { ...adminHeaders, ...headers });
 }
 
-function adminPage(body, authenticated) {
+function adminPage(body, authenticated, nonce) {
   const formTargets = authenticated ? "'self'" : "'self' https://accounts.google.com";
+  const scriptTargets = nonce ? `'self' 'nonce-${nonce}'` : "'self'";
   return new Response(body, {
     headers: {
       ...adminHeaders,
@@ -123,9 +126,28 @@ function adminPage(body, authenticated) {
       'Content-Type': 'text/html; charset=utf-8',
       'X-Frame-Options': 'DENY',
       'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
-      'Content-Security-Policy': `default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self'; connect-src 'self'; form-action ${formTargets}; frame-ancestors 'none'; base-uri 'none'`,
+      'Content-Security-Policy': `default-src 'none'; script-src ${scriptTargets}; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self'; connect-src 'self'; form-action ${formTargets}; frame-ancestors 'none'; base-uri 'none'`,
     },
   });
+}
+
+function adminRedirect(location) {
+  return new Response(null, { status: 302, headers: { ...adminHeaders, Location: location } });
+}
+
+function renderPasskeyPage(request, setup) {
+  const nonce = crypto.randomUUID();
+  const page = passkeyPage
+    .replace('PASSKEY_NONCE', nonce)
+    .replace('PASSKEY_OPERATION', setup ? 'register' : 'authenticate')
+    .replace('PASSKEY_HEADING', setup ? 'Set up your admin passkey' : 'Verify your admin passkey')
+    .replace('PASSKEY_INSTRUCTION', setup
+      ? 'Create a passkey with your phone, computer, or security key. The setup requires approval.'
+      : 'Unlock your approved passkey with your screen lock or security key to open the admin dashboard.')
+    .replace('PASSKEY_BUTTON', setup ? 'Create passkey' : 'Verify passkey')
+    .replace('PASSKEY_LINK_URL', setup ? '/admin' : '/admin/passkey/setup')
+    .replace('PASSKEY_LINK_TEXT', setup ? 'Back to admin' : 'Set up a replacement passkey');
+  return adminPage(request.method === 'HEAD' ? null : page, true, nonce);
 }
 
 function methodNotAllowed(allow) {
@@ -180,13 +202,21 @@ async function adminRequest(request, env, url) {
   }
   if (isDocument) {
     if (!['GET', 'HEAD'].includes(request.method)) return methodNotAllowed('GET, HEAD');
-    if (path !== '/admin') return Response.redirect(`${ADMIN_ORIGIN}/admin`, 302);
-    const authenticated = await hasAdminSession(request, env);
+    if (path === '/admin.html' || path === '/admin/') return adminRedirect(`${ADMIN_ORIGIN}/admin`);
+    const session = await getAdminSession(request, env);
+    if (path !== '/admin') {
+      if (!session) return adminRedirect('/admin');
+      return renderPasskeyPage(request, path === '/admin/passkey/setup');
+    }
+    if (session && !session.authorized) return adminRedirect('/admin/passkey');
+    const authenticated = Boolean(session);
     const error = url.searchParams.get('error') === 'signin';
     const page = authenticated ? dashboard : signInPage.replace('<!-- SIGN_IN_ERROR -->', error
       ? '<p role="alert" class="p-3 rounded-xl bg-red-50 border border-red-200 text-xs text-red-700">Sign-in could not be completed. Try again with the authorized Google account.</p>' : '');
     return adminPage(request.method === 'HEAD' ? null : page, authenticated);
   }
+
+  if (path.startsWith('/api/admin/passkey/')) return handleAdminPasskey(request, env, path);
 
   if (path === '/api/admin/google' || path === GOOGLE_CALLBACK) {
     const isCallback = path === GOOGLE_CALLBACK;

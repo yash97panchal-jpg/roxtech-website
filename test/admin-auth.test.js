@@ -1,9 +1,11 @@
 import assert from 'node:assert/strict';
+import { createHash, createHmac, generateKeyPairSync, randomBytes, sign } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { registerHooks } from 'node:module';
 import { DatabaseSync } from 'node:sqlite';
 import test from 'node:test';
 import { exportJWK, generateKeyPair, SignJWT } from 'jose';
+import { isoCBOR } from '@simplewebauthn/server/helpers';
 
 const htmlLoader = registerHooks({
   load(url, context, nextLoad) {
@@ -230,4 +232,101 @@ test('missing configuration fails closed while public pages and bookings still w
   assert.equal((await request('/api/bookings', options)).status, 201);
   assert.equal((await request('/api/bookings', options)).status, 409);
   assert.equal((await listSlots())[0].booked, true);
+});
+
+test('an approved passkey protects the dashboard and API, rotates the session, and can be revoked', async t => {
+  const { request, sql } = fixture(t);
+  const googleToken = randomBytes(32).toString('base64url');
+  const digest = createHmac('sha256', settings.SESSION_SECRET).update('session:' + googleToken).digest('base64url');
+  sql.prepare('INSERT INTO admin_sessions (token_digest, email, expires_at) VALUES (?, ?, ?)')
+    .run(digest, settings.ADMIN_EMAIL, now() + 3600);
+  const googleCookie = '__Host-roxtech-admin-session=' + googleToken;
+  const googleHeaders = { Cookie: googleCookie, Origin: origin, 'Content-Type': 'application/json' };
+  const endpoint = '/api/admin/passkey/';
+  const post = (route, response, headers = googleHeaders) => request(endpoint + route, {
+    method: 'POST', headers, body: response ? JSON.stringify(response) : undefined,
+  });
+  assert.equal((await post('register/start', undefined, { Origin: origin })).status, 401);
+  assert.equal((await post('register/start', undefined, { ...googleHeaders, Origin: 'https://example.com' })).status, 403);
+  assert.equal((await request('/admin/passkey/setup')).headers.get('Location'), '/admin');
+  const setupPage = await request('/admin/passkey/setup', { headers: googleHeaders });
+  const setupHtml = await setupPage.text();
+  assert.match(setupHtml, /Set up your admin passkey/);
+  const nonce = setupHtml.match(/<script nonce="([^"]+)">/)[1];
+  assert.ok(setupPage.headers.get('Content-Security-Policy').includes("'nonce-" + nonce + "'"));
+
+  const { publicKey, privateKey } = generateKeyPairSync('ec', { namedCurve: 'prime256v1' });
+  const jwk = publicKey.export({ format: 'jwk' });
+  const rpHash = createHash('sha256').update('roxtech.online').digest();
+  const credentialId = randomBytes(32);
+  const id = credentialId.toString('base64url');
+  const responseBase = { id, rawId: id, type: 'public-key', clientExtensionResults: {} };
+  const encode = value => Buffer.from(isoCBOR.encode(value)).toString('base64url');
+  const clientData = (type, challenge, requestOrigin = origin) =>
+    Buffer.from(JSON.stringify({ type, challenge, origin: requestOrigin, crossOrigin: false }));
+
+  const { options: registration } = await (await post('register/start')).json();
+  assert.equal(registration.authenticatorSelection.userVerification, 'required');
+  const publicData = isoCBOR.encode(new Map([
+    [1, 2], [3, -7], [-1, 1], [-2, Buffer.from(jwk.x, 'base64url')], [-3, Buffer.from(jwk.y, 'base64url')],
+  ]));
+  const attested = Buffer.concat([
+    rpHash, Buffer.from([0x45]), Buffer.alloc(4), Buffer.alloc(16), Buffer.from([0, credentialId.length]),
+    credentialId, publicData,
+  ]);
+  const enrollment = await post('register/finish', {
+    ...responseBase,
+    response: {
+      clientDataJSON: clientData('webauthn.create', registration.challenge).toString('base64url'),
+      attestationObject: encode(new Map([['fmt', 'none'], ['attStmt', new Map()], ['authData', attested]])),
+    },
+  });
+  assert.equal(enrollment.status, 200);
+  const { approvalReference } = await enrollment.json();
+  assert.match(approvalReference, /^[A-F0-9]{16}$/);
+  assert.equal((await post('authenticate/start')).status, 409);
+  assert.equal((await request('/api/bookings', { headers: googleHeaders })).status, 200);
+
+  const approved = sql.prepare(`
+    UPDATE admin_passkeys SET approved_at = ?
+    WHERE approval_reference = ? AND email = ? AND approved_at IS NULL AND pending_until > ?
+  `).run(now(), approvalReference, settings.ADMIN_EMAIL, now());
+  assert.equal(approved.changes, 1);
+  assert.equal((await request('/admin', { headers: googleHeaders })).headers.get('Location'), '/admin/passkey');
+  assert.equal((await request('/api/bookings', { headers: googleHeaders })).status, 401);
+
+  async function assertion(options, flags, requestOrigin = origin) {
+    const client = clientData('webauthn.get', options.challenge, requestOrigin);
+    const authenticatorData = Buffer.concat([rpHash, Buffer.from([flags, 0, 0, 0, 1])]);
+    const signature = sign('sha256', Buffer.concat([authenticatorData, createHash('sha256').update(client).digest()]), privateKey);
+    return post('authenticate/finish', {
+      ...responseBase,
+      response: {
+        clientDataJSON: client.toString('base64url'),
+        authenticatorData: authenticatorData.toString('base64url'),
+        signature: signature.toString('base64url'),
+      },
+    });
+  }
+  const { options: mismatchedOrigin } = await (await post('authenticate/start')).json();
+  assert.equal((await assertion(mismatchedOrigin, 0x05, 'https://www.roxtech.online')).status, 403);
+  const { options: missingVerification } = await (await post('authenticate/start')).json();
+  assert.equal((await assertion(missingVerification, 0x01)).status, 403);
+  assert.equal((await assertion(missingVerification, 0x05)).status, 400);
+
+  const { options: authentication } = await (await post('authenticate/start')).json();
+  assert.equal(authentication.userVerification, 'required');
+  const elevated = await assertion(authentication, 0x05);
+  assert.equal(elevated.status, 200);
+  const verifiedCookie = elevated.headers.get('Set-Cookie');
+  assert.match(verifiedCookie, /Max-Age=1800; Path=\/; Secure; HttpOnly; SameSite=Lax/);
+  assert.notEqual(verifiedCookie.split(';')[0], googleCookie);
+  const verifiedHeaders = { Cookie: verifiedCookie.split(';')[0] };
+  assert.match(await (await request('/admin', { headers: verifiedHeaders })).text(), /Sync Data/);
+  assert.equal((await request('/api/bookings', { headers: verifiedHeaders })).status, 200);
+  assert.equal((await request('/api/bookings', { headers: googleHeaders })).status, 401);
+
+  sql.prepare('UPDATE admin_passkeys SET revoked_at = ? WHERE credential_id = ?').run(now(), id);
+  assert.equal((await request('/api/bookings', { headers: verifiedHeaders })).status, 401);
+  assert.equal((await request('/admin', { headers: verifiedHeaders })).headers.get('Location'), '/admin/passkey');
 });

@@ -2,6 +2,12 @@
   "name": "lingering-mountain-bef0",
   "main": "worker.js",
   "compatibility_date": "2026-11-21",
+  "observability": {
+    "logs": { "enabled": true, "invocation_logs": false }
+  },
+  "ratelimits": [
+    { "name": "PUBLIC_RATE_LIMIT", "namespace_id": "1001", "simple": { "limit": 8, "period": 60 } }
+  ],
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",

@@ -19,6 +19,7 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <link rel="stylesheet" href="assets/rox-refresh.css">
+  <link rel="canonical" href="https://roxtech.online/estimator">
 </head>
 <body class="bg-white text-slate-700 font-sans antialiased selection:bg-[#FF5E14] selection:text-white overflow-x-hidden">
 
@@ -43,7 +44,6 @@
 
         <!-- Right Side: Client Sign In, Primary CTA, Mobile Toggle -->
         <div class="flex items-center space-x-3 sm:space-x-3.5">
-          <div class="nav-auth-slot inline-flex items-center"></div>
 
           <a href="index.html#inquiry-section" onclick="window.handleScheduleInquiryClick(event)" class="btn-enterprise-primary text-xs py-2 px-3.5 sm:px-4">
             <span>Schedule Inquiry</span>
@@ -81,10 +81,6 @@
         <a href="contact.html" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Contact</a>
       </div>
       <div class="p-5 border-t border-slate-200 space-y-2.5 bg-slate-50">
-        <button onclick="window.closeMobileDrawer(); window.openAuthModal('login')" class="w-full py-2.5 text-center text-xs font-bold text-slate-700 border border-slate-300 rounded-md bg-white hover:bg-slate-100 flex items-center justify-center gap-2">
-          <i data-lucide="user-check" class="w-4 h-4 text-[#FF5E14]"></i>
-          <span>Client Sign In</span>
-        </button>
         <a href="index.html#inquiry-section" onclick="window.closeMobileDrawer()" class="w-full btn-enterprise-primary text-center text-xs py-2.5">
           Schedule Inquiry
         </a>
@@ -312,9 +308,9 @@
             </div>
 
             <!-- Customer Verification Badge / Sign In Prompt -->
-            <div id="quote-auth-badge" class="mb-4"></div>
 
             <form id="quote-form" class="space-y-3 text-xs" novalidate>
+            <p class="form-privacy">We use your details to respond to this request. <a href="/privacy">Privacy notice</a></p>
               <h4 class="font-bold text-[#0B1B3D] text-sm">Receive Formal Quotation &amp; Architecture Scope</h4>
               <div>
                 <label class="block text-slate-700 font-semibold mb-1">Your Full Name *</label>
@@ -433,7 +429,6 @@
             <li><a href="about.html" class="hover:text-[#FF5E14] transition-colors">About Us &amp; Leadership</a></li>
             <li><a href="careers.html" class="hover:text-[#FF5E14] transition-colors">Careers</a></li>
             <li><a href="contact.html" class="hover:text-[#FF5E14] transition-colors">Global Delivery Centers</a></li>
-            <li><button onclick="window.openAuthModal('login')" class="hover:text-[#FF5E14] transition-colors text-left text-slate-300">Client Portal Login</button></li>
           </ul>
         </div>
 
@@ -446,9 +441,9 @@
         </div>
         <div class="flex items-center space-x-6 text-slate-400">
           <a href="#" class="hover:text-[#FF5E14] transition-colors">Master Services Agreement (MSA)</a>
-          <a href="#" class="hover:text-[#FF5E14] transition-colors">Privacy Policy</a>
-          <a href="#" class="hover:text-[#FF5E14] transition-colors">SOC2 / ISO 27001</a>
-          <a href="#" class="hover:text-[#FF5E14] transition-colors">NDA Terms</a>
+          <a href="/privacy" class="hover:text-[#FF5E14] transition-colors">Privacy Policy</a>
+          <a href="/security" class="hover:text-[#FF5E14] transition-colors">Security</a>
+          <a href="/terms" class="hover:text-[#FF5E14] transition-colors">Terms</a>
         </div>
       </div>
 
@@ -456,7 +451,7 @@
   </footer>
 
   <script src="assets/main.js"></script>
-  <script src="assets/auth.js"></script>
+  <script src="/assets/inquiry.js"></script>
   <script>
     let currentSvc = 'Custom Web Development';
     let currentScale = 'Professional Growth';
@@ -706,36 +701,13 @@
         estimated_budget: estBudget,
         notes: detailsVal,
         message: `Service: ${currentSvc}\nScale: ${currentScale}\nTimeline: ${currentTime}\nEstimated: ${estBudget}\nPhone: ${phoneVal}\nNotes: ${detailsVal}`,
-        _subject: `New Formal Quotation Request: ${nameVal} (${phoneVal}) - ${estBudget}`,
-        _template: 'table',
-        _captcha: 'false'
+
+
+
       };
 
       try {
-        // Direct background email delivery (FormSubmit AJAX + Backend API)
-        // Does NOT open any email apps or popups!
-        const formSubmitPromise = fetch('https://formsubmit.co/ajax/hello@roxtech.online', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        }).catch(() => null);
-
-        const backendPromise = fetch(`${API_BASE}/api/leads`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        }).catch(() => null);
-
-        const responses = await Promise.all([formSubmitPromise, backendPromise]);
-        const accepted = await Promise.all(responses.map(async response => {
-          if (!response?.ok) return false;
-          const result = await response.json().catch(() => null);
-          return result?.success === true || result?.success === 'true';
-        }));
-        if (!accepted.some(Boolean)) throw new Error('Quotation delivery was not confirmed');
+        await submitRoxTechInquiry('/api/leads', payload);
 
         // Success Notification via Top-Right Popup Toast
         if (window.showTopRightToast) {
@@ -747,8 +719,6 @@
         }
 
         quoteForm.classList.add('hidden');
-        const badge = document.getElementById('quote-auth-badge');
-        if (badge) badge.classList.add('hidden');
         const successBox = document.getElementById('quote-success');
         if (successBox) successBox.classList.remove('hidden');
         const msgEl = document.getElementById('quote-success-msg');

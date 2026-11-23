@@ -34,7 +34,7 @@ const now = () => Math.floor(Date.now() / 1000);
 function fixture(t, overrides = {}) {
   const sql = new DatabaseSync(':memory:');
   t.after(() => sql.close());
-  for (const file of ['booking-schema.sql', 'admin-schema.sql']) {
+  for (const file of ['booking-schema.sql', 'admin-schema.sql', 'inquiry-schema.sql']) {
     sql.exec(readFileSync(new URL(`../${file}`, import.meta.url), 'utf8'));
   }
   const env = {
@@ -329,4 +329,32 @@ test('an approved passkey protects the dashboard and API, rotates the session, a
   sql.prepare('UPDATE admin_passkeys SET revoked_at = ? WHERE credential_id = ?').run(now(), id);
   assert.equal((await request('/api/bookings', { headers: verifiedHeaders })).status, 401);
   assert.equal((await request('/admin', { headers: verifiedHeaders })).headers.get('Location'), '/admin/passkey');
+});
+
+test('public project inquiries are validated, persisted once, and private', async t => {
+  const { request, sql } = fixture(t, {
+    PUBLIC_RATE_LIMIT: { limit: async ({ key }) => ({ success: !key.endsWith(':192.0.2.1') }) },
+  });
+  const submission = {
+    request_id: 'c1cc962e-7d46-4d8e-81a6-420e86a159c3',
+    name: 'Test Person', email: 'Test@example.com', phone: '+91 12345 67890',
+    message: 'An inquiry for the test project.', service: 'Web development',
+  };
+  const submit = (path, data, headers = {}) => request(path, {
+    method: 'POST',
+    headers: { Origin: origin, 'Content-Type': 'application/json', ...headers },
+    body: JSON.stringify(data),
+  });
+  assert.equal((await submit('/api/contact', submission, { Origin: 'https://example.com' })).status, 403);
+  assert.equal((await submit('/api/contact', submission, { 'CF-Connecting-IP': '192.0.2.1' })).status, 429);
+  assert.equal((await submit('/api/contact', { ...submission, phone: '555' })).status, 400);
+  assert.equal((await submit('/api/contact', { ...submission, message: 'a'.repeat(9000) })).status, 413);
+  assert.equal((await submit('/api/contact', submission)).status, 201);
+  assert.equal((await submit('/api/contact', submission)).status, 200);
+  assert.equal((await submit('/api/contact', { ...submission, message: 'A different project.' })).status, 409);
+  assert.equal((await submit('/api/leads', { ...submission, request_id: crypto.randomUUID(), estimated_budget: '₹50,000' })).status, 201);
+  const rows = sql.prepare('SELECT source, email FROM project_inquiries ORDER BY source').all();
+  assert.deepEqual(rows.map(row => [row.source, row.email]), [['contact', 'test@example.com'], ['estimator', 'test@example.com']]);
+  assert.equal((await request('/api/contact')).status, 401);
+  assert.equal((await request('/api/health')).status, 200);
 });

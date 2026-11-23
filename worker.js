@@ -47,6 +47,84 @@ function field(data, key, maxLength, required = true) {
   return value.trim();
 }
 
+const inquiryPaths = new Map([['/api/contact', 'contact'], ['/api/leads', 'estimator']]);
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+async function readJson(request) {
+  if (!/^application\/json(?:\s*;|$)/i.test(request.headers.get('Content-Type') ?? '')) {
+    return { error: json({ success: false, message: 'Expected JSON.' }, 415) };
+  }
+  const reader = request.body?.getReader();
+  const bytes = new Uint8Array(8192);
+  let length = 0;
+  while (reader) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    if (length + value.length > bytes.length) {
+      await reader.cancel();
+      return { error: json({ success: false, message: 'Request is too large.' }, 413) };
+    }
+    bytes.set(value, length);
+    length += value.length;
+  }
+  try {
+    const data = JSON.parse(new TextDecoder().decode(bytes.subarray(0, length)));
+    if (data && !Array.isArray(data) && typeof data === 'object') return { data };
+  } catch {
+    // The caller returns the same error for invalid JSON and invalid top-level types.
+  }
+  return { error: json({ success: false, message: 'Invalid request.' }, 400) };
+}
+
+async function limitPublicRequest(request, env, path) {
+  const ip = request.headers.get('CF-Connecting-IP');
+  if (!env.PUBLIC_RATE_LIMIT || !ip) return null;
+  const { success } = await env.PUBLIC_RATE_LIMIT.limit({ key: `${path}:${ip}` });
+  return success ? null : json({ success: false, message: 'Too many requests. Try again in a minute.' }, 429,
+    { 'Retry-After': '60' });
+}
+
+async function saveInquiry(request, env, url) {
+  if (request.headers.get('Origin') !== url.origin) {
+    return json({ success: false, message: 'Invalid origin.' }, 403);
+  }
+  const limited = await limitPublicRequest(request, env, url.pathname);
+  if (limited) return limited;
+  const { data, error } = await readJson(request);
+  if (error) return error;
+
+  const id = field(data, 'request_id', 36);
+  const name = field(data, 'name', 100);
+  const email = field(data, 'email', 254)?.toLowerCase();
+  const phone = field(data, 'phone', 40);
+  const company = field(data, 'company', 120, false);
+  const service = field(data, 'service', 120, false);
+  const budget = field(data, 'estimated_budget', 100, false);
+  const message = field(data, 'message', 2000);
+  const digits = phone?.replace(/\D/g, '') ?? '';
+  if (!UUID.test(id ?? '') || !name || name.length < 2 || !email ||
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !phone || !/^[\d+().\s-]+$/.test(phone) ||
+    digits.length < 10 || digits.length > 15 || !message || message.length < 5 ||
+    [company, service, budget].includes(null)) {
+    return json({ success: false, message: 'Check your contact and project details, then try again.' }, 400);
+  }
+  const source = inquiryPaths.get(url.pathname);
+  const idLower = id.toLowerCase();
+  const inserted = await env.BOOKINGS.prepare(`
+    INSERT INTO project_inquiries (id, source, name, email, phone, company, service, budget, message)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ON CONFLICT (id) DO NOTHING RETURNING id
+  `).bind(idLower, source, name, email, phone, company, service, budget, message).first();
+  if (inserted) return json({ success: true, reference: inserted.id }, 201);
+  const existing = await env.BOOKINGS.prepare(`
+    SELECT id FROM project_inquiries WHERE id = ? AND source = ? AND name = ? AND email = ?
+      AND phone = ? AND company = ? AND service = ? AND budget = ? AND message = ?
+  `).bind(idLower, source, name, email, phone, company, service, budget, message).first();
+  return existing
+    ? json({ success: true, reference: existing.id })
+    : json({ success: false, message: 'The submission reference was already used.' }, 409);
+}
+
 async function bookingApi(request, db, url, now) {
   if (url.pathname === '/api/bookings/availability') {
     if (request.method !== 'GET') return json({ success: false }, 405, { Allow: 'GET' });
@@ -66,27 +144,8 @@ async function bookingApi(request, db, url, now) {
   if (request.method !== 'POST') return json({ success: false }, 405, { Allow: 'POST' });
   const origin = request.headers.get('Origin');
   if (origin && origin !== url.origin) return json({ success: false, message: 'Invalid origin.' }, 403);
-  if (!/^application\/json(?:\s*;|$)/i.test(request.headers.get('Content-Type') ?? '')) return json({ success: false }, 415);
-  const reader = request.body?.getReader();
-  const bytes = new Uint8Array(8192);
-  let length = 0;
-  while (reader) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    if (length + value.length > bytes.length) {
-      await reader.cancel();
-      return json({ success: false, message: 'Request is too large.' }, 413);
-    }
-    bytes.set(value, length);
-    length += value.length;
-  }
-  let data;
-  try {
-    data = JSON.parse(new TextDecoder().decode(bytes.subarray(0, length)));
-  } catch {
-    return json({ success: false, message: 'Invalid request.' }, 400);
-  }
-  if (!data || Array.isArray(data) || typeof data !== 'object') return json({ success: false }, 400);
+  const { data, error } = await readJson(request);
+  if (error) return error;
 
   const date = data.booking_date;
   const time = data.booking_time;
@@ -237,6 +296,15 @@ async function adminRequest(request, env, url) {
     return adminJson({ success: false, message: 'Admin sign-in required.' }, 401);
   }
   if (path === '/api/bookings' || path.startsWith('/api/bookings/')) return manageBookings(request, env.BOOKINGS, path);
+  if (path === '/api/contact') {
+    if (request.method === 'HEAD') return new Response(null, { headers: adminHeaders });
+    const { results } = await env.BOOKINGS.prepare(`
+      SELECT id, source, name, email, phone, company, service, budget, message, created_at,
+             COUNT(*) OVER () AS total
+      FROM project_inquiries ORDER BY created_at DESC, id DESC LIMIT 100
+    `).all();
+    return adminJson({ success: true, total: results[0]?.total ?? 0, data: results }, 200);
+  }
   return adminNotFound();
 }
 
@@ -244,8 +312,26 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     const path = url.pathname;
+    if (path === '/api/health') {
+      if (request.method !== 'GET' && request.method !== 'HEAD') return methodNotAllowed('GET, HEAD');
+      return request.method === 'HEAD'
+        ? new Response(null, { headers: { 'Cache-Control': 'no-store' } })
+        : json({ success: true });
+    }
+    if (inquiryPaths.has(path) && request.method === 'POST') {
+      try {
+        return await saveInquiry(request, env, url);
+      } catch {
+        console.error('Project inquiry storage failed');
+        return json({ success: false, message: 'Inquiry service is temporarily unavailable.' }, 503);
+      }
+    }
     if (path === '/api/bookings/availability' || (path === '/api/bookings' && request.method === 'POST')) {
       try {
+        if (request.method === 'POST') {
+          const limited = await limitPublicRequest(request, env, path);
+          if (limited) return limited;
+        }
         return await bookingApi(request, env.BOOKINGS, url, new Date());
       } catch (error) {
         console.error('Consultation booking request failed', error?.name);

@@ -246,35 +246,12 @@ function initRox() {
       payload.email = emailVal;
       payload.phone = phoneVal;
       payload.message = messageVal;
-      payload._subject = `New Quotation & Project Inquiry: ${nameVal} (${phoneVal})`;
-      payload._template = 'table';
-      payload._captcha = 'false';
+
+
+
 
       try {
-        // Direct background email delivery (FormSubmit AJAX + Backend API)
-        // Does NOT open any email apps or popups!
-        const formSubmitPromise = fetch('https://formsubmit.co/ajax/hello@roxtech.online', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        }).catch(() => null);
-
-        const backendPromise = fetch('/api/contact', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        }).catch(() => null);
-
-        const responses = await Promise.all([formSubmitPromise, backendPromise]);
-        const accepted = await Promise.all(responses.map(async response => {
-          if (!response?.ok) return false;
-          const result = await response.json().catch(() => null);
-          return result?.success === true || result?.success === 'true';
-        }));
-        if (!accepted.some(Boolean)) throw new Error('Quotation delivery was not confirmed');
+        await submitRoxTechInquiry('/api/contact', payload);
 
         // Success Feedback via Top-Right Popup Toast
         window.showTopRightToast(
@@ -389,31 +366,13 @@ function initRox() {
         phone: phoneVal,
         service: hqService ? hqService.value : 'Custom Web Development',
         message: messageVal,
-        _subject: `New Homepage Quotation Request: ${nameVal} (${phoneVal})`,
-        _template: 'table',
-        _captcha: 'false'
+
+
+
       };
 
       try {
-        const formSubmitPromise = fetch('https://formsubmit.co/ajax/hello@roxtech.online', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify(payload)
-        }).catch(() => null);
-
-        const backendPromise = fetch('/api/contact', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        }).catch(() => null);
-
-        const responses = await Promise.all([formSubmitPromise, backendPromise]);
-        const accepted = await Promise.all(responses.map(async response => {
-          if (!response?.ok) return false;
-          const result = await response.json().catch(() => null);
-          return result?.success === true || result?.success === 'true';
-        }));
-        if (!accepted.some(Boolean)) throw new Error('Quotation delivery was not confirmed');
+        await submitRoxTechInquiry('/api/contact', payload);
 
         window.showTopRightToast(
           'success',

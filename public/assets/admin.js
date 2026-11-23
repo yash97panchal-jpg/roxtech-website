@@ -1,5 +1,6 @@
 const tabButtons = [...document.querySelectorAll('[data-admin-tab]')];
 const bookingsTable = document.getElementById('table-bookings');
+const inquiriesTable = document.getElementById('table-inquiries');
 const syncButton = document.getElementById('sync-admin-data');
 const statusMessage = document.getElementById('admin-status');
 const tabStyle = 'px-4 py-2 rounded-lg text-xs font-bold transition-colors';
@@ -68,25 +69,49 @@ function renderBookings(bookings) {
   }
 }
 
-async function bookingRequest(path, options) {
+function renderInquiries(inquiries, total) {
+  inquiriesTable.replaceChildren();
+  document.getElementById('stat-inquiries').textContent = total;
+  if (inquiries.length === 0) {
+    addText(inquiriesTable.insertRow(), 'td', 'No project inquiries found.', 'p-6 text-center text-slate-400').colSpan = 7;
+    return;
+  }
+  for (const inquiry of inquiries) {
+    const row = inquiriesTable.insertRow();
+    addText(row, 'td', inquiry.id.slice(0, 8), 'p-4 font-mono');
+    const contact = addText(row, 'td', inquiry.name, 'p-4 font-semibold');
+    addText(contact, 'div', inquiry.email, 'text-slate-600');
+    addText(contact, 'div', inquiry.phone, 'text-slate-600');
+    addText(row, 'td', inquiry.company || '—', 'p-4');
+    addText(row, 'td', [inquiry.service, inquiry.budget].filter(Boolean).join(' · ') || '—', 'p-4');
+    addText(row, 'td', inquiry.message, 'p-4 whitespace-pre-wrap break-words');
+    addText(row, 'td', inquiry.source === 'estimator' ? 'Estimator' : 'Quote form', 'p-4');
+    addText(row, 'td', inquiry.created_at + ' UTC', 'p-4 whitespace-nowrap');
+  }
+}
+
+async function adminRequest(path, options) {
   const response = await fetch(path, { ...options, credentials: 'same-origin', redirect: 'error' });
   if (response.status === 401) {
     bookingsTable.replaceChildren();
+    inquiriesTable.replaceChildren();
     window.location.replace('/admin');
     return null;
   }
-  if (!response.ok) throw new Error('Booking request failed');
+  if (!response.ok) throw new Error('Admin request failed');
   return response.json();
 }
 
-async function loadBookings() {
+async function loadDashboard() {
   syncButton.disabled = true;
   announce('');
   try {
-    const result = await bookingRequest('/api/bookings');
-    if (result) renderBookings(result.data);
-  } catch {
-    announce('Could not load consultation bookings. Use Sync Data to try again.');
+    const results = await Promise.allSettled([
+      adminRequest('/api/bookings').then(result => { if (result) renderBookings(result.data); }),
+      adminRequest('/api/contact').then(result => { if (result) renderInquiries(result.data, result.total); }),
+    ]);
+    const failed = results.flatMap((result, index) => result.status === 'rejected' ? [index ? 'inquiries' : 'bookings'] : []);
+    if (failed.length) announce(`Could not load ${failed.join(' and ')}. Use Sync Data to try again.`);
   } finally {
     syncButton.disabled = false;
   }
@@ -95,12 +120,12 @@ async function loadBookings() {
 async function updateBooking(id, status, actions) {
   for (const button of actions.children) button.disabled = true;
   try {
-    const result = await bookingRequest(`/api/bookings/${id}`, {
+    const result = await adminRequest(`/api/bookings/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status }),
     });
-    if (result?.success) await loadBookings();
+    if (result?.success) await loadDashboard();
   } catch {
     announce('Could not update this booking. Try again.');
   } finally {
@@ -108,8 +133,8 @@ async function updateBooking(id, status, actions) {
   }
 }
 
-syncButton.addEventListener('click', loadBookings);
+syncButton.addEventListener('click', loadDashboard);
 window.addEventListener('pageshow', event => {
   if (event.persisted) window.location.reload();
 });
-loadBookings();
+loadDashboard();

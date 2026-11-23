@@ -105,7 +105,7 @@ export async function startGoogleSignIn(env) {
 async function googleIdentity(env, code, flow) {
   const response = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
-    redirect: 'error',
+    redirect: 'manual',
     signal: AbortSignal.timeout(10_000),
     body: new URLSearchParams({
       client_id: env.GOOGLE_CLIENT_ID,
@@ -116,6 +116,7 @@ async function googleIdentity(env, code, flow) {
       code_verifier: flow.verifier,
     }),
   });
+  if (response.status >= 300 && response.status < 400) return { stage: 'token_exchange_redirected' };
   if (!response.ok) {
     const result = await response.json().catch(() => null);
     const allowedErrors = ['invalid_client', 'invalid_grant', 'unauthorized_client', 'invalid_request'];

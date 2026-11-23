@@ -276,9 +276,9 @@
                 <div id="est-budget" class="text-3xl sm:text-4xl font-black text-[#FF5E14] font-mono tracking-tight mt-1">
                   ₹1,50,000 – ₹2,90,000
                 </div>
-                <p id="est-tax-note" class="text-[11px] text-slate-300 mt-2 flex items-center gap-1.5">
+                <p class="text-[11px] text-slate-300 mt-2 flex items-center gap-1.5">
                   <i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i>
-                  <span>Zero-obligation formal estimation. Domestic GST invoicing &amp; ITC support.</span>
+                  <span>No-obligation estimate based on the scope you select.</span>
                 </p>
               </div>
 
@@ -344,7 +344,7 @@
               </div>
               <div>
                 <label class="block text-slate-700 font-semibold mb-1">Project Details or Specific Features *</label>
-                <textarea id="q-details" rows="2" required placeholder="e.g. Scope, custom modules, mobile app requirements, GST invoicing requirements..." class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-hidden focus:border-[#FF5E14]"></textarea>
+                <textarea id="q-details" rows="2" required placeholder="e.g. Scope, custom modules, mobile app requirements, integrations..." class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-hidden focus:border-[#FF5E14]"></textarea>
               </div>
 
               <button type="submit" id="q-submit-btn" class="btn-enterprise-primary w-full justify-center text-sm py-3 mt-2 shadow-md">
@@ -377,11 +377,6 @@
           <p class="text-xs text-slate-300 leading-relaxed max-w-sm">
             RoxTech is a premier global enterprise IT services provider delivering custom web development, cloud ERP software, mobile applications, and high-accuracy back-office data operations.
           </p>
-
-          <div class="flex items-center gap-2 pt-1 text-slate-200">
-            <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
-            <span class="text-xs font-bold text-white">ISO 9001:2015 &amp; ISO 27001 Certified Partner</span>
-          </div>
 
           <!-- Prominent Global Contact Details -->
           <div class="pt-3 border-t border-white/10 space-y-2 text-xs">
@@ -428,16 +423,16 @@
           <ul class="space-y-2.5 text-xs text-slate-300">
             <li><a href="about.html" class="hover:text-[#FF5E14] transition-colors">About Us &amp; Leadership</a></li>
             <li><a href="careers.html" class="hover:text-[#FF5E14] transition-colors">Careers</a></li>
-            <li><a href="contact.html" class="hover:text-[#FF5E14] transition-colors">Global Delivery Centers</a></li>
+            <li><a href="contact.html" class="hover:text-[#FF5E14] transition-colors">Contact RoxTech</a></li>
           </ul>
         </div>
 
       </div>
 
-      <!-- Bottom Bar: Copyright & Compliance -->
+      <!-- Copyright and policy links -->
       <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
         <div>
-          &copy; 2026 RoxTech Intelligent Solutions. All rights reserved. Registered Enterprise IT Consulting Partner.
+          &copy; 2026 RoxTech
         </div>
         <div class="flex items-center space-x-6 text-slate-400">
           <a href="#" class="hover:text-[#FF5E14] transition-colors">Master Services Agreement (MSA)</a>
@@ -511,14 +506,6 @@
       document.getElementById('sum-svc').textContent = currentSvc;
       document.getElementById('sum-scale').textContent = currentScale;
       document.getElementById('sum-time').textContent = currentTime;
-
-      const taxNote = document.getElementById('est-tax-note');
-      if (taxNote) {
-        taxNote.innerHTML = currentCurrency === 'INR'
-          ? '<i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i><span>Zero-obligation formal estimation. Domestic GST (18%) invoicing &amp; ITC support.</span>'
-          : '<i data-lucide="check-circle" class="w-3.5 h-3.5 text-emerald-400 shrink-0"></i><span>Zero-obligation formal estimation based on selected scope.</span>';
-        if (window.lucide) window.lucide.createIcons();
-      }
     }
 
     const currInrBtn = document.getElementById('curr-inr');

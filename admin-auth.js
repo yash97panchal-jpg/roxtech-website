@@ -116,27 +116,39 @@ async function googleIdentity(env, code, flow) {
       code_verifier: flow.verifier,
     }),
   });
-  if (!response.ok) return null;
+  if (!response.ok) {
+    const result = await response.json().catch(() => null);
+    const allowedErrors = ['invalid_client', 'invalid_grant', 'unauthorized_client', 'invalid_request'];
+    const stage = allowedErrors.includes(result?.error) ? result.error : 'token_exchange_rejected';
+    return { stage };
+  }
 
   const { id_token: idToken } = await response.json();
-  if (typeof idToken !== 'string') return null;
-  const { payload } = await jwtVerify(idToken, googleKeys, {
+  if (typeof idToken !== 'string') return { stage: 'id_token_missing' };
+  const verified = await jwtVerify(idToken, googleKeys, {
     issuer: GOOGLE_ISSUERS,
     audience: env.GOOGLE_CLIENT_ID,
     algorithms: ['RS256'],
     requiredClaims: ['exp', 'iat', 'sub', 'nonce', 'email', 'email_verified'],
     maxTokenAge: FLOW_TTL,
     clockTolerance: 30,
+  }).catch(error => {
+    const keyErrors = ['ERR_JWKS_TIMEOUT', 'ERR_JWKS_NO_MATCHING_KEY', 'ERR_JWKS_INVALID', 'ERR_JOSE_GENERIC'];
+    return { stage: keyErrors.includes(error.code) ? 'google_signing_keys_unavailable' : 'id_token_verification_failed' };
   });
+  if (!verified.payload) return verified;
 
+  const { payload } = verified;
   const email = typeof payload.email === 'string' ? payload.email.toLowerCase() : '';
   const domain = email.split('@')[1];
   const authoritativeEmail = domain === 'gmail.com' || (domain && payload.hd === domain);
-  if (payload.nonce !== flow.nonce || payload.email_verified !== true || !authoritativeEmail ||
-      email !== adminEmail(env) || typeof payload.sub !== 'string' || !payload.sub ||
+  if (payload.nonce !== flow.nonce || typeof payload.sub !== 'string' || !payload.sub ||
       (Array.isArray(payload.aud) && payload.aud.length !== 1) ||
-      (payload.azp !== undefined && payload.azp !== env.GOOGLE_CLIENT_ID)) return null;
-  return email;
+      (payload.azp !== undefined && payload.azp !== env.GOOGLE_CLIENT_ID)) return { stage: 'id_token_claims_rejected' };
+  if (payload.email_verified !== true || !authoritativeEmail || email !== adminEmail(env)) {
+    return { stage: 'admin_identity_rejected' };
+  }
+  return { email };
 }
 
 export async function completeGoogleSignIn(request, env, params) {
@@ -156,14 +168,16 @@ export async function completeGoogleSignIn(request, env, params) {
   const code = params.get('code');
   if (!flow || params.has('error') || !code || code.length > 2048 || params.getAll('code').length !== 1) return fail();
 
-  let email;
-  try {
-    email = await googleIdentity(env, code, flow);
-  } catch {
-    // Google responses can contain tokens or credentials. Keep provider errors private.
+  const { email, stage } = await googleIdentity(env, code, flow)
+    .catch(() => ({ stage: 'google_request_failed' }));
+  if (!email) {
+    // Keep only the last failure category. Provider responses can contain credentials.
+    await env.BOOKINGS.prepare(`
+      INSERT INTO admin_oauth_diagnostics (id, stage, observed_at) VALUES (1, ?, ?)
+      ON CONFLICT (id) DO UPDATE SET stage = excluded.stage, observed_at = excluded.observed_at
+    `).bind(stage, now).run();
     return fail();
   }
-  if (!email) return fail();
 
   const token = randomToken();
   const digest = await tokenDigest(env, 'session', token);

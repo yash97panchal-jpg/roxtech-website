@@ -1,26 +1,17 @@
-# RoxTech — Production Website (Live Cloudflare Deployment)
+# RoxTech production website
 
-This repository contains the standalone, high-performance static website for **RoxTech** (`roxtech.io`), pre-configured specifically for **Cloudflare Pages** and custom domain hosting.
+Cloudflare Worker `lingering-mountain-bef0` serves [roxtech.online](https://roxtech.online/) from `public/` and handles consultation bookings and admin access in `worker.js`. Cloudflare Workers Builds deploys the `main` branch with `npm run deploy`.
 
----
+## Admin Google sign-in
 
-## 🚀 Cloudflare Pages Setup (Connect to GitHub)
+Use a Google OAuth web application client with this exact authorized redirect URI.
 
-1. Go to **[Cloudflare Dashboard](https://dash.cloudflare.com/)** -> **Workers & Pages**.
-2. Click **Create application** -> **Pages** tab -> **Connect to Git**.
-3. Select this repository: `roxtech-website`.
-4. Build configuration:
-   - **Framework preset**: `None`
-   - **Build command**: *(Leave blank)*
-   - **Build output directory**: `/` *(Root)*
-5. Click **Save and Deploy**.
-6. Under **Custom domains**, click **Set up a custom domain** and enter your live domain.
+```text
+https://roxtech.online/api/auth/google/callback
+```
 
----
+Set `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `SESSION_SECRET` (at least 32 characters of cryptographically random data), and `ADMIN_EMAIL` in the production Worker's **Variables and Secrets**. The admin email must be a Gmail address or a Google Workspace address Google can verify. For an OAuth app in Testing, include this account in Google's test users.
 
-## ⚡ What is included:
-- **HTML Pages**: All responsive pages (`index`, `about`, `services`, `industries`, `case-studies`, `careers`, `blog`, `estimator`, `contact`, `admin`, `404`)
-- **`_headers`**: Cloudflare HSTS, CSP, and 1-year immutable caching for static assets.
-- **`_redirects`**: Clean URL rewrites.
-- **`robots.txt` & `sitemap.xml`**: Production SEO.
-- **`assets/`**: High-resolution branding, CSS (`tailwind.css`, `rox.css`), and JavaScript (`hero3d.js`, `main.js`, `chatbot.js`, `auth.js`).
+Apply `booking-schema.sql` followed by `admin-schema.sql` to a new environment's `BOOKINGS` database before deploying. For an existing bookings database, apply `admin-schema.sql` before deploying. Both files can be reapplied safely.
+
+Run `npm ci`, `npm test` (Node.js 22.15 or later), and `npm run deploy -- --dry-run` to validate changes. The admin sign-in page is at [roxtech.online/admin](https://roxtech.online/admin).

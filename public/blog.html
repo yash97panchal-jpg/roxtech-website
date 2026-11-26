@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Insights &amp; Engineering Notes | RoxTech</title>
-  <meta name="description" content="Practical articles on ERP, web performance and data from the RoxTech engineering team.">
+  <title>Tech Blog & Engineering Insights | RoxTech</title>
+  <meta name="description" content="Read expert insights and engineering notes on custom ERP systems, web architecture, cloud optimization, and modern software development from RoxTech.">
   <meta name="theme-color" content="#060B13">
   <link rel="icon" type="image/png" href="assets/favicon.png">
 
@@ -17,27 +17,49 @@
   <link rel="stylesheet" href="assets/rox-pro.css">
   <link rel="stylesheet" href="assets/rox-refresh.css">
   <link rel="stylesheet" href="assets/chatbot.css">
-  <link rel="stylesheet" href="/card-models.css">
-  <link rel="canonical" href="https://roxtech.online/blog">
+  <!-- Open Graph / Social SEO -->
+    <link rel="canonical" href="https://roxtech.online/blog">
+  <!-- Open Graph / Social SEO -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Tech Blog & Engineering Insights | RoxTech">
+  <meta property="og:description" content="Read expert insights and engineering notes on custom ERP systems, web architecture, cloud optimization, and modern software development from RoxTech.">
+  <meta property="og:url" content="https://roxtech.online/blog">
+  <meta property="og:image" content="https://roxtech.online/assets/roxtech-symbol-clean.png">
+  <meta property="og:site_name" content="RoxTech">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "RoxTech",
+    "url": "https://roxtech.online",
+    "logo": "https://roxtech.online/assets/roxtech-symbol-clean.png",
+    "description": "RoxTech delivers IT services, custom software engineering, cloud architecture, and modern digital products to help growing businesses scale efficiently.",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "url": "https://roxtech.online/contact"
+    }
+  }
+  </script>
 </head>
 <body>
 
   <!-- Floating Glass Header Navigation -->
   <header class="top">
     <div class="wrap bar">
-      <a href="index.html" class="brand-logo-container" aria-label="RoxTech — Intelligence Technology"><img src="assets/roxtech-symbol-clean.png" alt="RoxTech Symbol" class="brand-symbol-img"><div class="brand-text-block"><span class="brand-name">Rox<span>Tech</span></span><small class="brand-tagline">Intelligence Technology</small></div></a>
+      <a href="/" class="brand-logo-container" aria-label="RoxTech — Intelligence Technology"><img src="assets/roxtech-symbol-clean.png" alt="RoxTech Logo Symbol" class="brand-symbol-img"><div class="brand-text-block"><span class="brand-name">Rox<span>Tech</span></span><small class="brand-tagline">Intelligence Technology</small></div></a>
 
       <button class="menu-btn" aria-expanded="false" aria-controls="nav">Menu</button>
 
       <nav class="main" id="nav" aria-label="Main Navigation">
-        <a href="index.html">Home</a>
-        <a href="services.html">Services</a>
-        <a href="industries.html">Industries</a>
-        <a href="case-studies.html">Work</a>
-        <a href="about.html">About</a>
-        <a href="blog.html" aria-current="page">Insights</a>
-        <a href="careers.html">Careers</a>
-        <a class="btn btn-primary" href="contact.html">Get a quote <span class="btn-arrow">→</span></a>
+        <a href="/">Home</a>
+        <a href="/services">Services</a>
+        <a href="/industries">Industries</a>
+        <a href="/case-studies">Work</a>
+        <a href="/about">About</a>
+        <a href="/blog" aria-current="page">Insights</a>
+        <a href="/careers">Careers</a>
+        <a class="btn btn-primary" href="/contact">Get a quote <span class="btn-arrow">→</span></a>
       </nav>
     </div>
   </header>
@@ -62,7 +84,7 @@
         <div class="grid g3">
           <!-- Article 1 -->
           <article class="card post" style="padding: 24px;">
-            <div class="card-model model-erp card-img" role="img" aria-label="3D inventory dashboard with packaged stock"></div>
+            <img src="assets/img/blog-1.svg" alt="Modern ERP operational planning and warehouse dashboard" class="card-img" loading="lazy">
             <span class="tag" style="margin-top:0; margin-bottom:8px;">Enterprise Architecture</span>
             <h3 style="margin-top:6px;">How modern ERP removes operational bottlenecks</h3>
             <p style="margin-top:8px;">Where spreadsheets break down across inventory, and the three modules that pay back fastest for multi-plant manufacturing.</p>
@@ -71,7 +93,7 @@
 
           <!-- Article 2 -->
           <article class="card post" style="padding: 24px;">
-            <div class="card-model model-speed card-img" role="img" aria-label="3D browser interface beside a performance gauge"></div>
+            <img src="assets/img/blog-2.svg" alt="Web performance optimization and code profiling in 2026" class="card-img" loading="lazy">
             <span class="tag" style="margin-top:0; margin-bottom:8px;">Web Performance</span>
             <h3 style="margin-top:6px;">Web performance in 2026: why milliseconds matter</h3>
             <p style="margin-top:8px;">How sub-second page speed impacts UPI checkout conversions, and a practical checklist to shave 600ms off your LCP this week.</p>
@@ -80,7 +102,7 @@
 
           <!-- Article 3 -->
           <article class="card post" style="padding: 24px;">
-            <div class="card-model model-data-pipeline card-img" role="img" aria-label="3D data pipeline connecting three database stacks"></div>
+            <img src="assets/img/blog-3.svg" alt="Clean database architecture and data pipelines" class="card-img" loading="lazy">
             <span class="tag" style="margin-top:0; margin-bottom:8px;">Data Engineering</span>
             <h3 style="margin-top:6px;">Why clean data comes before every software project</h3>
             <p style="margin-top:8px;">Dirty legacy data is the quiet reason many ERP migrations fail. Here is how dual-pass human-in-the-loop pipelines prevent catastrophe.</p>
@@ -97,8 +119,8 @@
           <h2>Want advice on your own project?</h2>
           <p>Send us your technical question or scope document. A principal engineer, not a salesperson, will reply.</p>
           <div class="actions">
-            <a class="btn btn-primary" href="contact.html">Start a project <span class="btn-arrow">→</span></a>
-            <a class="btn btn-ghost" href="mailto:hello@roxtech.online">Email an engineer</a>
+            <a class="btn btn-primary" href="/contact">Start a project <span class="btn-arrow">→</span></a>
+            <a class="btn btn-ghost" href="mailto:hello@roxtech.io">Email an engineer</a>
           </div>
         </div>
       </div>
@@ -110,30 +132,30 @@
     <div class="wrap">
       <div class="cols">
         <div>
-          <a href="index.html" class="brand-logo-container" aria-label="RoxTech — Intelligence Technology"><img src="assets/roxtech-symbol-clean.png" alt="RoxTech Symbol" class="brand-symbol-img"><div class="brand-text-block"><span class="brand-name">Rox<span>Tech</span></span><small class="brand-tagline">Intelligence Technology</small></div></a>
+          <a href="/" class="brand-logo-container" aria-label="RoxTech — Intelligence Technology"><img src="assets/roxtech-symbol-clean.png" alt="RoxTech Logo Symbol" class="brand-symbol-img"><div class="brand-text-block"><span class="brand-name">Rox<span>Tech</span></span><small class="brand-tagline">Intelligence Technology</small></div></a>
           <p>Software, cloud and data services for companies that want technology that works and keeps working.</p>
         </div>
         <div>
           <h3>Company</h3>
-          <a href="about.html">About RoxTech</a>
-          <a href="industries.html">Industries We Serve</a>
-          <a href="case-studies.html">Case Studies &amp; Work</a>
-          <a href="blog.html">Engineering Insights</a>
-          <a href="careers.html">Careers &amp; Culture</a>
-          <a href="estimator.html">Project Cost Calculator</a>
+          <a href="/about">About RoxTech</a>
+          <a href="/industries">Industries We Serve</a>
+          <a href="/case-studies">Case Studies &amp; Work</a>
+          <a href="/blog">Engineering Insights</a>
+          <a href="/careers">Careers &amp; Culture</a>
+          <a href="/estimator">Project Cost Calculator</a>
         </div>
         <div>
           <h3>Services</h3>
-          <a href="services.html#web">Web development</a>
-          <a href="services.html#erp">ERP &amp; custom software</a>
-          <a href="services.html#mobile">Mobile app development</a>
-          <a href="services.html#data">Data services &amp; AI</a>
-          <a href="services.html#cloud">Cloud &amp; DevOps</a>
+          <a href="/services#web">Web development</a>
+          <a href="/services#erp">ERP &amp; custom software</a>
+          <a href="/services#mobile">Mobile app development</a>
+          <a href="/services#data">Data services &amp; AI</a>
+          <a href="/services#cloud">Cloud &amp; DevOps</a>
         </div>
         <div>
-          <h3>Contact</h3>
-          <a href="contact.html">Request a Quote</a>
-          <a href="mailto:hello@roxtech.online">hello@roxtech.online</a>
+          <h4>Contact</h4>
+          <a href="/contact">Request a Quote</a>
+          <a href="mailto:hello@roxtech.io">hello@roxtech.io</a>
           <a href="tel:+918460162774">+91 8460162774</a>
         </div>
       </div>
@@ -143,9 +165,9 @@
           &copy; 2026 RoxTech
         </div>
         <div style="display:flex; gap:20px;">
-          <a href="/privacy">Privacy</a>
-          <a href="/terms">Terms</a>
-          <a href="/security">Security</a>
+          <a href="/contact">Privacy</a>
+          <a href="/contact">Terms</a>
+          <a href="/contact">Security</a>
         </div>
       </div>
     </div>

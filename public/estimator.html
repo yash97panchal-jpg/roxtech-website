@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project Cost &amp; Scope Estimator | RoxTech — Web, ERP, Apps &amp; Data Entry</title>
+  <title>Project Cost & Scope Estimator | RoxTech</title>
   <meta name="description" content="Calculate instant project estimates for Web Development, custom ERP software, Mobile Applications, and Data Entry services with RoxTech.">
   <link rel="icon" type="image/png" href="assets/favicon.png">
 
@@ -19,7 +19,30 @@
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   <link rel="stylesheet" href="assets/rox-refresh.css">
-  <link rel="canonical" href="https://roxtech.online/estimator">
+  <!-- Open Graph / Social SEO -->
+    <link rel="canonical" href="https://roxtech.online/estimator">
+  <!-- Open Graph / Social SEO -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Project Cost & Scope Estimator | RoxTech">
+  <meta property="og:description" content="Calculate instant project estimates for Web Development, custom ERP software, Mobile Applications, and Data Entry services with RoxTech.">
+  <meta property="og:url" content="https://roxtech.online/estimator">
+  <meta property="og:image" content="https://roxtech.online/assets/roxtech-symbol-clean.png">
+  <meta property="og:site_name" content="RoxTech">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "RoxTech",
+    "url": "https://roxtech.online",
+    "logo": "https://roxtech.online/assets/roxtech-symbol-clean.png",
+    "description": "RoxTech delivers IT services, custom software engineering, cloud architecture, and modern digital products to help growing businesses scale efficiently.",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "url": "https://roxtech.online/contact"
+    }
+  }
+  </script>
 </head>
 <body class="bg-white text-slate-700 font-sans antialiased selection:bg-[#FF5E14] selection:text-white overflow-x-hidden">
 
@@ -31,21 +54,22 @@
       <div class="flex items-center justify-between h-20 sm:h-22">
         
         <!-- RoxTech Corporate Brand Logo -->
-        <a href="index.html" class="brand-logo-container" aria-label="RoxTech — Intelligence Technology"><img src="assets/roxtech-symbol-clean.png" alt="RoxTech Symbol" class="brand-symbol-img"><div class="brand-text-block"><span class="brand-name">Rox<span>Tech</span></span><small class="brand-tagline">Intelligence Technology</small></div></a>
+        <a href="/" class="brand-logo-container" aria-label="RoxTech — Intelligence Technology"><img src="assets/roxtech-symbol-clean.png" alt="RoxTech Logo Symbol" class="brand-symbol-img"><div class="brand-text-block"><span class="brand-name">Rox<span>Tech</span></span><small class="brand-tagline">Intelligence Technology</small></div></a>
 
         <!-- Desktop Navigation Links -->
         <nav class="hidden lg:flex items-center space-x-8 text-[14px] font-bold text-slate-800">
-          <a href="index.html" class="text-slate-800 hover:text-[#FF5E14] transition-colors">Home</a>
-          <a href="services.html" class="text-slate-800 hover:text-[#FF5E14] transition-colors">Services</a>
-          <a href="case-studies.html" class="text-slate-800 hover:text-[#FF5E14] transition-colors">Case Studies</a>
-          <a href="estimator.html" class="text-[#FF5E14] font-extrabold">Cost Estimator</a>
-          <a href="contact.html" class="text-slate-800 hover:text-[#FF5E14] transition-colors">Contact</a>
+          <a href="/" class="text-slate-800 hover:text-[#FF5E14] transition-colors">Home</a>
+          <a href="/services" class="text-slate-800 hover:text-[#FF5E14] transition-colors">Services</a>
+          <a href="/case-studies" class="text-slate-800 hover:text-[#FF5E14] transition-colors">Case Studies</a>
+          <a href="/estimator" class="text-[#FF5E14] font-extrabold">Cost Estimator</a>
+          <a href="/contact" class="text-slate-800 hover:text-[#FF5E14] transition-colors">Contact</a>
         </nav>
 
         <!-- Right Side: Client Sign In, Primary CTA, Mobile Toggle -->
         <div class="flex items-center space-x-3 sm:space-x-3.5">
+          <div class="nav-auth-slot inline-flex items-center"></div>
 
-          <a href="index.html#inquiry-section" onclick="window.handleScheduleInquiryClick(event)" class="btn-enterprise-primary text-xs py-2 px-3.5 sm:px-4">
+          <a href="/#inquiry-section" onclick="window.handleScheduleInquiryClick(event)" class="btn-enterprise-primary text-xs py-2 px-3.5 sm:px-4">
             <span>Schedule Inquiry</span>
             <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
           </a>
@@ -62,7 +86,7 @@
     <div id="mobile-drawer-backdrop" onclick="window.closeMobileDrawer()" class="mobile-drawer-backdrop lg:hidden"></div>
     <div id="mobile-drawer-panel" class="mobile-drawer-panel lg:hidden">
       <div class="p-5 border-b border-slate-200 flex items-center justify-between">
-        <a href="index.html" class="flex items-center">
+        <a href="/" class="flex items-center">
           <img src="assets/roxtech-logo-dark.png" alt="RoxTech Logo" class="brand-drawer-logo">
         </a>
         <button id="mobile-drawer-close" onclick="window.closeMobileDrawer()" class="p-2 rounded-md text-slate-500 hover:text-slate-900 hover:bg-slate-100" title="Close Menu">
@@ -70,18 +94,22 @@
         </button>
       </div>
       <div class="flex-1 overflow-y-auto p-5 space-y-1 text-sm font-semibold text-slate-700">
-        <a href="index.html" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Home</a>
-        <a href="services.html" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Services (4 Core Practices)</a>
-        <a href="index.html#delivery-framework" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Methodology</a>
-        <a href="index.html#industries" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Industries</a>
-        <a href="case-studies.html" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Case Studies</a>
-        <a href="estimator.html" class="block py-2.5 px-3 rounded-md text-[#FF5E14] bg-orange-50 font-bold">Cost Estimator</a>
-        <a href="about.html" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Company</a>
-        <a href="careers.html" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Careers</a>
-        <a href="contact.html" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Contact</a>
+        <a href="/" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Home</a>
+        <a href="/services" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Services (4 Core Practices)</a>
+        <a href="/#delivery-framework" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Methodology</a>
+        <a href="/#industries" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Industries</a>
+        <a href="/case-studies" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Case Studies</a>
+        <a href="/estimator" class="block py-2.5 px-3 rounded-md text-[#FF5E14] bg-orange-50 font-bold">Cost Estimator</a>
+        <a href="/about" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Company</a>
+        <a href="/careers" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Careers</a>
+        <a href="/contact" class="block py-2.5 px-3 rounded-md hover:bg-slate-50">Contact</a>
       </div>
       <div class="p-5 border-t border-slate-200 space-y-2.5 bg-slate-50">
-        <a href="index.html#inquiry-section" onclick="window.closeMobileDrawer()" class="w-full btn-enterprise-primary text-center text-xs py-2.5">
+        <button onclick="window.closeMobileDrawer(); window.openAuthModal('login')" class="w-full py-2.5 text-center text-xs font-bold text-slate-700 border border-slate-300 rounded-md bg-white hover:bg-slate-100 flex items-center justify-center gap-2">
+          <i data-lucide="user-check" class="w-4 h-4 text-[#FF5E14]"></i>
+          <span>Client Sign In</span>
+        </button>
+        <a href="/#inquiry-section" onclick="window.closeMobileDrawer()" class="w-full btn-enterprise-primary text-center text-xs py-2.5">
           Schedule Inquiry
         </a>
       </div>
@@ -303,15 +331,15 @@
 
             <div id="quote-success" class="hidden p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-center space-y-3">
               <i data-lucide="check-circle-2" class="w-10 h-10 text-emerald-600 mx-auto"></i>
-              <h4 class="font-bold text-emerald-900 text-sm">Quote Request Registered!</h4>
+              <h2 class="font-bold text-emerald-900 text-sm">Quote Request Registered!</h2>
               <p id="quote-success-msg" class="text-xs text-emerald-700"></p>
             </div>
 
             <!-- Customer Verification Badge / Sign In Prompt -->
+            <div id="quote-auth-badge" class="mb-4"></div>
 
             <form id="quote-form" class="space-y-3 text-xs" novalidate>
-            <p class="form-privacy">We use your details to respond to this request. <a href="/privacy">Privacy notice</a></p>
-              <h4 class="font-bold text-[#0B1B3D] text-sm">Receive Formal Quotation &amp; Architecture Scope</h4>
+              <h2 class="font-bold text-[#0B1B3D] text-sm">Receive Formal Quotation &amp; Architecture Scope</h2>
               <div>
                 <label class="block text-slate-700 font-semibold mb-1">Your Full Name *</label>
                 <input type="text" id="q-name" required placeholder="Your full name" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 focus:outline-hidden focus:border-[#FF5E14]">
@@ -373,7 +401,7 @@
         
         <!-- Brand Info & Verified Contact Desk -->
         <div class="lg:col-span-2 space-y-4">
-          <a href="index.html" class="brand-logo-container" aria-label="RoxTech — Intelligence Technology"><img src="assets/roxtech-symbol-clean.png" alt="RoxTech Symbol" class="brand-symbol-img"><div class="brand-text-block"><span class="brand-name">Rox<span>Tech</span></span><small class="brand-tagline">Intelligence Technology</small></div></a>
+          <a href="/" class="brand-logo-container" aria-label="RoxTech — Intelligence Technology"><img src="assets/roxtech-symbol-clean.png" alt="RoxTech Logo Symbol" class="brand-symbol-img"><div class="brand-text-block"><span class="brand-name">Rox<span>Tech</span></span><small class="brand-tagline">Intelligence Technology</small></div></a>
           <p class="text-xs text-slate-300 leading-relaxed max-w-sm">
             RoxTech is a premier global enterprise IT services provider delivering custom web development, cloud ERP software, mobile applications, and high-accuracy back-office data operations.
           </p>
@@ -388,7 +416,7 @@
             <div class="flex items-center gap-2.5">
               <i data-lucide="mail" class="w-4 h-4 text-[#FF5E14] shrink-0"></i>
               <strong class="text-white font-bold">Inquiries:</strong>
-              <a href="mailto:hello@roxtech.online" class="text-blue-300 hover:text-[#FF5E14] font-semibold transition-colors">hello@roxtech.online</a>
+              <a href="mailto:india@roxtech.io" class="text-blue-300 hover:text-[#FF5E14] font-semibold transition-colors">india@roxtech.io</a> / <a href="mailto:enterprise@roxtech.io" class="text-blue-300 hover:text-[#FF5E14] font-semibold transition-colors">enterprise@roxtech.io</a>
             </div>
           </div>
         </div>
@@ -397,11 +425,11 @@
         <div class="space-y-3">
           <div class="text-xs font-bold uppercase tracking-wider text-white">Practice Areas</div>
           <ul class="space-y-2.5 text-xs text-slate-300">
-            <li><a href="services.html#web-dev" class="hover:text-[#FF5E14] transition-colors">Custom Web Development</a></li>
-            <li><a href="services.html#erp-software" class="hover:text-[#FF5E14] transition-colors">ERP &amp; Custom Software</a></li>
-            <li><a href="services.html#mobile-apps" class="hover:text-[#FF5E14] transition-colors">Mobile App Engineering</a></li>
-            <li><a href="services.html#data-entry" class="hover:text-[#FF5E14] transition-colors">Data Entry &amp; BPO Support</a></li>
-            <li><a href="estimator.html" class="hover:text-[#FF5E14] transition-colors text-[#FF5E14] font-semibold">Scope &amp; Cost Estimator</a></li>
+            <li><a href="/services#web-dev" class="hover:text-[#FF5E14] transition-colors">Custom Web Development</a></li>
+            <li><a href="/services#erp-software" class="hover:text-[#FF5E14] transition-colors">ERP &amp; Custom Software</a></li>
+            <li><a href="/services#mobile-apps" class="hover:text-[#FF5E14] transition-colors">Mobile App Engineering</a></li>
+            <li><a href="/services#data-entry" class="hover:text-[#FF5E14] transition-colors">Data Entry &amp; BPO Support</a></li>
+            <li><a href="/estimator" class="hover:text-[#FF5E14] transition-colors text-[#FF5E14] font-semibold">Scope &amp; Cost Estimator</a></li>
           </ul>
         </div>
 
@@ -409,11 +437,11 @@
         <div class="space-y-3">
           <div class="text-xs font-bold uppercase tracking-wider text-white">Industries</div>
           <ul class="space-y-2.5 text-xs text-slate-300">
-            <li><a href="index.html#industries" class="hover:text-[#FF5E14] transition-colors">Banking &amp; FinTech (BFSI)</a></li>
-            <li><a href="index.html#industries" class="hover:text-[#FF5E14] transition-colors">Healthcare &amp; Life Sciences</a></li>
-            <li><a href="index.html#industries" class="hover:text-[#FF5E14] transition-colors">Supply Chain &amp; Logistics</a></li>
-            <li><a href="index.html#industries" class="hover:text-[#FF5E14] transition-colors">Retail &amp; Modern E-Commerce</a></li>
-            <li><a href="case-studies.html" class="hover:text-[#FF5E14] transition-colors">Enterprise Case Studies</a></li>
+            <li><a href="/#industries" class="hover:text-[#FF5E14] transition-colors">Banking &amp; FinTech (BFSI)</a></li>
+            <li><a href="/#industries" class="hover:text-[#FF5E14] transition-colors">Healthcare &amp; Life Sciences</a></li>
+            <li><a href="/#industries" class="hover:text-[#FF5E14] transition-colors">Supply Chain &amp; Logistics</a></li>
+            <li><a href="/#industries" class="hover:text-[#FF5E14] transition-colors">Retail &amp; Modern E-Commerce</a></li>
+            <li><a href="/case-studies" class="hover:text-[#FF5E14] transition-colors">Enterprise Case Studies</a></li>
           </ul>
         </div>
 
@@ -421,9 +449,10 @@
         <div class="space-y-3">
           <div class="text-xs font-bold uppercase tracking-wider text-white">Company</div>
           <ul class="space-y-2.5 text-xs text-slate-300">
-            <li><a href="about.html" class="hover:text-[#FF5E14] transition-colors">About Us &amp; Leadership</a></li>
-            <li><a href="careers.html" class="hover:text-[#FF5E14] transition-colors">Careers</a></li>
-            <li><a href="contact.html" class="hover:text-[#FF5E14] transition-colors">Contact RoxTech</a></li>
+            <li><a href="/about" class="hover:text-[#FF5E14] transition-colors">About Us &amp; Leadership</a></li>
+            <li><a href="/careers" class="hover:text-[#FF5E14] transition-colors">Careers</a></li>
+            <li><a href="/contact" class="hover:text-[#FF5E14] transition-colors">Contact RoxTech</a></li>
+            <li><button onclick="window.openAuthModal('login')" class="hover:text-[#FF5E14] transition-colors text-left text-slate-300">Client Portal Login</button></li>
           </ul>
         </div>
 
@@ -436,9 +465,8 @@
         </div>
         <div class="flex items-center space-x-6 text-slate-400">
           <a href="#" class="hover:text-[#FF5E14] transition-colors">Master Services Agreement (MSA)</a>
-          <a href="/privacy" class="hover:text-[#FF5E14] transition-colors">Privacy Policy</a>
-          <a href="/security" class="hover:text-[#FF5E14] transition-colors">Security</a>
-          <a href="/terms" class="hover:text-[#FF5E14] transition-colors">Terms</a>
+          <a href="#" class="hover:text-[#FF5E14] transition-colors">Privacy Policy</a>
+          <a href="#" class="hover:text-[#FF5E14] transition-colors">NDA Terms</a>
         </div>
       </div>
 
@@ -446,7 +474,7 @@
   </footer>
 
   <script src="assets/main.js"></script>
-  <script src="/assets/inquiry.js"></script>
+  <script src="assets/auth.js"></script>
   <script>
     let currentSvc = 'Custom Web Development';
     let currentScale = 'Professional Growth';
@@ -688,13 +716,30 @@
         estimated_budget: estBudget,
         notes: detailsVal,
         message: `Service: ${currentSvc}\nScale: ${currentScale}\nTimeline: ${currentTime}\nEstimated: ${estBudget}\nPhone: ${phoneVal}\nNotes: ${detailsVal}`,
-
-
-
+        _subject: `New Formal Quotation Request: ${nameVal} (${phoneVal}) - ${estBudget}`,
+        _template: 'table',
+        _captcha: 'false'
       };
 
       try {
-        await submitRoxTechInquiry('/api/leads', payload);
+        // Direct background email delivery (FormSubmit AJAX + Backend API)
+        // Does NOT open any email apps or popups!
+        const formSubmitPromise = fetch('https://formsubmit.co/ajax/hello@roxtech.io', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        }).catch(() => null);
+
+        const backendPromise = fetch(`${API_BASE}/api/leads`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).catch(() => null);
+
+        await Promise.all([formSubmitPromise, backendPromise]);
 
         // Success Notification via Top-Right Popup Toast
         if (window.showTopRightToast) {
@@ -706,6 +751,8 @@
         }
 
         quoteForm.classList.add('hidden');
+        const badge = document.getElementById('quote-auth-badge');
+        if (badge) badge.classList.add('hidden');
         const successBox = document.getElementById('quote-success');
         if (successBox) successBox.classList.remove('hidden');
         const msgEl = document.getElementById('quote-success-msg');
@@ -720,7 +767,7 @@
           window.showTopRightToast(
             'error',
             'Submission Error',
-            'There is some error sending your quotation. Please try again or reach us at hello@roxtech.online.'
+            'There is some error sending your quotation. Please try again or reach us at hello@roxtech.io.'
           );
         }
       } finally {

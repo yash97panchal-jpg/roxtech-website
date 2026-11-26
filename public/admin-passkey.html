@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Passkey | RoxTech</title>
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <link rel="stylesheet" href="/assets/tailwind.css">
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="/assets/rox-refresh.css">
+    <meta name="robots" content="noindex, nofollow">
+</head>
+<body class="bg-[#071026] text-slate-800 font-sans antialiased">
+  <main class="min-h-screen flex items-center justify-center p-4" data-operation="PASSKEY_OPERATION">
+    <div class="w-full max-w-md bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5">
+      <div class="flex justify-center">
+        <a href="/" class="brand-logo-container" aria-label="RoxTech home">
+          <img src="/assets/roxtech-symbol-clean.png" alt="RoxTech Logo Symbol" class="brand-symbol-img">
+          <div class="brand-text-block"><span class="brand-name">Rox<span>Tech</span></span></div>
+        </a>
+      </div>
+      <div class="text-center space-y-2">
+        <h1 class="text-2xl font-extrabold text-[#0B1B3D]">PASSKEY_HEADING</h1>
+        <p class="text-sm text-slate-600">PASSKEY_INSTRUCTION</p>
+      </div>
+      <button id="passkey-action" type="button" class="btn-enterprise-primary w-full py-3 justify-center text-sm font-bold shadow-md">PASSKEY_BUTTON</button>
+      <p id="passkey-status" role="status" class="text-sm text-slate-700"></p>
+      <div id="passkey-approval" class="hidden p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-2">
+        <p class="text-sm">Share this setup reference to approve your passkey. It expires in 30 minutes.</p>
+        <p id="passkey-reference" class="font-mono font-bold break-all text-slate-900"></p>
+        <a class="text-sm underline text-slate-700" href="/admin/passkey">Verify your passkey after approval</a>
+      </div>
+      <div class="flex justify-between gap-3 text-sm">
+        <a href="PASSKEY_LINK_URL" class="text-slate-700 underline">PASSKEY_LINK_TEXT</a>
+        <form method="post" action="/api/admin/logout">
+          <button type="submit" class="text-slate-700 underline">Log out</button>
+        </form>
+      </div>
+    </div>
+  </main>
+  <script nonce="PASSKEY_NONCE">
+    const operation = document.querySelector('[data-operation]').dataset.operation;
+    const action = document.getElementById('passkey-action');
+    const status = document.getElementById('passkey-status');
+    const setup = operation === 'register';
+
+    async function post(step, credential) {
+      const response = await fetch('/api/admin/passkey/' + operation + '/' + step, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        redirect: 'error',
+        body: credential ? JSON.stringify(credential) : undefined,
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Could not complete passkey verification.');
+      return data;
+    }
+
+    action.addEventListener('click', async () => {
+      const passkey = globalThis.PublicKeyCredential;
+      const parseOptions = setup ? passkey?.parseCreationOptionsFromJSON : passkey?.parseRequestOptionsFromJSON;
+      if (!parseOptions || !navigator.credentials) {
+        status.textContent = 'Open this page in an up-to-date browser on a device with a screen lock.';
+        return;
+      }
+      action.disabled = true;
+      status.textContent = 'Opening your device’s passkey prompt…';
+      try {
+        const { options } = await post('start');
+        const publicKey = parseOptions.call(passkey, options);
+        const credential = setup ? await navigator.credentials.create({ publicKey }) :
+          await navigator.credentials.get({ publicKey });
+        if (!credential?.toJSON) throw new DOMException('Passkey unavailable', 'NotAllowedError');
+        const verified = await post('finish', credential.toJSON());
+        if (!setup) {
+          window.location.replace('/admin');
+          return;
+        }
+        document.getElementById('passkey-reference').textContent = verified.approvalReference;
+        document.getElementById('passkey-approval').classList.remove('hidden');
+        status.textContent = 'Your passkey is ready for approval.';
+        return;
+      } catch (error) {
+        status.textContent = error instanceof DOMException
+          ? 'The device did not complete the passkey prompt. Try again with your screen lock enabled.'
+          : error.message || 'Could not complete passkey verification.';
+      }
+      action.disabled = false;
+    });
+  </script>
+</body>
+</html>

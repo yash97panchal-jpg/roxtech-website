@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Sign In | RoxTech</title>
+  <link rel="icon" type="image/png" href="/assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=Barlow:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/tailwind.css">
+  <link rel="stylesheet" href="/assets/style.css">
+  <link rel="stylesheet" href="/assets/rox-refresh.css">
+    <meta name="robots" content="noindex, nofollow">
+</head>
+<body class="bg-[#071026] text-slate-800 font-sans antialiased">
+  <main class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-5">
+      <div class="flex justify-center">
+        <a href="/" class="brand-logo-container" aria-label="RoxTech home">
+          <img src="/assets/roxtech-symbol-clean.png" alt="RoxTech Logo Symbol" class="brand-symbol-img">
+          <div class="brand-text-block"><span class="brand-name">Rox<span>Tech</span></span><small class="brand-tagline">Intelligence Technology</small></div>
+        </a>
+      </div>
+      <div class="text-center space-y-2">
+        <h1 class="text-2xl font-extrabold text-[#0B1B3D]">Admin Authentication</h1>
+        <p class="text-sm text-slate-600">Sign in with your authorized Google account to open the RoxTech admin console.</p>
+      </div>
+      <!-- SIGN_IN_ERROR -->
+      <form action="/api/admin/google" method="post">
+        <button type="submit" class="btn-enterprise-primary w-full py-3 justify-center text-sm font-bold shadow-md">Continue with Google</button>
+      </form>
+      <p class="text-center text-sm"><a class="text-slate-600 hover:underline" href="/">Back to RoxTech</a></p>
+    </div>
+  </main>
+</body>
+</html>

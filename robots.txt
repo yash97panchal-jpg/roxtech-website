@@ -3,6 +3,8 @@ User-agent: *
 Allow: /
 Disallow: /admin.html
 Disallow: /admin
+Disallow: /admin-login.html
+Disallow: /admin-passkey.html
 Disallow: /api/
 
-Sitemap: https://roxtech.io/sitemap.xml
+Sitemap: https://roxtech.online/sitemap.xml
